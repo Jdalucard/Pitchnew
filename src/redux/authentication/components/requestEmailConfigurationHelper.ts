@@ -1,20 +1,17 @@
-import randomstring from 'randomstring';
+// import randomstring from 'randomstring';
 import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { socialNetworks } from "../../../constants";
 import { setCookies } from "../../cookies";
 import { requestSocialAuthentication } from '..';
+import { type RootState } from '../../store';
 
 interface IProps {
   socialSite: socialNetworks,
-  dispatch: ThunkDispatch<{
-    cookies: null;
-    alerts: null;
-    authentication: { isLoading: boolean };
-}, undefined, AnyAction> & Dispatch<AnyAction>  
+  dispatch: ThunkDispatch<RootState, undefined, AnyAction> & Dispatch<AnyAction>  
 }
 
 export async function requestEmailConfigurationHelper({ socialSite, dispatch }: IProps) {
-  const stateString = randomstring.generate(20);
+  const stateString = 'randomstring.generate(20);'
 
   dispatch(setCookies({
     key: 'stateString',

@@ -1,12 +1,12 @@
-import banner from '../../../resources/images/pitchdb/pitch-db-blue.png';
+import logo from '../../assets/logos/pitchdb-logo.png';
 
 export function UsagePolicy() {
   return (
     <div className='usage-policy'>
-      <div className="HomePanel container">
-        <div className="col-12 banner-image">
+      <div className="HomePanel">
+        <div className="banner-image">
           <img
-            src={banner}
+            src={logo}
             // TODO: test and set proper width and height.
           />
         </div>

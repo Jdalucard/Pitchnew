@@ -4,13 +4,10 @@ import { processEmailConfiguration } from "..";
 import { setCookies } from "../../cookies";
 import { authMessages } from "../../../constants";
 import { AnyAction, Dispatch, ThunkDispatch } from "@reduxjs/toolkit";
+import { type RootState } from "../../store";
 
 interface IProps {
-  dispatch: ThunkDispatch<{
-    cookies: null;
-    alerts: null;
-    authentication: { isLoading: boolean };
-}, undefined, AnyAction> & Dispatch<AnyAction>
+  dispatch: ThunkDispatch<RootState, undefined, AnyAction> & Dispatch<AnyAction>
 }
 
 export async function processEmailConfigurationHelper({ dispatch }: IProps) {

@@ -1,4 +1,4 @@
-import reloadIcon from '../../../resources/gifs/reload.gif';
+import spinner from '../assets/gifts/spinner.gif';
 import './LoadingIcon.styles.css';
 
 export interface ILoadingIcon {
@@ -8,7 +8,7 @@ export interface ILoadingIcon {
 
 export const LoadingIcon = ({ hidden, size }: ILoadingIcon) => (
   <img
-    src={reloadIcon}
+    src={spinner}
     alt="loading-icon"
     className={"loading-icon" + (hidden ? " hidden" : "") + (size ? " " + size : " loading-default")}
   />

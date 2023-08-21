@@ -1,15 +1,14 @@
 // WIP
 import { useState } from "react";
+import backgroundImage from '../../assets/images/pitchdb-background.png';
+import logo from '../../assets/logos/pitchdb-logo.png';
+import { AuthenticationDisplay, ForgotPasswordDisplay } from "./components";
 
 interface IProps {
-  changeAuthNetwork: (network: string) => void;
-  invite?: boolean
+  isInvite?: boolean
 }
 
-export function Home({
-  changeAuthNetwork,
-  invite
-}: IProps) {
+export function Home({ isInvite }: IProps) {
   const [forgetPasswordVisible, setForgetPasswordVisible] = useState(false);
 
   const toggleForgotPassword = () => {
@@ -17,21 +16,24 @@ export function Home({
   }
 
   return (
-    <div className="home_main" style={{ backgroundImage: `url(${backimage})` }}>
-      <div className="HomePanel container">
-        <div className="row">
-          <div className="col-12 banner-image">
-            <img src={banner} alt="Company logo" />
+    <>
+      <div className="home_main" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <div className="HomePanel">
+          <div className="banner-image">
+            <img src={logo} alt="Company logo" />
+          </div>
+          <div className="buttons-cont">
+            {!forgetPasswordVisible ?
+              <AuthenticationDisplay
+                isInvite={isInvite ?? false}
+                toggleForgotPassword={toggleForgotPassword}
+              />
+              :
+              <ForgotPasswordDisplay toggleForgotPassword={toggleForgotPassword} />
+            }
           </div>
         </div>
-        <div className="row buttons-cont">
-          {!forgetPasswordVisible ?
-            <Authentication {...props} />
-            :
-            <ForgotPassword {...props} />
-          }
-        </div>
       </div>
-    </div>
+    </>
   );
 }

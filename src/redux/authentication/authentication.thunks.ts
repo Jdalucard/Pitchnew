@@ -36,6 +36,15 @@ interface IProcessEmailConfiguration {
   }
 }
 
+interface IProcessRegularAuthentication {
+  email: string,
+  password: string,
+}
+
+interface IResetPassword {
+  email: string,
+}
+
 const basePath = import.meta.env.REACT_APP_API_BASE_URL;
 const authPath = `${basePath}/auth`;
 const emailConfigPath = `${basePath}/email-accounts`;
@@ -74,7 +83,7 @@ export const processSocialAuthentication = createAsyncThunk(
       const response = await axios.post(`${authPath}/${authNetwork}/login`, sendBody);
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
+      const err = error as AxiosError<string>;
 
       if (err.response) {
         return thunkApi.rejectWithValue(err.response.data);
@@ -86,6 +95,27 @@ export const processSocialAuthentication = createAsyncThunk(
     }
   }
 );
+
+export const processRegularAuthentication = createAsyncThunk(
+  `${authenticationStoreKey}/processRegularAuthentication`,
+  async (loginData: IProcessRegularAuthentication, thunkApi) => {
+    try {
+      const response = await axios.post(`${authPath}/login`, loginData);
+  
+      return response.data;
+    } catch (error) {
+      const err = error as AxiosError<string>;
+
+      if (err.response) {
+        thunkApi.dispatch(
+          errorAlert({ error: (err.response.data ?? 'Error, please try again later.') })
+        );
+      } else {
+        throw error;
+      }
+    }
+  }
+)
 
 export const processSignConfiguration = createAsyncThunk(
   `${authenticationStoreKey}/processSignConfiguration`,
@@ -100,7 +130,7 @@ export const processSignConfiguration = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
+      const err = error as AxiosError<string>;
 
       if (err.response) {
         return thunkApi.rejectWithValue(err.response.data);
@@ -132,7 +162,7 @@ export const processEmailConfiguration = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      const err = error as AxiosError;
+      const err = error as AxiosError<string>;
 
       if (err.response) {
         return thunkApi.rejectWithValue(err.response.data);
@@ -141,4 +171,23 @@ export const processEmailConfiguration = createAsyncThunk(
       }
     }
   }
-)
+);
+
+export const processResetPassword = createAsyncThunk(
+  `${authenticationStoreKey}/resetPassword`,
+  async (userData: IResetPassword, thunkApi) => {
+    try {
+      await axios.put(`${authPath}/password`, userData);
+      
+      return { success: true }  
+    } catch (error) {
+      const err = error as AxiosError<string>;
+
+      if (err.response) {
+        return thunkApi.rejectWithValue(err.response.data);
+      } else {
+        throw error;
+      }
+    }
+  }
+);

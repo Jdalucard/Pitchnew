@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { ContentOptions } from 'sweetalert/typings/modules/options/content';
-import type { ButtonList } from 'sweetalert/typings/modules/options/buttons';
+import { type PayloadAction } from '@reduxjs/toolkit';
+import { type ContentOptions } from 'sweetalert/typings/modules/options/content';
+import { type ButtonList } from 'sweetalert/typings/modules/options/buttons';
 import { alertsStoreKey } from './alerts.const';
 import spinnerGif from '../../assets/gifts/spinner.gif';
 
