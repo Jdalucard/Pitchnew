@@ -12,7 +12,6 @@ interface IProps {
 
 export async function processSocialAuthenticationHelper({ dispatch }: IProps) {
   const cookies = new Cookies();
-  //TODO: check this out. It previously used substr(1)
   const queryParams = window.location.search.substring(1).split('&');
 
   const sendBody: IProcessSocialAuthenticationBody = {
@@ -32,44 +31,23 @@ export async function processSocialAuthenticationHelper({ dispatch }: IProps) {
       const jwt = cookies.get("jwt");
 
       const response = await dispatch(processSignConfiguration({ jwt, authNetwork, sendBody })).unwrap();
-
-      if (!response.token) {
-        dispatch(removeCookies('signconfig'));
-        // TODO: check if this response comes as the error string or as something else.
-        dispatch(setCookies({
-          key: authMessages.COOKIES_CONNECT_ERROR,
-          value: response || 'Error, please try again later.'
-        }));
-        window.opener.postMessage(authMessages.POST_CONNECT_ERROR, window.opener.origin);
-
-        setTimeout(window.close, 400);
-      } else {
+     
+      if (response?.token) {
         dispatch(removeCookies('signconfig'));
         dispatch(setUserJWT(response.token));
-        window.opener.postMessage('connectsign', window.opener.origin);
 
-        setTimeout(window.close, 400);
+        window.opener.postMessage('connectsign', window.opener.origin);
       }
     } else {
       const response = await dispatch(processSocialAuthentication({ authNetwork, sendBody })).unwrap();
 
-      if (!response.token) {
-        dispatch(setCookies({
-          key: authMessages.COOKIES_CONNECT_ERROR,
-          value: response || 'Error, please try again later.'
-        }));
-        window.opener.postMessage(authMessages.POST_CONNECT_ERROR, window.opener.origin);
-
-        setTimeout(window.close, 400);        
-      } else {
+      if (response?.token) {
         if (inviteToken && inviteToken !== 'false') {
           dispatch(removeCookies('inviteToken'));
         }
 
         dispatch(setUserJWT(response.token));
         window.opener.postMessage('auth', window.opener.origin);
-
-        setTimeout(window.close, 400);        
       }
     }
   } else {
@@ -79,6 +57,7 @@ export async function processSocialAuthenticationHelper({ dispatch }: IProps) {
     }))
     window.opener.postMessage(authMessages.POST_AUTH_ERROR, window.opener.origin);
 
-    setTimeout(window.close, 400);
   }
+
+  setTimeout(window.close, 400);
 }

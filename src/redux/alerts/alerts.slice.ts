@@ -37,7 +37,6 @@ interface IOpenRemovalConfirmation {
 
 interface IOpenError {
   error: string,
-  callback?: () => void,
 }
 
 interface IOpenSuccess {
@@ -126,14 +125,8 @@ export const alertsSlice = createSlice({
       })
     },
     errorAlert: (_, action: PayloadAction<IOpenError>) => {
-      const { error, callback} = action.payload;
-      const swalAlert = swal("Error", error, "error");
-
-      if (callback) {
-        swalAlert.then(() => {
-          callback();
-        });
-      }
+      const { error} = action.payload;
+      swal("Error", error, "error");
     },
     successAlert: (_, action: PayloadAction<IOpenSuccess>) => {
       swal("Success", action.payload.success, "success");

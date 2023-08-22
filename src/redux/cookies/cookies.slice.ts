@@ -14,7 +14,7 @@ interface ISetSettings {
 
 interface ISetCookies {
   key: string,
-  value: string,
+  value: any,
 }
 
 const initialState: IState = {

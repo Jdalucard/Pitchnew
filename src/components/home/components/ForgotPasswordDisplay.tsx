@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { useAppDispatch } from "../../../redux/hooks";
 import { closeLoadingModal, errorAlert, openLoadingModal } from "../../../redux/alerts";
 import { processResetPassword } from "../../../redux/authentication";
+import styles from './ForgotPasswordDisplay.module.css';
 
 interface IProps {
   toggleForgotPassword: () => void,
@@ -23,81 +24,65 @@ export function ForgotPasswordDisplay({ toggleForgotPassword }: IProps) {
 
     dispatch(openLoadingModal('Sending email'));
 
-    const response = await dispatch(processResetPassword({ email: userEmail })).unwrap();
+    await dispatch(processResetPassword({ email: userEmail }));
 
-    if (!response.success) {
-      dispatch(errorAlert({ error: 'An unexpected error occured, please try again later' }))
-    } else {
-      setEmailIsSet(true);
-    }
-
+    setEmailIsSet(true);
+    
     dispatch(closeLoadingModal());
   }
 
   return (
     <>
-      <div className="col-12">
-        <h3>Reset password</h3>
-      </div>
-      {!emailIsSent ?
-        <div className="col-12">
-          <form onSubmit={resetPassword}>
-            <div className="row">
-              <div className="col-12 password-explain-text">
-                <p>
-                  Enter your account's email address and we will reset and send you a provisional password
-                </p>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-12 forgot-email-input">
-                <TextField
-                  type="email"
-                  name="email"
-                  label="Email"
-                  onChange={handleInputChange}
-                  value={userEmail}
-                  placeholder={"someone@email.com"}
-                  inputProps={{ min: 3, max: 40 }}
-                  required
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-12 col-sm-6">
-                <Button variant="outlined" color="primary" onClick={toggleForgotPassword}>
-                  Cancel
-                </Button>
-              </div>
-              <div className="col-12 col-sm-6">
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={toggleForgotPassword}
-                >
-                  Reset Password
-                </Button>
-              </div>
-            </div>
-          </form>
-        </div>
-        :
-        <>
-          <div className="col-12 password-explain-text">
-            <p>
-              An email has been sent to the address you provided if there is a user account associated with it
-            </p>              
+      <Typography variant="h5" color="text.primary">
+        Reset password
+      </Typography>
+      {!emailIsSent ? (
+        <form onSubmit={resetPassword}>
+          <Typography
+            variant="body1"
+            color="text.primary"
+            sx={{ m: '1rem 0', textAlign: 'center' }}
+          >
+            Enter your account's email address and we will reset and send you a provisional password.
+          </Typography>
+          <TextField
+            type="email"
+            name="email"
+            label="Email"
+            onChange={handleInputChange}
+            value={userEmail}
+            placeholder={"someone@email.com"}
+            inputProps={{ min: 3, max: 40 }}
+            fullWidth
+            required
+          />
+          <div className={styles.buttonWrapper}>
+            <Button variant="outlined" color="primary" onClick={toggleForgotPassword}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={toggleForgotPassword}
+              disabled={!userEmail}
+            >
+              Reset Password
+            </Button>
           </div>
-          <div className="col-12 offset-0 offset-sm-2 col-sm-8">
-            <div className="col-12 col-sm-6">
-              <Button variant="outlined" color="primary" onClick={toggleForgotPassword}>
-                Back to sign in screen
-              </Button>
-            </div>
+        </form>
+      ) : (
+        <>
+          <Typography variant="body1" color="text.primary">
+            An email has been sent to the address you provided if there is a user account associated with it
+          </Typography>
+          <div className={styles.buttonWrapper}>
+            <Button variant="outlined" color="primary" onClick={toggleForgotPassword}>
+              Back to sign in screen
+            </Button>
           </div>
         </>
-      }
+      )}
     </>
   );
 }

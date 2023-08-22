@@ -27,20 +27,20 @@ export function useAuthenticationListener() {
       case authMessages.POST_AUTH_ERROR:
         dispatch(errorAlert({
           error: cookies.get(authMessages.COOKIES_AUTH_ERROR),
-          callback: () => { dispatch(removeCookies(authMessages.COOKIES_AUTH_ERROR)) }
         }));
+        dispatch(removeCookies(authMessages.COOKIES_AUTH_ERROR))
         break;
       case authMessages.POST_EMAIL_ERROR:
         dispatch(errorAlert({
           error: "There was an error connecting your email: " + cookies.get(authMessages.COOKIES_EMAIL_ERROR),
-          callback: () => { dispatch(removeCookies(authMessages.COOKIES_EMAIL_ERROR)) }
         }));
+        dispatch(removeCookies(authMessages.COOKIES_EMAIL_ERROR))
         break;
       case authMessages.POST_CONNECT_ERROR:
         dispatch(errorAlert({
           error: "There was an error connecting your email: " + cookies.get(authMessages.COOKIES_CONNECT_ERROR),
-          callback: () => { dispatch(removeCookies(authMessages.COOKIES_CONNECT_ERROR)) }
         }));
+        dispatch(removeCookies(authMessages.COOKIES_CONNECT_ERROR));
         break;
       default:
         null;

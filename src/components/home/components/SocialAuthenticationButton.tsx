@@ -1,10 +1,10 @@
+import microsoftLogo from '../../../assets/logos/microsoft-logo.png';
 import googleLogo from '../../../assets/logos/google-logo.png';
 import linkedinLogo from '../../../assets/logos/linkedin-logo.png';
 import facebookLogo from '../../../assets/logos/facebook-logo.png';
-import microsoftLogo from '../../../assets/logos/microsoft-logo.png';
-import changeCase from 'change-case';
 import { socialNetworks } from '../../../constants';
-import './SocialAuthenticationButton.styles.css';
+import { formatToTitleCase } from '../../../common';
+import styles from './SocialAuthenticationButton.module.css';
 
 interface IProps {
   network: socialNetworks,
@@ -28,17 +28,19 @@ export function SocialAuthenticationButton({ network, onClick, idPrefix }: IProp
   }
   
   return (
-    <button
-      id={`${idPrefix ?? ''}${network}`}
-      className={"social-auth-button align-items-center " + network}
-      onClick={onClick}
-    >
-      <div className='btn-icon d-flex align-items-center'>
-        <img src={getImageSource()} alt="Social log in" />
-      </div>
-      <span className='btn-text d-flex align-items-center'>
-        {/* {`Sign in with ${changeCase.capitalCase(network)}`} */}
-      </span>
-    </button>
+    <div className={styles.socialAuthButton}>
+      <button
+        id={`${idPrefix ?? ''}${network}`}
+        className={network}
+        onClick={onClick}
+      >
+        <div className={`${styles.logoWrapper} ${styles[network]}`}>
+          <img src={getImageSource()} alt="Social log in" />
+        </div>
+        <div className={`${styles.textWrapper} ${styles[network]}`}>
+          <p>{`Log in with ${formatToTitleCase(network)}`}</p>
+        </div>
+      </button>
+    </div>
   );
 }

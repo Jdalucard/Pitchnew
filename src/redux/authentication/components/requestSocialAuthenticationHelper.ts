@@ -1,4 +1,4 @@
-// import randomstring from 'randomstring';
+import randomstring from 'randomstring';
 import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { socialNetworks } from "../../../constants";
 import { setCookies } from "../../cookies";
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export async function requestSocialAuthenticationHelper({ socialSite, isSignIn, dispatch }: IProps) {
-  const stateString = 'randomstring.generate(20);'
+  const stateString = randomstring.generate(20);
   
   dispatch(setCookies({
     key: 'stateString',
@@ -49,11 +49,9 @@ export async function requestSocialAuthenticationHelper({ socialSite, isSignIn, 
     'scrollbars=yes, width=' + w / systemZoom + ', height=' + h / systemZoom + ', top=' + top + ', left=' + left,
   );
 
-  const response = await dispatch(requestSocialAuthentication({ socialSite, isSignIn })).unwrap();
-  const { data: socialAuthLink } = response;
-  // TODO: Validate this is working properly
+  const socialAuthLink = await dispatch(requestSocialAuthentication({ socialSite, isSignIn })).unwrap();
 
-  if (socialAuthLink && newWindow) {
+  if (newWindow && socialAuthLink) {
     newWindow.location.href = `${socialAuthLink}&state=${stateString}`;
     newWindow.focus();
   }

@@ -1,8 +1,9 @@
 import axios, { AxiosError } from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { socialNetworks } from "../../constants";
+import { authMessages, socialNetworks } from "../../constants";
 import { authenticationStoreKey } from ".";
 import { errorAlert } from "../alerts";
+import { setCookies } from "../cookies";
 
 interface IRequestSocialAuthentication {
   socialSite: socialNetworks,
@@ -45,7 +46,7 @@ interface IResetPassword {
   email: string,
 }
 
-const basePath = import.meta.env.REACT_APP_API_BASE_URL;
+const basePath = import.meta.env.VITE_API_BASE_URL;
 const authPath = `${basePath}/auth`;
 const emailConfigPath = `${basePath}/email-accounts`;
 
@@ -68,7 +69,6 @@ export const requestSocialAuthentication = createAsyncThunk(
     } catch (error) {
       if (error instanceof Error) {
         thunkApi.dispatch(errorAlert({ error: error.message }));
-        // TODO: Validate this is working
       }
     }
   }
@@ -85,13 +85,11 @@ export const processSocialAuthentication = createAsyncThunk(
     } catch (error) {
       const err = error as AxiosError<string>;
 
-      if (err.response) {
-        return thunkApi.rejectWithValue(err.response.data);
-      } else {
-        throw error;
-      }
-      // TODO: Validate this is working
-      // TODO: Create a common catch error handler so we don't repeat code
+      thunkApi.dispatch(setCookies({
+        key: authMessages.COOKIES_AUTH_ERROR,
+        value: err.response?.data || 'Error, please try again later.'
+      }));
+      window.opener.postMessage(authMessages.POST_AUTH_ERROR, window.opener.origin);
     }
   }
 );
@@ -101,11 +99,10 @@ export const processRegularAuthentication = createAsyncThunk(
   async (loginData: IProcessRegularAuthentication, thunkApi) => {
     try {
       const response = await axios.post(`${authPath}/login`, loginData);
-  
+      
       return response.data;
     } catch (error) {
       const err = error as AxiosError<string>;
-
       if (err.response) {
         thunkApi.dispatch(
           errorAlert({ error: (err.response.data ?? 'Error, please try again later.') })
@@ -132,11 +129,11 @@ export const processSignConfiguration = createAsyncThunk(
     } catch (error) {
       const err = error as AxiosError<string>;
 
-      if (err.response) {
-        return thunkApi.rejectWithValue(err.response.data);
-      } else {
-        throw error;
-      }
+      thunkApi.dispatch(setCookies({
+        key: authMessages.COOKIES_AUTH_ERROR,
+        value: err.response?.data || 'Error, please try again later.'
+      }));
+      window.opener.postMessage(authMessages.POST_CONNECT_ERROR, window.opener.origin);
     }
   }
 );
@@ -164,11 +161,12 @@ export const processEmailConfiguration = createAsyncThunk(
     } catch (error) {
       const err = error as AxiosError<string>;
 
-      if (err.response) {
-        return thunkApi.rejectWithValue(err.response.data);
-      } else {
-        throw error;
-      }
+      thunkApi.dispatch(setCookies({
+        key: authMessages.COOKIES_EMAIL_ERROR,
+        value: err.response?.data || 'Error, please try again later.'
+      }));
+
+      window.opener.postMessage(authMessages.POST_EMAIL_ERROR, window.opener.origin);
     }
   }
 );
@@ -183,11 +181,7 @@ export const processResetPassword = createAsyncThunk(
     } catch (error) {
       const err = error as AxiosError<string>;
 
-      if (err.response) {
-        return thunkApi.rejectWithValue(err.response.data);
-      } else {
-        throw error;
-      }
+      thunkApi.dispatch(errorAlert({ error: err.response?.data || 'An unexpected error occured, please try again later' }))
     }
   }
 );

@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import { Button, TextField } from '@mui/material';
 import { socialNetworks } from "../../../constants";
 import { getFromQueryParams } from "../../../common";
@@ -7,8 +8,8 @@ import { setCookies, setUserJWT } from "../../../redux/cookies";
 import { requestSocialAuthenticationHelper } from "../../../redux/authentication/components";
 import { closeLoadingModal, openLoadingModal } from "../../../redux/alerts";
 import { processRegularAuthentication } from "../../../redux/authentication";
-import { useNavigate } from "react-router-dom";
 import { SocialAuthenticationButton } from ".";
+import styles from './AuthenticationDisplay.module.css';
 
 interface IProps {
   isInvite: boolean,
@@ -50,7 +51,7 @@ export function AuthenticationDisplay({ isInvite, toggleForgotPassword }: IProps
     }));
 
     dispatch(setCookies({
-      key: 'authNetWork',
+      key: 'authNetwork',
       value: network,
     }));
 
@@ -79,83 +80,71 @@ export function AuthenticationDisplay({ isInvite, toggleForgotPassword }: IProps
 
   return (
     <>
-      <div className="col-12 social justify-content-center">
+      <div className={styles.socialButtons}>
         <SocialAuthenticationButton
           network={socialNetworks.LINKEDIN}
           onClick={() => signInOrUpWithSocial(socialNetworks.LINKEDIN)}
         />
-      </div>
-      <div className="col-12 social justify-content-center">
         <SocialAuthenticationButton
           network={socialNetworks.GOOGLE}
           onClick={() => signInOrUpWithSocial(socialNetworks.GOOGLE)}
         />
-      </div>
-      <div className="col-12 social justify-content-center">
         <SocialAuthenticationButton
           network={socialNetworks.FACEBOOK}
           onClick={() => signInOrUpWithSocial(socialNetworks.FACEBOOK)}
         />
-      </div>
-      <div className="col-12 social justify-content-center">
         <SocialAuthenticationButton
           network={socialNetworks.MICROSOFT}
           onClick={() => signInOrUpWithSocial(socialNetworks.MICROSOFT)}
         />
       </div>
+      <h5 className={styles.credentialsTitle}>Log in with credentials</h5>
       {isSignIn &&
-        <div className="col-12">
-          <form onSubmit={regularSignIn}>
-            <div className="row regular-auth-section">
-              <div className="col-12 regular-auth-label">
-                <h5>Sign In with PitchDB's credentials</h5>
-              </div>
-            </div>
-            <div className="row credentials-cont">
-              <TextField
-                type="email"
-                name="email"
-                label="Email"
-                onChange={handleInputChange}
-                value={email}
-                placeholder={"someone@email.com"}
-                inputProps={{ min: 3, max: 40 }}
-                fullWidth
-                required
-              />
-              <TextField
-                type="password"
-                name="password"
-                label="Password"
-                onChange={handleInputChange}
-                value={password}
-                placeholder="myPassword123"
-                inputProps={{ min: 6, max: 40 }}
-                fullWidth
-                required
-              />
-              <div className="lower-links-wrapper forgot-password">
-                <p onClick={toggleForgotPassword}>
-                  Forgot your password?
-                </p>
-              </div>
-            </div>
-            <div className="main-action-button-wrapper">
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                disabled={loginDisabled}
-                fullWidth
-              >
-                Log in
-              </Button>
-            </div>
-            <div className="privacy-links">
-              <a href="data-usage-policy" target="_blank">Data Usage Policy</a>
-            </div>
-          </form>
-        </div>
+        <form onSubmit={regularSignIn} style={{ width: '100%' }}>
+          <div className={styles.credentialsContent}>
+            <TextField
+              type="email"
+              name="email"
+              label="Email"
+              onChange={handleInputChange}
+              value={email}
+              placeholder={"someone@email.com"}
+              inputProps={{ min: 3, max: 40 }}
+              fullWidth
+              required
+            />
+            <TextField
+              type="password"
+              name="password"
+              label="Password"
+              onChange={handleInputChange}
+              value={password}
+              placeholder="myPassword123"
+              inputProps={{ min: 6, max: 40 }}
+              fullWidth
+              required
+            />
+          </div>
+          <div className={styles.forgotPasswordClick}>
+            <p onClick={toggleForgotPassword}>
+              Forgot your password?
+            </p>
+          </div>
+          <div className="main-action-button-wrapper">
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              disabled={loginDisabled}
+              fullWidth
+            >
+              Log in
+            </Button>
+          </div>
+          <div className={styles.usagePolicyClick}>
+            <a href="data-usage-policy" target="_blank">Data Usage Policy</a>
+          </div>
+        </form>
       }
     </>
   );

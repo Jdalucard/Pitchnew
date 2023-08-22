@@ -1,0 +1,48 @@
+.socialButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f2f3;
+}
+
+.credentialsTitle {
+  color: rgb(110,110,110);
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 1rem 0;
+}
+
+.credentialsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.forgotPasswordClick {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  cursor: pointer
+}
+
+.forgotPasswordClick p {
+  color: #646cff;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.forgotPasswordClick p:hover {
+  text-decoration: underline;
+}
+
+.usagePolicyClick {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.usagePolicyClick a {
+  font-size: 0.8rem;
+}

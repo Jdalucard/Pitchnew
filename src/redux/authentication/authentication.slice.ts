@@ -35,7 +35,8 @@ export const authenticationSlice = createSlice({
     builder.addCase(processSocialAuthentication.pending, (state) => {
       state.isLoading = true;
     }),
-    builder.addCase(processSocialAuthentication.rejected, (state) => {
+    builder.addCase(processSocialAuthentication.rejected, (state, action) => {
+      console.log(JSON.stringify(action.payload));
       state.isLoading = false;
     }),
     builder.addCase(processSocialAuthentication.fulfilled, (state) => {
