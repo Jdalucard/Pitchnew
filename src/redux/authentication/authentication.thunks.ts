@@ -53,7 +53,7 @@ const emailConfigPath = `${basePath}/email-accounts`;
 export const requestSocialAuthentication = createAsyncThunk(
   `${authenticationStoreKey}/requestSocialAuthentication`,
   async (params: IRequestSocialAuthentication, thunkApi) => {
-    const { socialSite, isSignIn, isEmailConfiguration } = params;
+    const { socialSite, isSignIn, isEmailConfiguration } = prequestPatharams;
     let requestPath: string | undefined;
 
     if (isEmailConfiguration) {
