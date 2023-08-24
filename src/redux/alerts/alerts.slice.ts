@@ -46,6 +46,11 @@ interface ISwalOptions {
   className?: string,
 }
 
+interface IWarningAlerts {
+  title: string,
+  message: string,
+}
+
 export const alertsSlice = createSlice({
   name: alertsStoreKey,
   initialState,
@@ -119,6 +124,9 @@ export const alertsSlice = createSlice({
     errorAlert: (_, action: PayloadAction<string>) => {
       swal("Error", action.payload, "error");
     },
+    warningAlert:(_, action: PayloadAction<IWarningAlerts>) => {
+      swal(action.payload.title, action.payload.message, "warning");
+    },
     successAlert: (_, action: PayloadAction<string>) => {
       swal("Success", action.payload, "success");
     }
@@ -132,5 +140,6 @@ export const {
   openDualActionConfirmation,
   openDeleteConfirmation,
   errorAlert,
+  warningAlert,
   successAlert,
 } = alertsSlice.actions;

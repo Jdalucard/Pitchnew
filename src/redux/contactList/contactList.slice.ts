@@ -13,6 +13,9 @@ import {
   deleteUserContactListItems,
   getUserContactListItemSequence,
   activateUserContactListItemSequence,
+  connectContacts,
+  connectContactsNew,
+  getListContactItems,
 } from './contactList.thunks';
 
 interface IState {
@@ -132,6 +135,36 @@ export const contactListSlice = createSlice({
       state.isLoading = false;
     }),
     builder.addCase(activateUserContactListItemSequence.fulfilled, (state) => {
+      state.isLoading = false;
+    }),
+    // connectContacts
+    builder.addCase(connectContacts.pending, (state) => {
+      state.isLoading = true;
+    }),
+    builder.addCase(connectContacts.rejected, (state) => {
+      state.isLoading = false;
+    }),
+    builder.addCase(connectContacts.fulfilled, (state) => {
+      state.isLoading = false;
+    }),
+    // connectContactsNew
+    builder.addCase(connectContactsNew.pending, (state) => {
+      state.isLoading = true;
+    }),
+    builder.addCase(connectContactsNew.rejected, (state) => {
+      state.isLoading = false;
+    }),
+    builder.addCase(connectContactsNew.fulfilled, (state) => {
+      state.isLoading = false;
+    }),
+    // getListContactItems
+    builder.addCase(getListContactItems.pending, (state) => {
+      state.isLoading = true;
+    }),
+    builder.addCase(getListContactItems.rejected, (state) => {
+      state.isLoading = false;
+    }),
+    builder.addCase(getListContactItems.fulfilled, (state) => {
       state.isLoading = false;
     })
   },

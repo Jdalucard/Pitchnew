@@ -1,8 +1,9 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { contactListStoreKey } from "./contactList.const";
-import { errorAlert } from "../alerts";
+import { errorAlert, warningAlert } from "../alerts";
 import { IContactListItem } from "../../types";
+import { IContactSequence } from "../../types";
 
 const contactListsPath = `${import.meta.env.VITE_API_BASE_URL}/lists`;
 
@@ -36,7 +37,7 @@ interface IGetContactListItemsCount {
 
 interface IDeleteUserContactListItems {
   listId: string,
-  itemIds: string[],
+  listItemIds: string[],
 }
 
 interface IGetUserContactListItemSequence {
@@ -154,11 +155,11 @@ export const addUserContactListItems = createAsyncThunk(
 export const deleteUserContactListItems = createAsyncThunk(
   `${contactListStoreKey}/deleteUserContactListItems`,
   async (data: IDeleteUserContactListItems, thunkApi) => {
-    const { listId, itemIds } = data;
+    const { listId, listItemIds } = data;
     try {
-      const response = await axios.delete(`${contactListsPath}/${listId}/items`, { data: itemIds });
+      await axios.delete(`${contactListsPath}/${listId}/items`, { data: listItemIds });
 
-      return response.data;
+      return { success: true };
     } catch (error) {
       thunkApi.dispatch(errorAlert('Error deleting the contact from the list specified. Please, try again later.'));
     }
@@ -192,3 +193,49 @@ export const activateUserContactListItemSequence = createAsyncThunk(
     }
   }
 );
+
+export const connectContacts = createAsyncThunk(
+  `${contactListStoreKey}/connectContacts`,
+  async (newSequences: IContactSequence[], thunkApi) => {
+    try {
+      await axios.put(`${contactListsPath}/items/contact`, newSequences);
+
+      return { success: true }
+    } catch (error) {
+      thunkApi.dispatch(warningAlert({
+        title: 'Not validated',
+        message: "We couldn't validate the recipient's able to recieve messages, the outreach sequence has been removed",
+      }));
+      thunkApi.dispatch(deleteUserContactListItems({
+        listId: newSequences[0].listId,
+        listItemIds: [newSequences[0].listItemId],
+      }))
+    }
+  }
+);
+
+export const connectContactsNew = createAsyncThunk(
+  `${contactListStoreKey}/connectContactsNew`,
+  async (newSequence: IContactSequence, thunkApi) => {
+    try {
+      await axios.put(`${contactListsPath}/items/contactnew`, newSequence);
+
+      return { success: true }
+    } catch (error) {
+      thunkApi.dispatch(errorAlert('Error connecting to the new contact specified. Please, try again later.'));
+    }
+  }
+);
+
+export const getListContactItems = createAsyncThunk(
+  `${contactListStoreKey}/getContactListsItems`,
+  async (listId: string, thunkApi) => {
+    try {
+      const response = await axios.get(`${contactListsPath}/${listId}/contactitems`);
+
+      return response.data;
+    } catch (error) {
+      thunkApi.dispatch(errorAlert('Error getting the contact items in the list specified. Please, try again later.'));
+    }
+  }
+)
