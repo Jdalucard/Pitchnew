@@ -1,9 +1,10 @@
-// WIP
 import { useState } from "react";
 import backgroundImage from '../../assets/images/pitchdb-background.png';
 import logo from '../../assets/logos/pitchdb-logo.png';
 import { AuthenticationDisplay, ForgotPasswordDisplay } from "./components";
 import styles from './Home.module.css';
+import { useAppSelector } from "../../redux/hooks";
+import { authenticationSelectors } from "../../redux/authentication";
 
 interface IProps {
   isInvite?: boolean
@@ -11,6 +12,7 @@ interface IProps {
 
 export function Home({ isInvite }: IProps) {
   const [forgetPasswordVisible, setForgetPasswordVisible] = useState(false);
+  const authenticationIsLoading = useAppSelector(authenticationSelectors.isLoading);
 
   const toggleForgotPassword = () => {
     setForgetPasswordVisible((prev) => !prev);
@@ -26,9 +28,13 @@ export function Home({ isInvite }: IProps) {
           <AuthenticationDisplay
             isInvite={isInvite ?? false}
             toggleForgotPassword={toggleForgotPassword}
+            isLoading={authenticationIsLoading}
           />
           :
-          <ForgotPasswordDisplay toggleForgotPassword={toggleForgotPassword} />
+          <ForgotPasswordDisplay
+            toggleForgotPassword={toggleForgotPassword}
+            isLoading={authenticationIsLoading}
+          />
         }
       </div>
     </div>

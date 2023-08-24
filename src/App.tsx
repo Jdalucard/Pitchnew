@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
-import { useAuthenticationListener } from './hooks/authentication';
+import { useAuthenticationListener } from './hooks';
 import { Callback } from './common';
 import { callbackTypes } from './types';
 import Home from './components/home';
 import UsagePolicy from './components/privacyPolicy';
-// import Main from './modules/main/containers/main';
+import Main from './components/main';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -18,12 +18,8 @@ function App() {
         <Route path={'/data-usage-policy'} element={<UsagePolicy />} />          
         <Route path={'/authcallback'} element={<Callback type={callbackTypes.authentication} />} />
         <Route path={'/emailcallback'} element={<Callback type={callbackTypes.emailConfiguration} />} />
-        {/* <Route
-          path={'/main'}
-          element={
-            <Main changeAuthNetwork={changeAuthNetwork} changeEmailAuthNetwork={changeEmailAuthNetwork} />
-          }
-        /> */}
+        <Route path={'/main'} element={<Main />}
+        />
       </Routes>
     </div>
   );

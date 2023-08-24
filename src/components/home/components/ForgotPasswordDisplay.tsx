@@ -1,15 +1,16 @@
 import { useState } from "react"
 import { Button, TextField, Typography } from "@mui/material";
 import { useAppDispatch } from "../../../redux/hooks";
-import { closeLoadingModal, errorAlert, openLoadingModal } from "../../../redux/alerts";
+import { closeLoadingModal, openLoadingModal } from "../../../redux/alerts";
 import { processResetPassword } from "../../../redux/authentication";
-import styles from './ForgotPasswordDisplay.module.css';
+import styles from './styles/ForgotPasswordDisplay.module.css';
 
 interface IProps {
   toggleForgotPassword: () => void,
+  isLoading: boolean,
 }
 
-export function ForgotPasswordDisplay({ toggleForgotPassword }: IProps) {
+export function ForgotPasswordDisplay({ toggleForgotPassword, isLoading }: IProps) {
   const dispatch = useAppDispatch();
 
   const [userEmail, setUserEmail] = useState('');
@@ -30,6 +31,10 @@ export function ForgotPasswordDisplay({ toggleForgotPassword }: IProps) {
     
     dispatch(closeLoadingModal());
   }
+
+  if (isLoading) {
+    return <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
+  }  
 
   return (
     <>

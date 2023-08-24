@@ -35,14 +35,6 @@ interface IOpenRemovalConfirmation {
   message: string,
 }
 
-interface IOpenError {
-  error: string,
-}
-
-interface IOpenSuccess {
-  success: string,
-}
-
 interface ISwalOptions {
   title: string,
   text: string,
@@ -124,12 +116,11 @@ export const alertsSlice = createSlice({
         buttons: ["Cancel", "Remove"],
       })
     },
-    errorAlert: (_, action: PayloadAction<IOpenError>) => {
-      const { error} = action.payload;
-      swal("Error", error, "error");
+    errorAlert: (_, action: PayloadAction<string>) => {
+      swal("Error", action.payload, "error");
     },
-    successAlert: (_, action: PayloadAction<IOpenSuccess>) => {
-      swal("Success", action.payload.success, "success");
+    successAlert: (_, action: PayloadAction<string>) => {
+      swal("Success", action.payload, "success");
     }
   },
 });

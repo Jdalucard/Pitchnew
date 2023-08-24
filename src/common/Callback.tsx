@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { processSocialAuthenticationHelper, processEmailConfigurationHelper } from '../redux/authentication/components';
-import { callbackTypes } from '../types';
-import { LoadingIcon } from '.';
+import { processSocialAuthenticationHelper, processEmailConfigurationHelper } from '../redux/authentication/helpers';
+import { callbackTypes, loadingDisplayTypes } from '../types';
 import { useAppDispatch } from '../redux/hooks';
+import { LoadingDisplay } from './LoadingDisplay';
 
 interface IProps {
   type: callbackTypes,
@@ -24,15 +24,5 @@ export function Callback({ type }: IProps) {
     }
   }, [type, dispatch]);
   
-  return (
-    <div style={{
-      height: '100svh',
-      width: '100svw',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }}>
-      <LoadingIcon size="loading-huge" />
-    </div>
-  );
+  return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />;
 }

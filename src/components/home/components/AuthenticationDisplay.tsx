@@ -2,21 +2,23 @@ import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { Button, TextField } from '@mui/material';
 import { socialNetworks } from "../../../constants";
-import { getFromQueryParams } from "../../../common";
+import { getFromQueryParams, LoadingDisplay } from "../../../common";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setCookies, setUserJWT } from "../../../redux/cookies";
-import { requestSocialAuthenticationHelper } from "../../../redux/authentication/components";
+import { requestSocialAuthenticationHelper } from "../../../redux/authentication/helpers";
 import { closeLoadingModal, openLoadingModal } from "../../../redux/alerts";
 import { processRegularAuthentication } from "../../../redux/authentication";
 import { SocialAuthenticationButton } from ".";
-import styles from './AuthenticationDisplay.module.css';
+import styles from './styles/AuthenticationDisplay.module.css';
+import { loadingDisplayTypes } from "../../../types";
 
 interface IProps {
   isInvite: boolean,
   toggleForgotPassword: () => void,
+  isLoading: boolean,
 }
 
-export function AuthenticationDisplay({ isInvite, toggleForgotPassword }: IProps) {
+export function AuthenticationDisplay({ isInvite, toggleForgotPassword, isLoading }: IProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -76,6 +78,10 @@ export function AuthenticationDisplay({ isInvite, toggleForgotPassword }: IProps
       dispatch(closeLoadingModal());
       navigate('/main/academy');
     }
+  }
+
+  if (isLoading) {
+    return <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
   }
 
   return (

@@ -4,7 +4,7 @@ import linkedinLogo from '../../../assets/logos/linkedin-logo.png';
 import facebookLogo from '../../../assets/logos/facebook-logo.png';
 import { socialNetworks } from '../../../constants';
 import { formatToTitleCase } from '../../../common';
-import styles from './SocialAuthenticationButton.module.css';
+import styles from './styles/SocialAuthenticationButton.module.css';
 
 interface IProps {
   network: socialNetworks,

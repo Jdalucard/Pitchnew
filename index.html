@@ -37,7 +37,9 @@
     </script>
     <script src="https://cdn.candu.ai/sdk/latest/candu.umd.js"></script>
     <script>
-      Candu.init({ clientToken: 'CKf5ldkAW0' });
+      if (typeof Candu === 'function') {
+        window.Candu = Candu;
+      }
     </script>
     <!--- Tooltip player -->
     <!-- Following script for defining the global object, for randomstring to work properly -->
