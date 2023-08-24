@@ -28,6 +28,6 @@ export const userSlice = createSlice({
     builder.addCase(getUserData.fulfilled, (state, action) => {
       state.isLoading = false;
       state.userData = action.payload;
-    })  
+    })
   },
 });

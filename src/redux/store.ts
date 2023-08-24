@@ -3,13 +3,16 @@ import { cookiesSlice, cookiesStoreKey } from './cookies';
 import { alertsSlice, alertsStoreKey } from './alerts';
 import { authenticationSlice, authenticationStoreKey } from './authentication';
 import { userSlice, userStoreKey } from './user';
+import { contactListStoreKey } from './contactList/contactList.const';
+import { contactListSlice } from './contactList/contactList.slice';
 
 export const store = configureStore({
   reducer: {
     [cookiesStoreKey]: cookiesSlice.reducer,
     [alertsStoreKey]: alertsSlice.reducer,
     [authenticationStoreKey]: authenticationSlice.reducer,
-    [userStoreKey]: userSlice.reducer
+    [userStoreKey]: userSlice.reducer,
+    [contactListStoreKey]: contactListSlice.reducer,
   },
 });
 
