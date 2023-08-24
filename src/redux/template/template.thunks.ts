@@ -4,8 +4,14 @@ import { templateStoreKey } from ".";
 import { errorAlert } from "../alerts";
 
 
-interface IIsSignIn {
-    isSignIn: boolean,
+interface IGetEmaildata {
+    id: string,
+}
+
+interface IEmail {
+    subject: string,
+    content: string,
+    date: Date
 }
 
 interface IEditEmailTemplate {
@@ -17,24 +23,15 @@ interface IEditEmailTemplate {
 }
 
 interface IRemoveEmailTemplate {
-    isSignIn: boolean,
     id: string,
     idNote: string,
 }
 
-interface IEmail {
-    subject: string,
-    content: string,
-    date: Date
-}
 
 interface IAddEmailTemplate{
-    isSignIn: boolean,
     id: boolean,
     note: IEmail,
 }
-
-
 
 
 const basePath = import.meta.env.VITE_API_BASE_URL;
@@ -44,15 +41,11 @@ const ADD_TEMPLATE_ENDPOINT = '/email-templates/';
 export const addEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/addemailtemplate`,
     async (params: IAddEmailTemplate, thunkApi) => {
-        const { id, note, isSignIn } = params;
-        let requestPath: string | undefined;
+        const { id, note } = params;
 
-        if (isSignIn) {
-            requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/add-template";
-        } else {
-            requestPath = basePath + ADD_TEMPLATE_ENDPOINT;
-        }
         try {
+            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/add-template";
+
             const response = await axios.put(requestPath, note);
 
             return response.data;
@@ -74,17 +67,12 @@ export const addEmailTemplate = createAsyncThunk(
 
 export const getEmaildata = createAsyncThunk(
     `${templateStoreKey}/getEmaildata`,
-    async (params: IIsSignIn, thunkApi) => {
-        const { isSignIn } = params;
-        let requestPath: string | undefined;
-    
-        if (isSignIn) {
-          requestPath = basePath + ADD_TEMPLATE_ENDPOINT;
-        } else {
-          requestPath = ``;
-        }
+    async (params: IGetEmaildata, thunkApi) => {
   
       try {
+
+        const requestPath = basePath + ADD_TEMPLATE_ENDPOINT;
+
         const response = await axios.get(requestPath);
   
         return response.data;
@@ -107,15 +95,12 @@ export const getEmaildata = createAsyncThunk(
 export const editEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/editemailtemplate`,
     async (params: IEditEmailTemplate, thunkApi) => {
-        const { id, idNote, note, isSignIn } = params;
-        let requestPath: string | undefined;
-
-        if (isSignIn) {
-            requestPath = basePath + ADD_TEMPLATE_ENDPOINT  + id + "/edit-template/" + idNote;
-        } else {
-            requestPath = basePath + ADD_TEMPLATE_ENDPOINT;
-        }
+        const { id, idNote, note } = params;
+        
         try {
+
+            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT  + id + "/edit-template/" + idNote;
+
             const response = await axios.put(requestPath, note);
 
             return response.data[0].emailsignature;
@@ -138,15 +123,11 @@ export const editEmailTemplate = createAsyncThunk(
 export const removeEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/removeemailtemplate`,
     async (params: IRemoveEmailTemplate, thunkApi) => {
-        const { id, idNote, isSignIn } = params;
-        let requestPath: string | undefined;
+        const { id, idNote } = params;
 
-        if (isSignIn) {
-            requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/remove-template/" + idNote;
-        } else {
-            requestPath = basePath + ADD_TEMPLATE_ENDPOINT;
-        }
         try {
+            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/remove-template/" + idNote;
+
             const response = await axios.delete(requestPath);
 
             return response.data;
