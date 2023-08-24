@@ -14,7 +14,7 @@ interface ISetSettings {
 
 interface ISetCookies {
   key: string,
-  value: any,
+  value: string,
 }
 
 const initialState: IState = {
@@ -52,5 +52,5 @@ export const cookiesSlice = createSlice({
 export const {
   setUserJWT,
   setCookies,
-  removeCookies
+  removeCookies,
 } = cookiesSlice.actions;

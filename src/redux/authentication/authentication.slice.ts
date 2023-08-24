@@ -3,6 +3,7 @@ import { authenticationStoreKey } from './authentication.const';
 import {
   processEmailConfiguration,
   processRegularAuthentication,
+  processResetPassword,
   processSignConfiguration,
   processSocialAuthentication,
   requestSocialAuthentication
@@ -71,7 +72,16 @@ export const authenticationSlice = createSlice({
     }),
     builder.addCase(processEmailConfiguration.fulfilled, (state) => {
       state.isLoading = false;
-    })
-    
+    }),
+    // processResetPassword
+    builder.addCase(processResetPassword.pending, (state) => {
+      state.isLoading = true;
+    }),
+    builder.addCase(processResetPassword.rejected, (state) => {
+      state.isLoading = false;
+    }),
+    builder.addCase(processResetPassword.fulfilled, (state) => {
+      state.isLoading = false;
+    })    
   },
 });

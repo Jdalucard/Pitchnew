@@ -68,7 +68,7 @@ export const requestSocialAuthentication = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error instanceof Error) {
-        thunkApi.dispatch(errorAlert({ error: error.message }));
+        thunkApi.dispatch(errorAlert(error.message));
       }
     }
   }
@@ -105,7 +105,7 @@ export const processRegularAuthentication = createAsyncThunk(
       const err = error as AxiosError<string>;
       if (err.response) {
         thunkApi.dispatch(
-          errorAlert({ error: (err.response.data ?? 'Error, please try again later.') })
+          errorAlert(err.response.data ?? 'Error, please try again later.')
         );
       } else {
         throw error;
@@ -131,7 +131,7 @@ export const processSignConfiguration = createAsyncThunk(
 
       thunkApi.dispatch(setCookies({
         key: authMessages.COOKIES_AUTH_ERROR,
-        value: err.response?.data || 'Error, please try again later.'
+        value: err.response?.data ?? 'Error, please try again later.'
       }));
       window.opener.postMessage(authMessages.POST_CONNECT_ERROR, window.opener.origin);
     }
@@ -163,7 +163,7 @@ export const processEmailConfiguration = createAsyncThunk(
 
       thunkApi.dispatch(setCookies({
         key: authMessages.COOKIES_EMAIL_ERROR,
-        value: err.response?.data || 'Error, please try again later.'
+        value: err.response?.data ?? 'Error, please try again later.'
       }));
 
       window.opener.postMessage(authMessages.POST_EMAIL_ERROR, window.opener.origin);
@@ -181,7 +181,7 @@ export const processResetPassword = createAsyncThunk(
     } catch (error) {
       const err = error as AxiosError<string>;
 
-      thunkApi.dispatch(errorAlert({ error: err.response?.data || 'An unexpected error occured, please try again later' }))
+      thunkApi.dispatch(errorAlert(err.response?.data ?? 'An unexpected error occured, please try again later' ))
     }
   }
 );

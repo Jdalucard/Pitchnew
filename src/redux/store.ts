@@ -4,6 +4,9 @@ import { alertsSlice, alertsStoreKey } from './alerts';
 import { authenticationSlice, authenticationStoreKey } from './authentication';
 import { templateSlice, templateStoreKey } from './template';
 import { emailSlice, emailStoreKey } from './email';
+import { userSlice, userStoreKey } from './user';
+import { contactListStoreKey } from './contactList/contactList.const';
+import { contactListSlice } from './contactList/contactList.slice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +15,8 @@ export const store = configureStore({
     [authenticationStoreKey]: authenticationSlice.reducer,
     [templateStoreKey]: templateSlice.reducer,
     [emailStoreKey]: emailSlice.reducer,
+    [userStoreKey]: userSlice.reducer,
+    [contactListStoreKey]: contactListSlice.reducer,
   },
 });
 

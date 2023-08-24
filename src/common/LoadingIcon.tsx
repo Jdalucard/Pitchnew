@@ -1,8 +1,8 @@
 import spinner from '../assets/gifts/spinner.gif';
-import './LoadingIcon.styles.css';
+import './styles/LoadingIcon.styles.css';
 
 export interface ILoadingIcon {
-  size: string,
+  size?: string,
   hidden?: boolean,
 }
 

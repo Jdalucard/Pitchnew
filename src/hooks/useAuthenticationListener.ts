@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react';
 import Cookies from 'universal-cookie';
-import { useAppDispatch } from '../../redux/hooks';
-import { removeCookies } from '../../redux/cookies';
-import { errorAlert } from '../../redux/alerts';
-import { authMessages } from '../../constants';
+import { useAppDispatch } from '../redux/hooks';
+import { removeCookies } from '../redux/cookies';
+import { errorAlert } from '../redux/alerts';
+import { authMessages } from '../constants';
 
 export function useAuthenticationListener() {
   const dispatch = useAppDispatch();
@@ -25,21 +25,15 @@ export function useAuthenticationListener() {
         window.location.href = host + '/main/configuration?element=connect';
         break;
       case authMessages.POST_AUTH_ERROR:
-        dispatch(errorAlert({
-          error: cookies.get(authMessages.COOKIES_AUTH_ERROR),
-        }));
+        dispatch(errorAlert(cookies.get(authMessages.COOKIES_AUTH_ERROR)));
         dispatch(removeCookies(authMessages.COOKIES_AUTH_ERROR))
         break;
       case authMessages.POST_EMAIL_ERROR:
-        dispatch(errorAlert({
-          error: "There was an error connecting your email: " + cookies.get(authMessages.COOKIES_EMAIL_ERROR),
-        }));
+        dispatch(errorAlert('There was an error connecting your email: ' + cookies.get(authMessages.COOKIES_EMAIL_ERROR)));
         dispatch(removeCookies(authMessages.COOKIES_EMAIL_ERROR))
         break;
       case authMessages.POST_CONNECT_ERROR:
-        dispatch(errorAlert({
-          error: "There was an error connecting your email: " + cookies.get(authMessages.COOKIES_CONNECT_ERROR),
-        }));
+        dispatch(errorAlert('There was an error connecting your email: ' + cookies.get(authMessages.COOKIES_CONNECT_ERROR)));
         dispatch(removeCookies(authMessages.COOKIES_CONNECT_ERROR));
         break;
       default:
