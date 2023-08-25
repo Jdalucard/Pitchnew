@@ -52,21 +52,14 @@ export const addEmailTemplate = createAsyncThunk(
 
         } catch (error) {
 
-            const err = error as AxiosError<string>;
-            if (err.response) {
-                thunkApi.dispatch(
-                    errorAlert({ error: (err.response.data ?? 'Error, please try again later.') })
-                );
-            } else {
-                throw error;
-            }
+            errorAlert('Error, please try again later.')
 
         }
     }
 );
 
 export const getEmaildata = createAsyncThunk(
-    `${templateStoreKey}/getEmaildata`,
+    `${templateStoreKey}/getemaildata`,
     async (params: IGetEmaildata, thunkApi) => {
   
       try {
@@ -78,14 +71,7 @@ export const getEmaildata = createAsyncThunk(
         return response.data;
       } catch (error) {
 
-        const err = error as AxiosError<string>;
-        if (err.response) {
-          thunkApi.dispatch(
-            errorAlert({ error: (err.response.data ?? 'Error, please try again later.') })
-          );
-        } else {
-          throw error;
-        }
+        errorAlert('Error, please try again later.')
 
       }
     }
@@ -107,14 +93,7 @@ export const editEmailTemplate = createAsyncThunk(
 
         } catch (error) {
 
-            const err = error as AxiosError<string>;
-            if (err.response) {
-                thunkApi.dispatch(
-                    errorAlert({ error: (err.response.data ?? 'Error, please try again later.') })
-                );
-            } else {
-                throw error;
-            }
+            errorAlert('Error, please try again later.')
 
         }
     }
@@ -134,14 +113,7 @@ export const removeEmailTemplate = createAsyncThunk(
 
         } catch (error) {
 
-            const err = error as AxiosError<string>;
-            if (err.response) {
-                thunkApi.dispatch(
-                    errorAlert({ error: (err.response.data ?? 'Error, please try again later.') })
-                );
-            } else {
-                throw error;
-            }
+            errorAlert('Error, please try again later.')
 
         }
     }

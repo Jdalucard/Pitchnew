@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { type PayloadAction } from '@reduxjs/toolkit';
 import { emailStoreKey } from './email.const';
 
 import {
-    getEmailSignature
+    getEmailSignature,
+    sendEmail
   } from '.';
 
 interface IState {
@@ -24,22 +24,6 @@ export const emailSlice = createSlice({
     name: emailStoreKey,
     initialState,
     reducers: {
-        fetchEmailTemplates: (_, action: PayloadAction<string>) => {
-            //lo que sea
-        },
-        addEmailtemplate: (_, action: PayloadAction<string>) => {
-            //lo que sea
-        },
-        editEmailtemplate: (_, action: PayloadAction<string>) => {
-            //lo que sea
-        },
-        removeEmailtemplate: (_, action: PayloadAction<string>) => {
-            //lo que sea
-        },
-        sendEmailtemplate: (_, action: PayloadAction<string>) => {
-            //lo que sea
-        },
-
     },
     extraReducers: (builder) => {
         //getEmailSignature
@@ -54,12 +38,16 @@ export const emailSlice = createSlice({
             state.isLoading = true;
         });
 
+        //sendEmail
+        builder.addCase(sendEmail.pending, (state) => {
+            state.isLoading = true;
+        }),
+        builder.addCase(sendEmail.fulfilled, (state, action) => {
+            state.isLoading = false;
+        }),
+        builder.addCase(sendEmail.rejected, (state, action) => {
+            state.isLoading = true;
+        });
+
     },
 });
-
-export const {
-    fetchEmailTemplates,
-    addEmailtemplate,
-    removeEmailtemplate,
-    sendEmailtemplate
-  } = emailSlice.actions;

@@ -11,13 +11,11 @@ import {
 
 interface IState {
   isLoading: boolean;
-  error: string;
   emailTemplatedata: [];
 }
 
 const initialState: IState = {
   isLoading: false,
-  error: '',
   emailTemplatedata: [],
 };
 
@@ -26,12 +24,6 @@ export const templateSlice = createSlice({
     initialState,
     reducers: {
         fetchEmailTemplates: (_, action: PayloadAction<string>) => {
-            //lo que sea
-        },
-        removeEmailtemplate: (_, action: PayloadAction<string>) => {
-            //lo que sea
-        },
-        sendEmailtemplate: (_, action: PayloadAction<string>) => {
             //lo que sea
         },
 
