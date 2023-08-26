@@ -1,25 +1,13 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { templateStoreKey } from ".";
 import { errorAlert } from "../alerts";
-
-
-interface IGetEmaildata {
-    id: string,
-}
-
-interface IEmail {
-    subject: string,
-    content: string,
-    date: Date
-}
+import { IEmail, IEditEmail } from "../../types"
 
 interface IEditEmailTemplate {
-    isSignIn: boolean,
     id: string,
     idNote: string,
-    editDate: Date,
-    note: IEmail
+    note: IEditEmail
 }
 
 interface IRemoveEmailTemplate {
@@ -33,20 +21,25 @@ interface IAddEmailTemplate{
     note: IEmail,
 }
 
+interface IGetEmailById{
+    id : string,
+    withStages: string
+}
+
 
 const basePath = import.meta.env.VITE_API_BASE_URL;
 
 const ADD_TEMPLATE_ENDPOINT = '/email-templates/';
 
-export const addEmailTemplate = createAsyncThunk(
-    `${templateStoreKey}/addemailtemplate`,
-    async (params: IAddEmailTemplate, thunkApi) => {
-        const { id, note } = params;
+export const getEmailTemplateById = createAsyncThunk(
+    `${templateStoreKey}/getemailtemplatebyid`,
+    async (params: IGetEmailById) => {
+        const { id, withStages } = params;
 
         try {
-            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/add-template";
+            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + '?withStages=' + withStages;
 
-            const response = await axios.put(requestPath, note);
+            const response = await axios.get(requestPath);
 
             return response.data;
 
@@ -58,9 +51,34 @@ export const addEmailTemplate = createAsyncThunk(
     }
 );
 
-export const getEmaildata = createAsyncThunk(
+
+export const addEmailTemplate = createAsyncThunk(
+    `${templateStoreKey}/addemailtemplate`,
+    async (params: IAddEmailTemplate, { dispatch }) => {
+        const { id, note } = params;
+
+        try {
+            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/add-template";
+
+            //add the email template
+            const response = await axios.put(requestPath, note);
+
+            //recover all the templates again
+            dispatch(getAllTemplates());
+
+            return response.data;
+
+        } catch (error) {
+
+            errorAlert('Error, please try again later.')
+
+        }
+    }
+);
+
+export const getAllTemplates = createAsyncThunk(
     `${templateStoreKey}/getemaildata`,
-    async (params: IGetEmaildata, thunkApi) => {
+    async () => {
   
       try {
 
@@ -80,7 +98,7 @@ export const getEmaildata = createAsyncThunk(
 
 export const editEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/editemailtemplate`,
-    async (params: IEditEmailTemplate, thunkApi) => {
+    async (params: IEditEmailTemplate, { dispatch }) => {
         const { id, idNote, note } = params;
         
         try {
@@ -88,6 +106,9 @@ export const editEmailTemplate = createAsyncThunk(
             const requestPath = basePath + ADD_TEMPLATE_ENDPOINT  + id + "/edit-template/" + idNote;
 
             const response = await axios.put(requestPath, note);
+
+            //recover all the templates again
+            dispatch(getAllTemplates());
 
             return response.data[0].emailsignature;
 
@@ -101,13 +122,16 @@ export const editEmailTemplate = createAsyncThunk(
 
 export const removeEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/removeemailtemplate`,
-    async (params: IRemoveEmailTemplate, thunkApi) => {
+    async (params: IRemoveEmailTemplate, {dispatch}) => {
         const { id, idNote } = params;
 
         try {
             const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/remove-template/" + idNote;
 
             const response = await axios.delete(requestPath);
+
+            //recover all the templates again
+            dispatch(getAllTemplates());
 
             return response.data;
 

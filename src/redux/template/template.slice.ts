@@ -1,34 +1,51 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { type PayloadAction } from '@reduxjs/toolkit';
 import { templateStoreKey } from './template.const';
+import { IEmail } from "../../types"
+
 import swal from 'sweetalert';
 import {
-    getEmaildata,
+    getAllTemplates,
+    getEmailTemplateById,
     editEmailTemplate,
     addEmailTemplate,
-    removeEmailTemplate
+    removeEmailTemplate,
   } from '.';
 
 interface IState {
   isLoading: boolean;
-  emailTemplatedata: [];
+  emailTemplates: IEmail[];
 }
+
+
 
 const initialState: IState = {
   isLoading: false,
-  emailTemplatedata: [],
+  emailTemplates: [],
 };
+
 
 export const templateSlice = createSlice({
     name: templateStoreKey,
     initialState,
     reducers: {
-        fetchEmailTemplates: (_, action: PayloadAction<string>) => {
-            //lo que sea
-        },
-
     },
     extraReducers: (builder) => {
+
+        //getEmailTemplateById
+        builder.addCase(getEmailTemplateById.pending, (state) => {
+            state.isLoading = true;
+        }),
+        builder.addCase(getEmailTemplateById.fulfilled, (state, action) => {
+            state.isLoading = false;
+
+            // **AQUI** RETORNAR EL TEMPLATE OBTENIDO EN EL FRONT
+
+        }),
+        builder.addCase(getEmailTemplateById.rejected, (state) => {
+            state.isLoading = false;
+
+            swal("Error", "An error has occured, please try again later");
+        });
 
         //addEmailTemplate
         builder.addCase(addEmailTemplate.pending, (state) => {
@@ -37,36 +54,36 @@ export const templateSlice = createSlice({
         builder.addCase(addEmailTemplate.fulfilled, (state, action) => {
             state.isLoading = false;
 
-            //tengo que llamar a getEmaildata here
+            state.emailTemplates.push(action.payload)
 
             swal("Success", action.payload.success, "Email Template added succesfully");
         }),
-        builder.addCase(addEmailTemplate.rejected, (state, action) => {
-            state.isLoading = true;
+        builder.addCase(addEmailTemplate.rejected, (state) => {
+            state.isLoading = false;
         });
 
-        //getEmaildata
-        builder.addCase(getEmaildata.pending, (state) => {
+        //getAllTemplates
+        builder.addCase(getAllTemplates.pending, (state) => {
             state.isLoading = true;
         }),
-        builder.addCase(getEmaildata.fulfilled, (state, action) => {
+        builder.addCase(getAllTemplates.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.emailTemplatedata = action.payload;
+            state.emailTemplates = action.payload;
         }),
-        builder.addCase(getEmaildata.rejected, (state, action) => {
-            state.isLoading = true;
+        builder.addCase(getAllTemplates.rejected, (state) => {
+            state.isLoading = false;
         });
 
         //editEmailtemplate
         builder.addCase(editEmailTemplate.pending, (state) => {
             state.isLoading = true;
         }),
-        builder.addCase(editEmailTemplate.fulfilled, (state, action) => {
+        builder.addCase(editEmailTemplate.fulfilled, (state) => {
             state.isLoading = false;
-            //tengo que llamar a getEmaildata here
+            //tengo que llamar a getAllTemplates here
         }),
-        builder.addCase(editEmailTemplate.rejected, (state, action) => {
-            state.isLoading = true;
+        builder.addCase(editEmailTemplate.rejected, (state) => {
+            state.isLoading = false;
         });
 
         //deleteEmailtemplate
@@ -75,20 +92,12 @@ export const templateSlice = createSlice({
         }),
         builder.addCase(removeEmailTemplate.fulfilled, (state, action) => {
             state.isLoading = false;
-            //tengo que llamar a getEmaildata here
+            //tengo que llamar a getAllTemplates here
             swal("Success", action.payload.success, "Email Template removed succesfully");
         }),
-        builder.addCase(removeEmailTemplate.rejected, (state, action) => {
-            state.isLoading = true;
+        builder.addCase(removeEmailTemplate.rejected, (state) => {
+            state.isLoading = false;
         });
 
-        
     },
 });
-
-//to review
-export const {
-    fetchEmailTemplates,
-    removeEmailtemplate,
-    sendEmailtemplate
-  } = templateSlice.actions;

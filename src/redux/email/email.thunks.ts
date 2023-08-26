@@ -1,13 +1,13 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { emailStoreKey } from ".";
 import { errorAlert } from "../alerts";
 import { IUserData } from '../../types';
 
-interface IEmail {
+interface IEmailAccountData {
     emailval: string,
     message: string,
-    emaiAccountdata: IUserData,
+    emailAccountData: IUserData,
     subject: string
 }
 
@@ -17,7 +17,11 @@ interface IGetEmailSignature {
 }
 
 interface ISendEmail {
-    note: IEmail
+    note: IEmailAccountData
+}
+
+interface IGetEmailReport {
+    id: string,
 }
 
 
@@ -30,7 +34,7 @@ const ADD_TEMPLATE_ENDPOINT = '/email-templates/';
 
 export const sendEmail = createAsyncThunk(
     `${emailStoreKey}/sendemail`,
-    async (params: ISendEmail, thunkApi) => {
+    async (params: ISendEmail) => {
         const { note } = params;
 
         try {
@@ -50,7 +54,7 @@ export const sendEmail = createAsyncThunk(
 
 export const getEmailSignature = createAsyncThunk(
     `${emailStoreKey}/getemailsignature`,
-    async (params: IGetEmailSignature, thunkApi) => {
+    async (params: IGetEmailSignature) => {
         const { userId } = params;
 
         try {
@@ -68,3 +72,25 @@ export const getEmailSignature = createAsyncThunk(
 );
 
 
+
+/****************************************REPORT AREA*****************************************/
+
+
+export const getEmailReport = createAsyncThunk(
+    `${emailStoreKey}/getemailreport`,
+    async (params: IGetEmailReport) => {
+        const { id } = params;
+
+        try {
+            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/email-validity";
+            const response = await axios.get(requestPath);
+
+            return response.data;
+
+        } catch (error) {
+
+            errorAlert('Error, please try again later.')
+
+        }
+    }
+);
