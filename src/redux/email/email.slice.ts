@@ -13,14 +13,12 @@ import {
 
 interface IState {
     isLoading: boolean;
-    emailTemplateData: [];
     emailSignatureData: string;
     email: IEmail //** AQUI / este se podria obviar y obtener directo del resultado del api*/
   }
 
 const initialState: IState = {
     isLoading: false,
-    emailTemplateData: [],
     emailSignatureData: '',
     email: {
         subject: '',
@@ -75,7 +73,7 @@ export const emailSlice = createSlice({
             state.isLoading = false;
 
             //** AQUI / este se podria obviar y obtener directo del resultado del api*/
-            
+
             state.email.subject = action.payload.emailtemplate[0].subject
             state.email.content = action.payload.emailtemplate[0].content
 

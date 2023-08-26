@@ -3,24 +3,31 @@ import { templateStoreKey } from './template.const';
 import { IEmail } from "../../types"
 
 import swal from 'sweetalert';
+
 import {
     getAllTemplates,
     getEmailTemplateById,
     editEmailTemplate,
     addEmailTemplate,
     removeEmailTemplate,
-  } from '.';
+} from '.';
 
 interface IState {
-  isLoading: boolean;
-  emailTemplates: IEmail[];
+    isLoading: boolean;
+    emailTemplates: IEmail[];
+    emailTemplate: IEmail;
 }
 
 
 
 const initialState: IState = {
-  isLoading: false,
-  emailTemplates: [],
+    isLoading: false,
+    emailTemplates: [],
+    emailTemplate: {
+        subject: '',
+        content: '',
+        date: new Date()
+    },
 };
 
 
