@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
+import { toast, Theme, Zoom } from 'react-toastify';
 import { type PayloadAction } from '@reduxjs/toolkit';
 import { type ContentOptions } from 'sweetalert/typings/modules/options/content';
 import { type ButtonList } from 'sweetalert/typings/modules/options/buttons';
@@ -51,15 +52,24 @@ interface IWarningAlerts {
   message: string,
 }
 
+const toastOptions = {
+  position: toast.POSITION.TOP_RIGHT,
+  transition: Zoom,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  theme: 'light' as Theme,
+};
+
 export const alertsSlice = createSlice({
   name: alertsStoreKey,
   initialState,
   reducers: {
-    openLoadingModal: (_, action: PayloadAction<string | undefined>) => {
+    openLoadingModal: (_, action) => {
       if (swal.getState && !swal.getState().isOpen) {
         swal({
           title: "",
-          text: (action || 'Loading') + ', please wait...',
+          text: (action.payload || 'Loading') + ', please wait...',
           icon: spinnerGif,
           closeOnClickOutside: false
         });
@@ -121,15 +131,27 @@ export const alertsSlice = createSlice({
         buttons: ["Cancel", "Remove"],
       })
     },
-    errorAlert: (_, action: PayloadAction<string>) => {
+    errorAlert: (_, action) => {
       swal("Error", action.payload, "error");
     },
-    warningAlert:(_, action: PayloadAction<IWarningAlerts>) => {
+    warningAlert: (_, action: PayloadAction<IWarningAlerts>) => {
       swal(action.payload.title, action.payload.message, "warning");
     },
-    successAlert: (_, action: PayloadAction<string>) => {
+    successAlert: (_, action) => {
       swal("Success", action.payload, "success");
-    }
+    },
+    successSideAlert: (_, action) => {
+      if (swal.getState && swal.close && swal.getState().isOpen) {
+        swal.close();
+      }
+      toast.success(action.payload, toastOptions);
+    },
+    errorSideAlert: (_, action) => {
+      if (swal.getState && swal.close && swal.getState().isOpen) {
+        swal.close();
+      }
+      toast.error(action.payload, toastOptions);
+    }    
   },
 });
 
@@ -142,4 +164,6 @@ export const {
   errorAlert,
   warningAlert,
   successAlert,
+  successSideAlert,
+  errorSideAlert,
 } = alertsSlice.actions;

@@ -1,0 +1,80 @@
+.headerWrapper {
+  position: sticky;
+  top: 0;
+  background-color: #f1f2f3;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  border: 1px solid white;
+}
+
+.logoAndMobileToggleWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.logoWrapper {
+  width: 10rem;
+  height: auto;
+  padding: 0 1.25rem;
+  min-height: 3.55rem;
+  display: flex;
+  align-items: center;
+
+  @media only screen and (max-width: 600px) {
+    width: 7rem;
+    min-height: auto;
+  }
+  
+  @media only screen and (max-width: 480px) {
+    width: 6rem;
+    padding: 0.5rem;
+  }
+
+  @media only screen and (max-width: 420px) {
+    width: 5rem;
+  }
+}
+
+.profileOptionsWrapper {
+  display: flex;
+  gap: 0.5rem;
+  border-left: 1px solid white;
+  padding: 0 1rem;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  min-width: 13rem;
+
+  @media only screen and (max-width: 480px) {
+    position: unset;
+    padding: 0 0.5rem;
+    min-width: auto;
+  }
+}
+
+.mobileNavigationToggle {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid white;
+  padding: 0rem 1.25rem;
+  cursor: pointer;
+
+  @media only screen and (max-width: 600px) {
+    min-width: 3.4rem;
+  }
+}
+
+.profileToggleWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.nameAndArrowDownWrapper {
+  display: flex;
+  align-items: center;
+}
+

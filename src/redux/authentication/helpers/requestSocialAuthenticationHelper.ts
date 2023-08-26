@@ -37,7 +37,7 @@ export async function requestSocialAuthenticationHelper({ socialSite, isSignIn, 
       : document.documentElement.clientHeight
         ? document.documentElement.clientHeight
         : window.screen.height;
-  const w = 900;
+  const w = 450;
   const h = 650;
   const systemZoom = width / window.screen.availWidth;
   const left = (width - w) / 2 / systemZoom + dualScreenLeft;

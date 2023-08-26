@@ -5,3 +5,4 @@ export * from './verifyStateFromQueryParams';
 export * from './formatToTitleCase'
 export * from './buildAppTheme';
 export * from './LoadingDisplay';
+export * from './userHasAllAccess';

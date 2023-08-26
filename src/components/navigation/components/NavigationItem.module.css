@@ -1,0 +1,39 @@
+.verticalDivider {
+  width: 80%;
+  height: 1px;
+  background-color: white;
+}
+
+.navigationItem {
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  border-left: 3px solid white;
+  align-items: center;
+  gap: 1rem;
+
+  @media only screen and (max-width: 600px) {
+    padding: 0.75rem;
+  }
+}
+
+.navigationItem.active {
+  background-color: rgba(88, 86, 214, 0.1);
+  border-left: 3px solid rgb(0, 26, 183);
+  color: rgb(0, 26, 183);
+}
+
+.navigationAnchor {
+  text-decoration: none;
+  color: black;
+  width: 100%;
+
+  :hover {
+    color: #263a69;
+  }
+}
+
+.navIconWrapper {
+  width: 1.4rem;
+  display: flex;
+  justify-content: center;
+}

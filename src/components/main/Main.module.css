@@ -1,0 +1,15 @@
+.mainContentWrapper {
+  margin-left: 13.5rem;
+
+  @media only screen and (max-width: 600px) {
+    margin-left: 0;
+  }
+}
+
+.mainContentWrapper.minimized {
+   margin-left: 3.8rem;
+
+  @media only screen and (max-width: 600px) {
+    margin-left: 0;
+  }
+}
