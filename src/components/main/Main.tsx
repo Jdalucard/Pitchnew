@@ -1,42 +1,56 @@
-import { useCallback, useEffect, useState } from "react";
-import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { getUserData, userSelectors } from "../../redux/user";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import { useAppSelector } from "../../redux/hooks";
+import { userSelectors } from "../../redux/user";
 import { LoadingDisplay } from "../../common";
 import { loadingDisplayTypes } from "../../types";
+import Header from "../header";
+import Navigation from "../navigation";
+import styles from './Main.module.css';
+import { useFetchUser } from "../../hooks";
 
 export function Main() {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const user = useAppSelector(userSelectors.userData);
   const userIsLoading = useAppSelector(userSelectors.isLoading);
 
-  const [isAdminMode, setIsAdminMode] = useState(false);
+  useFetchUser();
 
-  const fetchUser = useCallback(async () => {
-    const cookies = new Cookies();
-    const token = cookies.get('jwt');
-    const response = await dispatch(getUserData(token)).unwrap();
+  const [navigationIsMinimized, setNavigationIsMinimized] = useState(false);
 
-    if (!response) {
-      navigate('/');
-    } else {
-      const isAdmin = cookies.get('admin-token');
-      setIsAdminMode(isAdmin);
-    }
-  }, [dispatch, navigate]);
-
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+  const toggleNavigationIsMinimized = () => {
+    setNavigationIsMinimized((prev) => !prev);
+  }
 
   if (userIsLoading) {
     return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />
   }
 
   return (
-    <>
-    </>
+    <div style={{ width: '100svw', height: '100svh' }}>
+      <Header
+        navigationIsMinimized={navigationIsMinimized}
+        toggleNavigationIsMinimized={toggleNavigationIsMinimized}
+      />
+      <Navigation navigationIsMinimized={navigationIsMinimized} />
+      <div className={`${styles.mainContentWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}>
+        <Routes>
+          <Route path={"dashboard"} element={<></>} />
+          <Route path={"podcast-search"} element={<></>} />
+          <Route path={"live-events"} element={<></>} />
+          <Route path={"business-search"} element={<></>} />
+          <Route path={"people-search"} element={<></>} />
+          <Route path={"experts-search"} element={<></>} />
+          <Route path={"media-search"} element={<></>} />
+          <Route path={"conference-search"} element={<></>} />
+          <Route path={"my-lists"} element={<></>} />
+          <Route path={"outreach-sequences/"} element={<></>} />
+          <Route path={"outreach-sequences-mail/"} element={<></>} />
+          <Route path={"account"} element={<></>} />
+          <Route path={"payment/credits"} element={<></>} />
+          <Route path={"reports"} element={<></>} />
+          <Route path={"templates"} element={<></>} />
+          <Route path={"academy"} element={<></>} />
+        </Routes>
+      </div>
+    </div>
   );
 }

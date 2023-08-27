@@ -112,8 +112,8 @@ export const deleteUserContactList = createAsyncThunk(
 
 export const getContactListItems = createAsyncThunk(
   `${contactListStoreKey}/getContactListItems`,
-  async (data: IGetContactListItems, thunkApi) => {
-    const { listId, itemType, page } = data;
+  async (params: IGetContactListItems, thunkApi) => {
+    const { listId, itemType, page } = params;
     try {
       const response = await axios.get(`${contactListsPath}/${listId}/items?type=${itemType}&page=${page}`);
 
@@ -126,8 +126,8 @@ export const getContactListItems = createAsyncThunk(
 
 export const getContactListItemsCount = createAsyncThunk(
   `${contactListStoreKey}/getContactListItemsCount`,
-  async (data: IGetContactListItemsCount, thunkApi) => {
-    const { listId, itemType } = data;
+  async (params: IGetContactListItemsCount, thunkApi) => {
+    const { listId, itemType } = params;
     try {
       const response = await axios.get(`${contactListsPath}/${listId}/items/count?type=${itemType}`);
 
@@ -140,8 +140,8 @@ export const getContactListItemsCount = createAsyncThunk(
 
 export const addUserContactListItems = createAsyncThunk(
   `${contactListStoreKey}/addUserContactListItems`,
-  async (data: IAddItemsToUserContactList, thunkApi) => {
-    const { listId, itemType, items } = data;
+  async (params: IAddItemsToUserContactList, thunkApi) => {
+    const { listId, itemType, items } = params;
     try {
       const response = await axios.post(`${contactListsPath}/${listId}/items?type=${itemType}`, items);
 
@@ -154,8 +154,8 @@ export const addUserContactListItems = createAsyncThunk(
 
 export const deleteUserContactListItems = createAsyncThunk(
   `${contactListStoreKey}/deleteUserContactListItems`,
-  async (data: IDeleteUserContactListItems, thunkApi) => {
-    const { listId, listItemIds } = data;
+  async (params: IDeleteUserContactListItems, thunkApi) => {
+    const { listId, listItemIds } = params;
     try {
       await axios.delete(`${contactListsPath}/${listId}/items`, { data: listItemIds });
 
@@ -168,8 +168,8 @@ export const deleteUserContactListItems = createAsyncThunk(
 
 export const getUserContactListItemSequence = createAsyncThunk(
   `${contactListStoreKey}/getUserContactListItemSequence`,
-  async (data: IGetUserContactListItemSequence, thunkApi) => {
-    const { listId, listItemId } = data;
+  async (params: IGetUserContactListItemSequence, thunkApi) => {
+    const { listId, listItemId } = params;
     try {
       const response = await axios.get(`${contactListsPath}/${listId}/items/${listItemId}/sequence`);
 
@@ -182,8 +182,8 @@ export const getUserContactListItemSequence = createAsyncThunk(
 
 export const activateUserContactListItemSequence = createAsyncThunk(
   `${contactListStoreKey}/activateUserContactListItemSequence`,
-  async (data: IGetUserContactListItemSequence, thunkApi) => {
-    const { listId, listItemId } = data;
+  async (params: IGetUserContactListItemSequence, thunkApi) => {
+    const { listId, listItemId } = params;
     try {
       const response = await axios.put(`${contactListsPath}/${listId}/items/${listItemId}/sequence`);
 
