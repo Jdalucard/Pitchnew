@@ -9,7 +9,10 @@ import Navigation from "../navigation";
 import styles from './Main.module.css';
 import { useFetchUser } from "../../hooks";
 
+import Templates from "../templates"
+
 export function Main() {
+  
   const userIsLoading = useAppSelector(userSelectors.isLoading);
 
   useFetchUser();
@@ -47,7 +50,7 @@ export function Main() {
           <Route path={"account"} element={<></>} />
           <Route path={"payment/credits"} element={<></>} />
           <Route path={"reports"} element={<></>} />
-          <Route path={"templates"} element={<></>} />
+          <Route path={"templates"} element={<Templates />} />
           <Route path={"academy"} element={<></>} />
         </Routes>
       </div>

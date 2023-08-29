@@ -14,17 +14,17 @@ import {
 interface IState {
     isLoading: boolean;
     emailSignatureData: string;
-    email: IEmail //** AQUI / este se podria obviar y obtener directo del resultado del api*/
+    //email: IEmail //** AQUI / este se podria obviar y obtener directo del resultado del api*/
   }
 
 const initialState: IState = {
     isLoading: false,
     emailSignatureData: '',
-    email: {
+    /*email: {
         subject: '',
         content: '',
         date: new Date()
-    },
+    },*/
 };
 
 export const emailSlice = createSlice({
@@ -74,8 +74,8 @@ export const emailSlice = createSlice({
 
             //** AQUI / este se podria obviar y obtener directo del resultado del api*/
 
-            state.email.subject = action.payload.emailtemplate[0].subject
-            state.email.content = action.payload.emailtemplate[0].content
+            /*state.email.subject = action.payload.emailtemplate[0].subject
+            state.email.content = action.payload.emailtemplate[0].content*/
 
         }),
         builder.addCase(getEmailReport.rejected, (state) => {

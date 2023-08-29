@@ -52,6 +52,26 @@ export const getEmailTemplateById = createAsyncThunk(
 );
 
 
+export const getAllTemplates = createAsyncThunk(
+    `${templateStoreKey}/getemaildata`,
+    async () => {
+  
+      try {
+
+        const requestPath = basePath + ADD_TEMPLATE_ENDPOINT;
+
+        const response = await axios.get(requestPath);
+  
+        return response.data;
+      } catch (error) {
+
+        errorAlert('Error, please try again later.')
+
+      }
+    }
+);
+
+
 export const addEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/addemailtemplate`,
     async (params: IAddEmailTemplate, { dispatch }) => {
@@ -75,26 +95,6 @@ export const addEmailTemplate = createAsyncThunk(
         }
     }
 );
-
-export const getAllTemplates = createAsyncThunk(
-    `${templateStoreKey}/getemaildata`,
-    async () => {
-  
-      try {
-
-        const requestPath = basePath + ADD_TEMPLATE_ENDPOINT;
-
-        const response = await axios.get(requestPath);
-  
-        return response.data;
-      } catch (error) {
-
-        errorAlert('Error, please try again later.')
-
-      }
-    }
-);
-
 
 export const editEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/editemailtemplate`,

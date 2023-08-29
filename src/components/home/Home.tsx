@@ -40,3 +40,5 @@ export function Home({ isInvite }: IProps) {
     </div>
   );
 }
+
+

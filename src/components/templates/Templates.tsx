@@ -1,93 +1,116 @@
-import React, { Component } from 'react';
-import { Editor } from '@tinymce/tinymce-react';
-import TemplatesPanel from '../components/templates-panel';
-import addTemplateapi from '../../../api/routes/add-template-api';
-import activityApi from '../../../api/routes/activity-api';
-import async from 'async';
-import swalApi from '../../../api/util/swal-api';
-import InputBox from '../../../common/general/components/input-box';
-import addUserimageapi from '../../../api/routes/add-userimage-api';
-import emailAccountsApi from '../../../api/routes/email-accounts-api';
-import * as Showdown from "showdown";
-
-
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 
-import { 
-  fetchEmailTemplates,
-  getEmaildata,
-  addEmailtemplate,
-  editEmailtemplate,
-  removeEmailtemplate,
-  sendEmailtemplate,
-} from '../../redux/template';
+import { templateSelectors } from '../../redux/template';
+import { getAllTemplates } from '../../redux/template';
+import { userSelectors } from '../../redux/user';
+
+import { Box, Card, CardContent, CardActions, Typography, Tabs, Tab } from '@mui/material';
+
+import CustomTabPanel from './components/CustomTabPanel';
+
 
 export function Templates() {
+
+
+    const dispatch = useAppDispatch();
+
+    const emailTemplates = useAppSelector(templateSelectors.emailTemplates);
+    const userData = useAppSelector(userSelectors.userData);
+
+    const [activeTab, setActiveTab] = useState(0);
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+      setActiveTab(newValue);
+    };
   
 
-    const dispatch = useDispatch();
-
-    const [subject, setSubject] = useState('');
-    const [editorData, setEditorData] = useState('');
-
-    const { templates } = useSelector((state: RootState) => state.emailTemplates);
-
     useEffect(() => {
-        dispatch(fetchEmailTemplates());
-    }, [dispatch]);
+      const fetchTemplates = async () => {
 
-    useEffect(() => {
-      dispatch(fetchEmailTemplates());
-    }, [dispatch]);
+        const userId = userData?._id;
 
-    const handleSubjectChange = (e) => {
-      setSubject(e.target.value);
-    };
+        if(userId !== undefined) {
 
-    const handleEditorChange = (content) => {
-      setEditorData(content);
-    };
-
-    const addEmailTemplateHandler = () => {
-      dispatch(
-        addEmailtemplate({
-          subject,
-          content: editorData,
-        })
-      );
-    };
-
-    const editEmailTemplateHandler = (template) => {
-      dispatch(
-        editEmailtemplate({
-          ...template,
-          subject,
-          content: editorData,
-        })
-      );
-    };
-
-    const removeEmailTemplateHandler = (template) => {
-      dispatch(removeEmailtemplate(template));
-    };
-
-    const sendEmailTemplateHandler = (template) => {
-        dispatch(sendEmailtemplate(template));
+          //to delete
+          console.log('USERID ', userId)
+  
+          await dispatch(getAllTemplates());
+        }
       };
+  
+      fetchTemplates();
+    }, [])
+    
+    useEffect(() => {
+      //to delete
+      console.log("TEMPLATES ", emailTemplates)
 
+    }, [emailTemplates])
+    
 
+  
     return (
-        <TemplatesPanel
-            templates={templates}
-            subject={subject}
-            editorData={editorData}
-            onSubjectChange={handleSubjectChange}
-            onEditorChange={handleEditorChange}
-            onAddTemplate={addEmailTemplateHandler}
-            onEditTemplate={editEmailTemplateHandler} 
-            onRemoveTemplate={removeEmailTemplateHandler}
-        />
-    )
+      <div className="col-lg-12 content-padding">
+        <div className="row">
+          <div className="col col-lg-10 offset-0 offset-lg-1">
+            <div className="notes title">
+              <div className="DisplayLabel display-title">
+                <span className="">Email Templates</span>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-lg-12">
+                <div className="tb-card tb-style1">
+                  <div className="tb-fade-tabs tb-tabs tb-style3">
+                    <Box sx={{ width: "100%" }}>
+                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Tabs
+                          value={activeTab}
+                          onChange={handleChange}
+                          aria-label="basic tabs example"
+                        >
+                          <Tab label="Default Templates" />
+                          <Tab label="My Templates" />
+                        </Tabs>
+                      </Box>
+
+                      <CustomTabPanel value={activeTab} index={0}>
+                        {emailTemplates.map((item, index) => (
+                          <div key={index} style={{ width: "100%" }}>
+                            <Card className="card" key={index}>
+                              <CardContent>
+                                <Typography> {item.subject} </Typography>
+                                <Typography> {item.content} </Typography>
+                              </CardContent>
+
+                              <CardActions className="actions">
+                                <button
+                                  type="button"
+                                  className="action-button main-action use-template-btn"
+                                  onClick={() => {
+                                    console.log("CLIC ");
+                                  }}
+                                >
+                                  Use This Template
+                                </button>
+                              </CardActions>
+                            </Card>
+                          </div>
+                        ))}
+                      </CustomTabPanel>
+
+                      <CustomTabPanel value={activeTab} index={1}>
+                        My Templates
+                      </CustomTabPanel>
+                    </Box>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
 }

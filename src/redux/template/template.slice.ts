@@ -15,7 +15,6 @@ import {
 interface IState {
     isLoading: boolean;
     emailTemplates: IEmail[];
-    emailTemplate: IEmail;
 }
 
 
@@ -23,11 +22,6 @@ interface IState {
 const initialState: IState = {
     isLoading: false,
     emailTemplates: [],
-    emailTemplate: {
-        subject: '',
-        content: '',
-        date: new Date()
-    },
 };
 
 
