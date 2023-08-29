@@ -11,27 +11,30 @@ import { useFetchUser } from "../../hooks";
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
-
+  
   useFetchUser();
-
   const [navigationIsMinimized, setNavigationIsMinimized] = useState(false);
 
   const toggleNavigationIsMinimized = () => {
     setNavigationIsMinimized((prev) => !prev);
-  }
+  };
 
   if (userIsLoading) {
-    return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />
+    return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />;
   }
-
+  console.log("Main");
   return (
-    <div style={{ width: '100svw', height: '100svh' }}>
+    <div style={{ width: "100svw", height: "100svh" }}>
       <Header
         navigationIsMinimized={navigationIsMinimized}
         toggleNavigationIsMinimized={toggleNavigationIsMinimized}
       />
       <Navigation navigationIsMinimized={navigationIsMinimized} />
-      <div className={`${styles.mainContentWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}>
+      <div
+        className={`${styles.mainContentWrapper} ${
+          navigationIsMinimized ? "minimized" : ""
+        }`}
+      >
         <Routes>
           <Route path={"dashboard"} element={<></>} />
           <Route path={"podcast-search"} element={<></>} />
