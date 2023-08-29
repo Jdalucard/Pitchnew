@@ -5,6 +5,7 @@ import { templateSelectors } from '../../redux/template';
 import { getAllTemplates } from '../../redux/template';
 import { userSelectors } from '../../redux/user';
 
+import styles from './Templates.module.css';
 import { Box, Card, CardContent, CardActions, Typography, Tabs, Tab } from '@mui/material';
 
 import CustomTabPanel from './components/CustomTabPanel';
@@ -33,7 +34,7 @@ export function Templates() {
         if(userId !== undefined) {
 
           //to delete
-          console.log('USERID ', userId)
+          //console.log('USERID ', userId)
   
           await dispatch(getAllTemplates());
         }
@@ -44,7 +45,7 @@ export function Templates() {
     
     useEffect(() => {
       //to delete
-      console.log("TEMPLATES ", emailTemplates)
+      //console.log("TEMPLATES ", emailTemplates)
 
     }, [emailTemplates])
     
@@ -54,8 +55,8 @@ export function Templates() {
       <div className="col-lg-12 content-padding">
         <div className="row">
           <div className="col col-lg-10 offset-0 offset-lg-1">
-            <div className="notes title">
-              <div className="DisplayLabel display-title">
+            <div className={`${styles.notes} ${styles.title}`}>
+              <div className={`${styles.displayTitle}`}>
                 <span className="">Email Templates</span>
               </div>
             </div>
@@ -64,8 +65,8 @@ export function Templates() {
               <div className="col-lg-12">
                 <div className="tb-card tb-style1">
                   <div className="tb-fade-tabs tb-tabs tb-style3">
-                    <Box sx={{ width: "100%" }}>
-                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <Box sx={{ width: "100%"}}>
+                      <Box sx={{ borderBottom: 1, borderColor: "divider"}}>
                         <Tabs
                           value={activeTab}
                           onChange={handleChange}
@@ -78,17 +79,17 @@ export function Templates() {
 
                       <CustomTabPanel value={activeTab} index={0}>
                         {emailTemplates.map((item, index) => (
-                          <div key={index} style={{ width: "100%" }}>
-                            <Card className="card" key={index}>
+                          <div key={index} className={`${styles.panel}`}>
+                            <Card className={`${styles.card}`} key={index}>
                               <CardContent>
-                                <Typography> {item.subject} </Typography>
+                                <Typography className={`${styles.displaySubtitle}`}> {item.subject} </Typography>
                                 <Typography> {item.content} </Typography>
                               </CardContent>
 
-                              <CardActions className="actions">
+                              <CardActions className={`${styles.actions}`}>
                                 <button
                                   type="button"
-                                  className="action-button main-action use-template-btn"
+                                  className={`action-button ${styles.actionButton} `}
                                   onClick={() => {
                                     console.log("CLIC ");
                                   }}

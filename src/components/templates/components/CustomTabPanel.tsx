@@ -1,8 +1,7 @@
 import React from 'react'
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import styles from '../Templates.module.css'
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -22,7 +21,7 @@ const CustomTabPanel = (props: TabPanelProps) => {
         {...other}
       >
         {value === index && (
-          <Box sx={{ p: 3 }}>
+          <Box className={`${styles.CustomTabPanel}`}>
             <Typography>{children}</Typography>
           </Box>
         )}
