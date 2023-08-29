@@ -10,6 +10,7 @@
   border-left: 3px solid white;
   align-items: center;
   gap: 1rem;
+  cursor: pointer;
 
   @media only screen and (max-width: 600px) {
     padding: 0.75rem;
@@ -20,16 +21,6 @@
   background-color: rgba(88, 86, 214, 0.1);
   border-left: 3px solid rgb(0, 26, 183);
   color: rgb(0, 26, 183);
-}
-
-.navigationAnchor {
-  text-decoration: none;
-  color: black;
-  width: 100%;
-
-  :hover {
-    color: #263a69;
-  }
 }
 
 .navIconWrapper {

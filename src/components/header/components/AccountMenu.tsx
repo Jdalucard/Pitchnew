@@ -40,35 +40,35 @@ export function AccountMenu({ userPrivileges }: IProps) {
   return (
     <div className={styles.headerDropMenu}>
       <div className={styles.verticalDivider} />
-      <div className={styles.headerMenuItem} onClick={() => navigate('main/account/profile')}>
+      <div className={styles.headerMenuItem} onClick={() => navigate('account/profile')}>
         <div className={styles.profileIconWrapper}>
           <PersonIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
         </div>
         <Typography variant="body1" color="text.primary">Profile</Typography>
       </div>
       <div className={styles.verticalDivider} />
-      <div className={styles.headerMenuItem} onClick={() => navigate('main/account/configuration')}>
+      <div className={styles.headerMenuItem} onClick={() => navigate('account/configuration')}>
         <div className={styles.profileIconWrapper}>
           <SettingsIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
         </div>
         <Typography variant="body1" color="text.primary">Configuration</Typography>
       </div>
       <div className={styles.verticalDivider} />
-      <div className={styles.headerMenuItem} onClick={() => navigate('main/reports')}>
+      <div className={styles.headerMenuItem} onClick={() => navigate('reports')}>
         <div className={styles.profileIconWrapper}>
           <BarChartIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
         </div>
         <Typography variant="body1" color="text.primary">Reports</Typography>
       </div>
       <div className={styles.verticalDivider} />
-      <div className={styles.headerMenuItem} onClick={() => navigate("main/account/team")}>
+      <div className={styles.headerMenuItem} onClick={() => navigate("account/team")}>
         <div className={styles.profileIconWrapper}>
           <GroupIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
         </div>
         <Typography variant="body1" color="text.primary">Team</Typography>
       </div>
       <div className={styles.verticalDivider} />
-      <div className={styles.headerMenuItem} onClick={() => navigate("main/payment/credits")}>
+      <div className={styles.headerMenuItem} onClick={() => navigate("payment/credits")}>
         <div className={styles.profileIconWrapper}>
           <PaidIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
         </div>
@@ -83,14 +83,14 @@ export function AccountMenu({ userPrivileges }: IProps) {
       {userHasAllAccess(userPrivileges) && (
         <>
           <div className={styles.verticalDivider} />        
-          <div className={styles.headerMenuItem} onClick={() => navigate("main/account/super-admin-searches")}>
+          <div className={styles.headerMenuItem} onClick={() => navigate("account/super-admin-searches")}>
             <div className={styles.profileIconWrapper}>
               <ContentPasteSearchIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
             </div>
             <Typography variant="body1" color="text.primary">Admin: Searches</Typography>
           </div>
           <div className={styles.verticalDivider} />
-          <div className={styles.headerMenuItem} onClick={() => navigate("main/account/super-admin-users")}>
+          <div className={styles.headerMenuItem} onClick={() => navigate("account/super-admin-users")}>
             <div className={styles.profileIconWrapper}>
               <SettingsIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
             </div>
