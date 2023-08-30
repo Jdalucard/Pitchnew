@@ -5,6 +5,7 @@ import facebookLogo from '../../../assets/logos/facebook-logo.png';
 import { socialNetworks } from '../../../constants';
 import { formatToTitleCase } from '../../../common';
 import styles from './styles/SocialAuthenticationButton.module.css';
+import { Typography } from '@mui/material';
 
 interface IProps {
   network: socialNetworks,
@@ -38,7 +39,9 @@ export function SocialAuthenticationButton({ network, onClick, idPrefix }: IProp
           <img src={getImageSource()} alt="Social log in" />
         </div>
         <div className={`${styles.textWrapper} ${styles[network]}`}>
-          <p>{`Log in with ${formatToTitleCase(network)}`}</p>
+          <Typography variant="body1">
+            {`Log in with ${formatToTitleCase(network)}`}
+          </Typography>
         </div>
       </button>
     </div>

@@ -71,7 +71,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
           </div>
           {subscriptionPlan && (
             <Typography variant="caption" color="text.secondary">
-              {`${remainingCredits ? remainingCredits + ' pitches - ' : ''} ${subscriptionPlan}`}
+              {`${remainingCredits ? remainingCredits + ' pitches - ' : ''} ${subscriptionPlan.type}`}
             </Typography>
           )}
         </div>

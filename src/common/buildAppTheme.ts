@@ -22,6 +22,8 @@ export const buildAppTheme = () => ({
     text: {
       primary: 'rgb(13 13, 13)',
       secondary: 'rgba(13, 13, 13, 0.7)',
+      primaryInverted: 'rgba(225, 225, 225, 1)',
+      secondaryInverted: 'rgba(225, 225, 225, 0.7)',
     },    
   },
   typography: {
@@ -42,29 +44,32 @@ export const buildAppTheme = () => ({
     h5: {
       fontSize: '1.2rem',
     },    
+    h6: {
+      fontSize: '1rem',
+    },     
     caption: {
       fontSize: '0.82rem',
     },
   },
   // Here we can override MUI styles in their components
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textDecoration: 'none',
-          boxShadow: 'none',
-          ':hover': {
-            boxShadow: 'none',
-          },
-        },
-      },
-    },
-    MuiListItem: {
-      styleOverrides: {
-        root: {
-          padding: 0,
-        },
-      },
-    },
-  },
+  // components: {
+  //   MuiButton: {
+  //     styleOverrides: {
+  //       root: {
+  //         textDecoration: 'none',
+  //         boxShadow: 'none',
+  //         ':hover': {
+  //           boxShadow: 'none',
+  //         },
+  //       },
+  //     },
+  //   },
+  //   MuiListItem: {
+  //     styleOverrides: {
+  //       root: {
+  //         padding: 0,
+  //       },
+  //     },
+  //   },
+  // },
 });

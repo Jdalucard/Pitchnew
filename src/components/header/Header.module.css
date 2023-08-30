@@ -1,6 +1,8 @@
 .headerWrapper {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   background-color: #f1f2f3;
   z-index: 10;
   display: flex;
