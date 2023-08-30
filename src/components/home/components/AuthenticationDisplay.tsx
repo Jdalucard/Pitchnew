@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import { socialNetworks } from "../../../constants";
 import { getFromQueryParams, LoadingDisplay } from "../../../common";
 import { useAppDispatch } from "../../../redux/hooks";
@@ -104,7 +104,7 @@ export function AuthenticationDisplay({ isInvite, toggleForgotPassword, isLoadin
           onClick={() => signInOrUpWithSocial(socialNetworks.MICROSOFT)}
         />
       </div>
-      <h5 className={styles.credentialsTitle}>Log in with credentials</h5>
+      <Typography variant="h5" color="text.secondary" m="1rem 0">Log in with credentials</Typography>
       {isSignIn &&
         <form onSubmit={regularSignIn} style={{ width: '100%' }}>
           <div className={styles.credentialsContent}>
@@ -132,9 +132,13 @@ export function AuthenticationDisplay({ isInvite, toggleForgotPassword, isLoadin
             />
           </div>
           <div className={styles.forgotPasswordClick}>
-            <p onClick={toggleForgotPassword}>
+            <Typography
+              variant="button"
+              color="primary"
+              onClick={toggleForgotPassword}
+            >
               Forgot your password?
-            </p>
+            </Typography>
           </div>
           <div className="main-action-button-wrapper">
             <Button
@@ -148,7 +152,13 @@ export function AuthenticationDisplay({ isInvite, toggleForgotPassword, isLoadin
             </Button>
           </div>
           <div className={styles.usagePolicyClick}>
-            <a href="data-usage-policy" target="_blank">Data Usage Policy</a>
+            <Typography
+              variant="button"
+              color="primary"
+              onClick={() => navigate('data-usage-policy')}            
+            >
+              Data Usage Policy
+            </Typography>
           </div>
         </form>
       }

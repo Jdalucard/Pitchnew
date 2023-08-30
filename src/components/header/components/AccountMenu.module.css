@@ -1,18 +1,16 @@
 .headerDropMenu {
   position: absolute;
   top: 4.5rem;
-  right: 1rem;
+  right: 0;
   left: 0;
-  background-color: #f1f2f3;
   z-index: 10;
+  background-color: #f1f2f3;
   border-radius: 4px 0 0 4px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   border: 1px solid white;
-  padding: 0 1.5rem;
 
   @media only screen and (max-width: 600px) {
     top: 3.5rem;
@@ -31,7 +29,6 @@
   padding: 0.5rem 1.5rem;
   gap: 1rem;
   justify-content: space-between;
-  width: 100%;
   border: 1px solid #f1f2f3;
 }
 

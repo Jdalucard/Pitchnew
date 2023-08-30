@@ -1,15 +1,11 @@
 import logo from '../../assets/logos/pitchdb-logo.png';
+import styles from './PrivacyPolicy.module.css';
 
 export function UsagePolicy() {
   return (
-    <div className='usage-policy'>
-      <div className="HomePanel">
-        <div className="banner-image">
-          <img
-            src={logo}
-            // TODO: test and set proper width and height.
-          />
-        </div>
+    <div className={styles.wrapper}>
+      <div className={styles.banner}>
+        <img src={logo} alt="PitchDB Company" />
       </div>
       <br />
       <br /> 
@@ -52,9 +48,8 @@ export function UsagePolicy() {
       <br />
       <p>Most or all browsers permit you to disable or reject cookies. You can do this by adjusting your preferences in the browser.</p>
       <br />
-      <p>Below is a non-exhaustive list of the cookies, explanations and cookie policies, if applicable, on the Site. While we will maintain the accuracy of this list in good faith, although it may not be</p>
+      <p>Below is a non-exhaustive list of the cookies, explanations and cookie policies, if applicable, on the Site. While we will maintain the accuracy of this list in good faith, although it may not be complete or fully accurate.</p>
       <br />
-      <p>complete or fully accurate.</p>
       <figure className="wp-block-table">
         <table>
           <tbody>

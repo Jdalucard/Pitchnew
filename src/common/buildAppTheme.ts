@@ -44,6 +44,9 @@ export const buildAppTheme = () => ({
     h5: {
       fontSize: '1.2rem',
     },    
+    h6: {
+      fontSize: '1rem',
+    },     
     caption: {
       fontSize: '0.82rem',
     },

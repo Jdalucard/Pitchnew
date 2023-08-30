@@ -4,9 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider, responsiveFontSizes } from '@mui/material';
 import { store } from './redux/store.ts';
+import { buildAppTheme } from './common';
 import App from './App.tsx'
 import './index.css';
-import { buildAppTheme } from './common';
 
 const theme = () => {
   const creation = createTheme(buildAppTheme());
@@ -14,7 +14,7 @@ const theme = () => {
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <ThemeProvider theme={theme()}>
@@ -22,5 +22,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </ThemeProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )
