@@ -12,8 +12,9 @@ import { BuyCredits } from "../buyCredits/BuyCredits";
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
-  
+
   useFetchUser();
+
   const [navigationIsMinimized, setNavigationIsMinimized] = useState(false);
 
   const toggleNavigationIsMinimized = () => {
@@ -23,7 +24,7 @@ export function Main() {
   if (userIsLoading) {
     return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />;
   }
-  console.log("Main");
+
   return (
     <div style={{ width: "100svw", height: "88svh" }}>
       <Header
