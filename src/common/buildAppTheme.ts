@@ -11,39 +11,39 @@ declare module '@mui/material/styles' {
 export const buildAppTheme = () => ({
   palette: {
     primary: {
-      main: 'rgba(0, 26, 183, 1)',
-      generalBoxShadow: '0 1px 4px rgba(0, 0, 0, .16)',
+      main: "rgba(0, 26, 183, 1)",
+      generalBoxShadow: "0 1px 4px rgba(0, 0, 0, .16)",
     },
     background: {
-      default: 'rgb(255, 255, 255)',
-      transparent: 'rgba(255, 255, 255, 0)',
-      paper: 'rgba(241, 242, 243, 1)',
+      default: "rgb(255, 255, 255)",
+      transparent: "rgba(255, 255, 255, 0)",
+      paper: "rgba(241, 242, 243, 1)",
     },
     text: {
-      primary: 'rgb(13 13, 13)',
-      secondary: 'rgba(13, 13, 13, 0.7)',
-    },    
+      primary: "rgb(13 13, 13)",
+      secondary: "rgba(13, 13, 13, 0.7)",
+    },
   },
   typography: {
-    fontFamily: ['Open Sans', 'Roboto', 'Arial', 'sans-serif'].join(','),
+    fontFamily: ["Open Sans", "Roboto", "Arial", "sans-serif"].join(","),
     h1: {
-      fontSize: '4rem',
+      fontSize: "4rem",
     },
     h2: {
-      fontSize: '2rem',
+      fontSize: "2rem",
     },
     h3: {
-      fontStyle: 'italic',
-      fontSize: '1.5rem',
+      fontStyle: "italic",
+      fontSize: "1.5rem",
     },
     h4: {
-      fontSize: '1.4rem',
+      fontSize: "1.4rem",
     },
     h5: {
-      fontSize: '1.2rem',
-    },    
+      fontSize: "1.2rem",
+    },
     caption: {
-      fontSize: '0.82rem',
+      fontSize: "0.82rem",
     },
   },
   // Here we can override MUI styles in their components
@@ -51,10 +51,10 @@ export const buildAppTheme = () => ({
     MuiButton: {
       styleOverrides: {
         root: {
-          textDecoration: 'none',
-          boxShadow: 'none',
-          ':hover': {
-            boxShadow: 'none',
+          textDecoration: "none",
+          boxShadow: "none",
+          ":hover": {
+            boxShadow: "none",
           },
         },
       },
