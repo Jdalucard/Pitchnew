@@ -1,21 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { cookiesSlice, cookiesStoreKey } from './cookies';
 import { alertsSlice, alertsStoreKey } from './alerts';
-import { authenticationSlice, authenticationStoreKey } from './authentication';
-<<<<<<< HEAD
-
-import { teamsStoreKey, teamsSlice } from "./appUser/teams/index";
+import { authenticationSlice, authenticationStoreKey } from "./authentication";
 import { userSlice, userStoreKey } from "./user";
 import { contactListStoreKey } from "./contactList/contactList.const";
 import { contactListSlice } from "./contactList/contactList.slice";
 import { subscriptionSlice, subscriptionStoreKey } from "./subscription";
-=======
-import { userSlice, userStoreKey } from './user';
-import { contactListStoreKey } from './contactList/contactList.const';
-import { contactListSlice } from './contactList/contactList.slice';
-import { subscriptionSlice, subscriptionStoreKey } from './subscription';
-import { searchParametersSlice, searchParametersStoreKey } from './searchParameters';
->>>>>>> origin/main
+import {
+  searchParametersSlice,
+  searchParametersStoreKey,
+} from "./searchParameters";
 
 export const store = configureStore({
   reducer: {
@@ -26,11 +20,7 @@ export const store = configureStore({
     [userStoreKey]: userSlice.reducer,
     [contactListStoreKey]: contactListSlice.reducer,
     [subscriptionStoreKey]: subscriptionSlice.reducer,
-<<<<<<< HEAD
-    [teamsStoreKey]: teamsSlice.reducer,
-=======
     [searchParametersStoreKey]: searchParametersSlice.reducer,
->>>>>>> origin/main
   },
 });
 

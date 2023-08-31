@@ -25,25 +25,17 @@ export function Main() {
   }
   console.log("Main");
   return (
-<<<<<<< HEAD
-    <div style={{ width: "100svw", height: "100svh" }}>
-=======
-    <div style={{ width: '100svw', height: '88svh' }}>
->>>>>>> origin/main
+    <div style={{ width: "100svw", height: "88svh" }}>
       <Header
         navigationIsMinimized={navigationIsMinimized}
         toggleNavigationIsMinimized={toggleNavigationIsMinimized}
       />
       <Navigation navigationIsMinimized={navigationIsMinimized} />
-<<<<<<< HEAD
       <div
         className={`${styles.mainContentWrapper} ${
-          navigationIsMinimized ? "minimized" : ""
+          navigationIsMinimized ? styles.minimized : ""
         }`}
       >
-=======
-      <div className={`${styles.mainContentWrapper} ${navigationIsMinimized ? styles.minimized : ''}`}>
->>>>>>> origin/main
         <Routes>
           <Route path={"dashboard"} element={<></>} />
           <Route path={"podcast-search"} element={<></>} />
@@ -56,7 +48,15 @@ export function Main() {
           <Route path={"account"} element={<></>} />
           <Route path={"payment/credits"} element={<BuyCredits />} />
           <Route path={"templates"} element={<></>} />
-          <Route path={"academy"} element={<div id="candu-academy-content" className="candu-academy-content" />} />
+          <Route
+            path={"academy"}
+            element={
+              <div
+                id="candu-academy-content"
+                className="candu-academy-content"
+              />
+            }
+          />
         </Routes>
       </div>
     </div>
