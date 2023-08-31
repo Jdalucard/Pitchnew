@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { Bundles, IBundle, ISubscription, Subscriptions } from './components';
 import styles from './BuyCredits.module.css';
 import { formatDateToReadable } from '../../common';
-import { useAppSelector } from '../../redux/hooks';
-import { subscriptionSelectors } from '../../redux/subscription';
 
 export interface IBuyingItem {
   selectedPlan?: ISubscription,
@@ -32,7 +30,6 @@ interface ILocationParameter {
 export function BuyCredits() {
   // const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isLoading = useAppSelector(subscriptionSelectors.isLoading);
 
   // const [formData, setFormData] = useState<IFormData>({
   //   country: null,
@@ -127,17 +124,15 @@ export function BuyCredits() {
   }
 
   return (
-    <div className={styles.creditsPaymentPanel}>
+    <>
       {!successItem ? (
         <>
           <Subscriptions
-            isLoading={isLoading}
             beginTransaction={beginTransaction}
             toggleBeginTransaction={toggleBeginTransaction}
             toggleSuccessItem={toggleSuccessItem}
           />
           <Bundles
-            isLoading={isLoading}
             beginTransaction={beginTransaction}
             toggleBeginTransaction={toggleBeginTransaction}
             toggleSuccessItem={toggleSuccessItem}
@@ -145,45 +140,44 @@ export function BuyCredits() {
         </>
       ) : (
         <div className={styles.paymentConfirmedWrapper}>
+          <Typography variant="h3" color="text.primary" gutterBottom>
+            Upgrade processed successfully
+          </Typography>
+          <Typography variant="body1" color="text.primary">
+            <b>Transaction date:</b> {formatDateToReadable(new Date(), true)}
+          </Typography> 
           {successItem.selectedPlan ? (
             <>
-              <Typography variant="h5" color="text.primary">Upgrade successful</Typography>  
               <Typography variant="body1" color="text.primary">
                 <b>Plan:</b> {successItem.selectedPlan.name}
               </Typography>
               <Typography variant="body1" color="text.primary">
-                <b>Price:</b> {`$ ${successItem.selectedPlan.price} / ${successItem.selectedPlan.interval}`}
-              </Typography>
-              <Typography variant="body1" color="text.primary">
-                <b>Transaction date:</b> {formatDateToReadable(new Date(), true)}
-              </Typography>                
+                <b>Price:</b> {`$${successItem.selectedPlan.price} / ${successItem.selectedPlan.interval}`}
+              </Typography>               
             </>
           ) : (
-            <>
-              <Typography variant="h5" color="text.primary">Order successful</Typography>  
+            <>  
               <Typography variant="body1" color="text.primary">
                 <b>Bundle:</b> {successItem.selectedBundle?.type}
               </Typography>
               <Typography variant="body1" color="text.primary">
-                <b>Price:</b> {`$ ${successItem.selectedBundle?.price}`}
+                <b>Price:</b> {`$${successItem.selectedBundle?.price}`}
               </Typography>
               <Typography variant="body1" color="text.primary">
                 <b>Credits:</b> {successItem.selectedBundle?.amount}
-              </Typography>                  
-              <Typography variant="body1" color="text.primary">
-                <b>Transaction date:</b> {formatDateToReadable(new Date(), true)}
-              </Typography>                
+              </Typography>
             </>
           )}
             <Button
               variant="contained"
               color="primary"
               onClick={() => navigate('../outreach-sequences-mail')}
+              sx={{ mt: '1rem' }}
             >
               Back to main page
             </Button>  
         </div>  
       )}
-    </div>
+    </>
   );
 }

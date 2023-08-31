@@ -33,7 +33,6 @@ export function Navigation({ navigationIsMinimized }: IProps) {
               isActive={checkIfIsActive(option)}
               text={title}
               Icon={icon}
-              dataId={option}
               link={option}
               userPrivileges={userData?.privileges}
               limitedAccess={!userHasAllAccess(userData?.privileges)}

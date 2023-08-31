@@ -4,7 +4,6 @@ import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { useNavigate } from "react-router-dom";
 
 interface IProps {
-  dataId: string,
   isActive: boolean,
   navigationIsMinimized: boolean,
   text: string,
@@ -15,7 +14,6 @@ interface IProps {
 }
 
 export function NavigationItem({
-  dataId,
   isActive,
   navigationIsMinimized,
   text,

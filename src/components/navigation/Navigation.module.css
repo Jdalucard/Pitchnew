@@ -1,6 +1,6 @@
 .navigationPanel {
-	position: absolute;
-	top: 5.2rem;
+	position: fixed;
+	top: 5rem;
   left: 0;
 	z-index: 9;
   background-color: #f1f2f3;

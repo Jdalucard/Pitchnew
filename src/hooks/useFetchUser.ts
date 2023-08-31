@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { getUserData, getUserProfileImage, userSelectors } from "../redux/user";
 import axios from "axios";
 import { socketsCommon } from "../sockets";
-import { getUserSubscriptionPlan } from "../redux/subscription";
+import { getUserCreditCounter, getUserSubscriptionPlan } from "../redux/subscription";
 
 export function useFetchUser() {
   const dispatch = useAppDispatch();
@@ -26,6 +26,7 @@ export function useFetchUser() {
     } else {
       dispatch(getUserProfileImage());
       dispatch(getUserSubscriptionPlan());
+      dispatch(getUserCreditCounter());
     }
   }, [dispatch, navigate]);
 

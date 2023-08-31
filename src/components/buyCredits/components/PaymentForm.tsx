@@ -1,10 +1,13 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { Token } from "@stripe/stripe-js";
+import { StripeCardElementChangeEvent, Token } from "@stripe/stripe-js";
 import { IBundle, ISubscription } from ".";
-import styles from '../BuyCredits.module.css';
 import { Button, Typography } from "@mui/material";
 import { formatToTitleCase } from "../../../common";
 import { IUserSubscription } from "../../../redux/subscription";
+import SecurityIcon from '@mui/icons-material/Security';
+import styles from '../BuyCredits.module.css';
+import { useState } from "react";
+
 
 interface IProps {
   userPlan: IUserSubscription | null,
@@ -13,7 +16,6 @@ interface IProps {
   processPaySubscription?: (token: Token) => void,
   processPayBundle?: (token: Token) => void,
   upgradePlan?: () => void,
-  
 }
 
 export function PaymentForm({
@@ -24,8 +26,12 @@ export function PaymentForm({
   processPayBundle,
   upgradePlan,
 }: IProps) {
+  window.scrollTo(0, 0);
+
   const stripe = useStripe();
   const elements = useElements();
+
+  const [formIsComplete, setFormIsComplete] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -45,36 +51,72 @@ export function PaymentForm({
     }
   }
 
+  const handleCardChange = (event: StripeCardElementChangeEvent) => {
+    setFormIsComplete(event.complete);
+  }
+
   return (
     <div className={styles.paymentForm}>
       {processPaySubscription ? (
         <>
-          <Typography variant="body1" color="text.primary" fontWeight="bold">
-            Upgrade to {selectedPlan?.name} plan.
+          <Typography variant="h3" color="text.primary" gutterBottom>
+            Upgrade to {selectedPlan?.name} plan
           </Typography>
           {selectedPlan?.description && (
-            <Typography variant="body1" color="text.primary">
-              Upgrade to {selectedPlan?.name} plan.
+            <Typography variant="body1" color="text.primary" gutterBottom>
+              {selectedPlan.description}
             </Typography>
           )}
-          <Typography variant="body2" color="text.secondary">
-            Note: If you already have a plan, purchasing this new plan will replace the previous one.
-            You will be credited/debited the proration changes at the start of the next billing month.
-          </Typography>
         </>
       ) : (
-        <Typography variant="body1" color="text.primary">
-          You selected the {formatToTitleCase(selectedBundle?.type ?? '')} bundle.
-        </Typography>
+        <>
+          <Typography variant="h3" color="text.primary" gutterBottom>
+            Get the {formatToTitleCase(selectedBundle?.type ?? '')} bundle
+          </Typography>
+          <Typography variant="body1" color="text.primary">
+            <b>Pitches:</b> {selectedBundle?.amount}
+          </Typography>          
+        </>
       )}
       <Typography variant="body1" color="text.primary">
-        Total to pay: {`${selectedPlan ? selectedPlan.price : selectedBundle?.price}`} {`${selectedPlan ? `/ ${selectedPlan.interval}` : ''}`}
-      </Typography>      
-      <form onSubmit={handleSubmit}>
-        <Typography variant="h5" color="text.primary">
-          Enter your payment information:
+        <b>Total to pay:</b> ${`${selectedPlan ? selectedPlan.price : selectedBundle?.price}`} {`${selectedPlan ? `/ ${selectedPlan.interval}` : ''}`}
+      </Typography>
+      {processPaySubscription && (
+        <Typography variant="body2" color="text.primary" textAlign="center" mt="1rem">
+          <b>Note:</b> If you already have a plan, purchasing this new plan will replace the previous one.
+          You will be credited/debited the proration changes at the start of the next billing month.
         </Typography>
-        <CardElement />
+      )}
+      <form onSubmit={handleSubmit}>
+        <Typography variant="h5" color="text.primary" mt="2rem">
+          Enter your payment information
+        </Typography>
+        <div className={styles.security}>
+          <Typography variant="body2" color="text.secondary">
+            Powered & secured by <a href="https://stripe.com/" target="_blank">Stripe</a>
+          </Typography>        
+          <SecurityIcon color="primary" fontSize="small" />
+        </div>
+        <div className={styles.cardWrapper}>
+          <CardElement
+            id="my-card"
+            onChange={handleCardChange}
+            options={{
+              iconStyle: 'solid',
+              style: {
+                base: {
+                  iconColor: 'rgba(0, 26, 183, 1)',
+                  color: 'rgb(13 13, 13)',
+                  fontSize: '20px',
+                },
+                invalid: {
+                  iconColor: 'rgb(211, 47, 47)',
+                  color: 'rgb(211, 47, 47)',
+                },
+              },
+            }}
+          />
+        </div>
         {selectedPlan ? (
           <>
             {userPlan ? (
@@ -82,6 +124,7 @@ export function PaymentForm({
                 variant="contained"
                 color="primary"
                 onClick={upgradePlan}
+                disabled={!formIsComplete}
               >
                 Change plan
               </Button>
@@ -90,6 +133,7 @@ export function PaymentForm({
                 variant="contained"
                 color="primary"
                 type="submit"
+                disabled={!formIsComplete}
               >
                 Pay upgrade
               </Button>
@@ -100,6 +144,7 @@ export function PaymentForm({
             variant="contained"
             color="primary"
             type="submit"
+            disabled={!formIsComplete}
           >
             Pay bundle
           </Button>

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
   cancelUserSubscriptionPlan,
   getSubscriptionPlans,
+  getUserSubscriptionPlan,
   paySubscription,
   subscriptionSelectors,
   updateUserSubscriptionPlan,
@@ -14,6 +15,9 @@ import { IBuyingItem } from "../BuyCredits";
 import { openConfirmation } from "../../../redux/alerts/alerts.thunks";
 import styles from '../BuyCredits.module.css';
 import { PaymentForm } from ".";
+import { userSelectors } from "../../../redux/user";
+import { LoadingDisplay } from "../../../common";
+import { loadingDisplayTypes } from "../../../types";
 
 export interface ISubscription {
   id: string,
@@ -24,7 +28,6 @@ export interface ISubscription {
 }
 
 interface IProps {
-  isLoading: boolean,
   beginTransaction: boolean,
   toggleBeginTransaction: (beginTransaction: boolean) => void,
   toggleSuccessItem: (item: IBuyingItem) => void,
@@ -33,14 +36,14 @@ interface IProps {
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
 export function Subscriptions({
-  isLoading,
   beginTransaction,
   toggleBeginTransaction,
   toggleSuccessItem
 }: IProps) {
   const dispatch = useAppDispatch();
-
+  const isLoading = useAppSelector(subscriptionSelectors.isLoading);
   const userPlan = useAppSelector(subscriptionSelectors.userSubscription);
+  const userData = useAppSelector(userSelectors.userData);
 
   const [plans, setPlans] = useState<ISubscription[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<ISubscription | null>(null);
@@ -51,11 +54,13 @@ export function Subscriptions({
     if (response) {
       setPlans(response);
     }
-  }, [ dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
-    fetchPlans();
-  }, [fetchPlans]);
+    if (userData) {
+      fetchPlans();
+    }
+  }, [fetchPlans, userData]);
 
   const handleSelectPlan = (selectedPlan: ISubscription) => {
     toggleBeginTransaction(true);
@@ -72,9 +77,8 @@ export function Subscriptions({
       })).unwrap();
 
       if (response?.success) {
-        toggleSuccessItem({
-          selectedPlan,
-        });
+        dispatch(getUserSubscriptionPlan());
+        toggleSuccessItem({ selectedPlan });
       }
     }
   }
@@ -104,84 +108,112 @@ export function Subscriptions({
 
   return (
     <>
-      {!beginTransaction ? (
+      {!beginTransaction && (
         <div className={styles.planOptions}>
-          <Typography variant="h3" color="text.primary">
-            Subscription plans
-          </Typography>
           {userPlan && (
             <>
               <div className={styles.userPlanWrapper}>
-                <Typography variant="h5" color="text.primary">Your current plan:</Typography>
-                <Typography variant="body1" color="text.primary">{userPlan.type}</Typography>
-                <Typography variant="body1" color="text.primary">
-                  Credits per month: {userPlan.credits ?? 'Infinite!'}
-                </Typography>
-              </div>
-              {!userPlan?.scheduledToCancel ? (
-                <>
-                  <Typography variant="body1" color="text.primary">
-                    Canceling your current plan will remove all the pitches that you gained from it when the current billing month ends.
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={cancelPlan}
-                  >
-                    Cancel plan
-                  </Button>
-                </>
-              ) : (
-                <Typography variant="body1" color="text.primary">
-                  You have scheduled to cancel your subscription at the end of the month.
-                </Typography>
-              )}
-            </>
-          )}
-          {plans.map((plan, index) => {
-            return (
-              <div className={styles.planItem} key={index}>
-                <div className="header">
-                  <Typography variant="h5" color="text.primaryInverted">{plan.name ?? `Plan #${index}`}</Typography>
+                <div className={styles.cancelPlanWrapper}>
+                  <div>
+                    <Typography variant="body2" color="text.secondary">
+                      <b>Your current plan:</b> {userPlan.type}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <b>Credits per month:</b> {userPlan.credits ?? 'Infinite!'}
+                    </Typography>
+                  </div>
+                  {!userPlan?.scheduledToCancel && (
+                    <div>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={cancelPlan}
+                        sx={{ width: '8rem' }}
+                      >
+                        Cancel plan
+                      </Button>
+                    </div>
+                  )}
                 </div>
-                <Typography variant="body1" color="text.primary">{plan.description ?? ''}</Typography>
-                <Typography variant="body1" color="text.primary">{`${plan.price} / ${plan.interval}`}</Typography>
-                {userPlan?.planId === plan.id ? (
-                  <Typography variant="body2" color="text.primary">Selected</Typography>
+                {!userPlan?.scheduledToCancel ? (
+                  <Typography variant="body2" color="text.secondary">
+                    <b>Note:</b> Canceling your current plan will remove all the pitches
+                    that you gained from it when the current billing month ends.
+                  </Typography>
                 ) : (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleSelectPlan(plan)}
-                  >
-                    Purchase plan
-                  </Button>
+                  <Typography variant="body2" color="text.secondary">
+                    <b>Note:</b> You have scheduled to cancel your subscription at the end of the month.
+                  </Typography>
                 )}
               </div>
-            );
-          })}
+            </>
+          )}
+          <Typography variant="h3" color="text.primary" m="2rem 0">
+            Subscription plans
+          </Typography>
+          <div className={styles.itemsMappedWrapper}>
+            {isLoading && <LoadingDisplay type={loadingDisplayTypes.entireComponent} />}
+            {!isLoading && plans.map((plan, index) => {
+              return (
+                <div className={styles.planItem} key={index}>
+                  <div className={styles.header}>
+                    <Typography variant="h5" color="text.primaryInverted">{plan.name ?? `Plan #${index}`}</Typography>
+                  </div>
+                  <div className={styles.body}>
+                    {plan.description && (
+                      <Typography variant="body1" color="text.primary" gutterBottom>
+                        {plan.description}
+                      </Typography>
+                    )}
+                    <Typography variant="body1" color="text.primary" gutterBottom>
+                      {`$${plan.price} / ${plan.interval}`}
+                    </Typography>
+                    {userPlan?.planId === plan.id ? (
+                      <Typography variant="body2" color="text.primary">Selected</Typography>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleSelectPlan(plan)}
+                      >
+                        Purchase plan
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      ) : (
-        <div>
-          <Button
-            variant="outlined"
-            color="primary"  
-            onClick={() => {
-              toggleBeginTransaction(false);
-              setSelectedPlan(null);
-            }}
-          >
-            Go back   
-          </Button>
-          <Elements stripe={stripePromise}>
-            <PaymentForm
-              upgradePlan={upgradePlan}
-              userPlan={userPlan}
-              selectedPlan={selectedPlan ?? undefined}
-              processPaySubscription={processPaySubscription}
-            />
-          </Elements>
-        </div>
+      )}
+      {beginTransaction && selectedPlan && (
+        <>
+          {isLoading ? (
+            <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
+          ) : (
+            <div className={styles.transactionInProcess}>
+              <Button
+                variant="outlined"
+                color="primary"  
+                onClick={() => {
+                  toggleBeginTransaction(false);
+                  setSelectedPlan(null);
+                }}
+                sx={{ mb: '1rem' }}
+              >
+                Go back
+              </Button>
+              <Elements stripe={stripePromise}>
+                <PaymentForm
+                  upgradePlan={upgradePlan}
+                  userPlan={userPlan}
+                  selectedPlan={selectedPlan ?? undefined}
+                  processPaySubscription={processPaySubscription}
+                />
+              </Elements>
+            </div>    
+          )}
+        </>
       )}
     </>
   );

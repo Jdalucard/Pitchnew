@@ -23,16 +23,22 @@ export interface IUserSubscription {
   scheduledToCancel: boolean,
 }
 
+interface ICredits {
+  _id: string,
+  remaining: number,
+  used: number,
+}
+
 interface IState {
   isLoading: boolean,
   userSubscription: IUserSubscription | null,
-  remainingCredits: number | null,
+  credits: ICredits | null,
 }
 
 const initialState: IState = {
   isLoading: false,
   userSubscription: null,
-  remainingCredits: null,
+  credits: null,
 };
 
 export const subscriptionSlice = createSlice({
@@ -89,7 +95,7 @@ export const subscriptionSlice = createSlice({
     }),
     builder.addCase(getUserCreditCounter.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.remainingCredits = action.payload.remaining;
+      state.credits = action.payload;
     }),
     // getUserSubscriptionPlan
     builder.addCase(getUserSubscriptionPlan.pending, (state) => {

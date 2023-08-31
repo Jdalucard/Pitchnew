@@ -44,7 +44,7 @@ export const getSubscriptionPlans = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error getting the subscription plans. Please, try again later.'));
+      thunkApi.dispatch(errorSideAlert('Error getting the subscription plans. Please, try again later.'));
     }
   }
 );
@@ -71,7 +71,7 @@ export const getBundlePlans = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error getting the bundle plans. Please, try again later.'));
+      thunkApi.dispatch(errorSideAlert('Error getting the bundle plans. Please, try again later.'));
     }
   }
 );
@@ -97,7 +97,7 @@ export const getUserCreditCounter = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error getting the user credits counter. Please, try again later.'));
+      thunkApi.dispatch(errorSideAlert('Error getting the user credits counter. Please, try again later.'));
     }
   }
 );
