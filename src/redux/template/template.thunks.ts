@@ -17,8 +17,8 @@ interface IRemoveEmailTemplate {
 
 
 interface IAddEmailTemplate{
-    id: boolean,
-    note: IEmail,
+    id: string,
+    template: IEmail,
 }
 
 interface IGetEmailById{
@@ -75,13 +75,21 @@ export const getAllTemplates = createAsyncThunk(
 export const addEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/addemailtemplate`,
     async (params: IAddEmailTemplate, { dispatch }) => {
-        const { id, note } = params;
+        const { id, template } = params;
 
         try {
             const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/add-template";
 
+            //to delete
+            console.log('requestPath ', requestPath);
+            console.log('template ', template);
+
+
             //add the email template
-            const response = await axios.put(requestPath, note);
+            const response = await axios.put(requestPath, template);
+
+            //to delete
+            console.log('El responde fue ', response);
 
             //recover all the templates again
             dispatch(getAllTemplates());

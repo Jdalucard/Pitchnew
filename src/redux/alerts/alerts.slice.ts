@@ -60,7 +60,7 @@ export const alertsSlice = createSlice({
         swal.close();
       }
       toast.error(action.payload, toastOptions);
-    }    
+    },
   },
 });
 

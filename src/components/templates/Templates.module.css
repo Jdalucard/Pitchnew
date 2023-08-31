@@ -1,5 +1,4 @@
 
-
 .notes{
     grid-area: notes;
     display: flex;
@@ -8,14 +7,12 @@
 
 .title {
     margin-top: 1rem;
-    padding-top: 1rem;
     margin-bottom: 0.5rem;
 }
 
 .displayTitle {
     font-size: 1.2rem;
     font-weight: bold;
-    margin-bottom: 0.8rem;
     color: rgb(0, 26, 183);
 }
 
@@ -79,6 +76,33 @@
 .CustomTabPanel {
     display: flex;
     flex-direction: column;
-    background-color: #b31b1b;
     padding: 0px;
+}
+
+.row{
+    padding: 0px 50px 0px 0px;
+}
+
+.h2Sub{
+    margin-left: 20px;
+}
+
+.mailbox_editor{
+    width: 50% !important;
+}
+
+  
+.custom-modal {
+display: flex !important;
+flex-direction: column !important;
+height: 100% !important;
+}
+
+.custom-quill {
+height: 50vh !important;
+width: 100% !important;
+}
+
+.custom-input {
+width: 100% !important;
 }

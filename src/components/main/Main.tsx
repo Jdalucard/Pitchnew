@@ -48,7 +48,7 @@ export function Main() {
           <Route path={"account"} element={<></>} />
           <Route path={"payment/credits"} element={<></>} />
           <Route path={"reports"} element={<></>} />
-          <Route path={"templates"} element={<></>} />
+          <Route path={"templates"} element={<Templates/>} />
           <Route path={"academy"} element={<></>} />
         </Routes>
       </div>

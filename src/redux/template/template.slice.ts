@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { templateStoreKey } from './template.const';
-import { IEmail } from "../../types"
+import { ITemplate } from "../../types"
 
 import swal from 'sweetalert';
 
@@ -14,7 +14,7 @@ import {
 
 interface IState {
     isLoading: boolean;
-    emailTemplates: IEmail[];
+    emailTemplates: ITemplate[];
 }
 
 
