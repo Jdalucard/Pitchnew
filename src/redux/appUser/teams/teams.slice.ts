@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { teamsStoreKey } from "./teams.const";
+
 import {
-  createTeamAsync,
-  issueInvitationAsync,
-  getTeamAsync,
+  createTeam,
+  issueInvitation,
+  getTeam,
+  removeUserTeam,
 } from "./teams.thunks";
 
 //interfaz del equipo
@@ -20,7 +23,7 @@ interface TeamState {
   users: Team["users"];
 }
 
-const initialState: TeamState = {
+export const initialState: TeamState = {
   isLoading: false,
   team: null,
   teamId: "",
@@ -28,50 +31,79 @@ const initialState: TeamState = {
 };
 
 export const teamsSlice = createSlice({
-  name: "teams",
+  name: teamsStoreKey,
   initialState,
   reducers: {},
 
   extraReducers: (builder) => {
     /* CREATE TEAMS  */
-    builder.addCase(createTeamAsync.pending, (state) => {
+    builder.addCase(createTeam.pending, (state) => {
       state.isLoading = true;
     }),
-      builder.addCase(createTeamAsync.rejected, (state, action) => {
+      builder.addCase(createTeam.rejected, (state) => {
         state.isLoading = false;
       });
-    builder.addCase(createTeamAsync.fulfilled, (state, action) => {
+    builder.addCase(createTeam.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.users.push(action.payload);
+      const newUsers = [...state.users, ...action.payload];
+      state.users = newUsers;
     }),
       /* ISSUE INVITATION  */
-      builder.addCase(issueInvitationAsync.pending, (state) => {
+      builder.addCase(issueInvitation.pending, (state) => {
         state.isLoading = true;
       }),
-      builder.addCase(issueInvitationAsync.fulfilled, (state, action) => {
-        state.isLoading = false;
+      builder.addCase(issueInvitation.fulfilled, (state, action) => {
         const { teamId, email } = action.payload;
         if (state.team && state.team.teamId === teamId) {
-          state.team.users = state.team.users.map((existingUser) =>
+          const updatedUsers = state.team.users.map((existingUser) =>
             existingUser.email === email
               ? { ...existingUser, email: email }
               : existingUser
           );
+
+          state.team = {
+            ...state.team,
+            users: updatedUsers,
+          };
         }
       });
-    builder.addCase(issueInvitationAsync.rejected, (state, action) => {
+    builder.addCase(issueInvitation.rejected, (state) => {
       state.isLoading = false;
     });
 
-    /* GETTEAMASYNC */
-    builder.addCase(getTeamAsync.pending, (state) => {
+    /* GETTEAM */
+    builder.addCase(getTeam.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(getTeamAsync.fulfilled, (state, action) => {
+    builder.addCase(getTeam.fulfilled, (state, action) => {
       state.isLoading = false;
       state.team = action.payload;
     });
-    builder.addCase(getTeamAsync.rejected, (state) => {
+    builder.addCase(getTeam.rejected, (state) => {
+      state.isLoading = false;
+    });
+
+    /* REMOVE USERTEAM*/
+    builder.addCase(removeUserTeam.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(removeUserTeam.fulfilled, (state, action) => {
+      state.isLoading = false;
+      const { teamId, email } = action.payload;
+      const currentTeam = state.team;
+
+      if (currentTeam && currentTeam.teamId === teamId) {
+        const updatedUsers = currentTeam.users.filter(
+          (existingUser) => existingUser.email !== email
+        );
+
+        state.team = {
+          ...currentTeam,
+          users: updatedUsers,
+        };
+      }
+    });
+    builder.addCase(removeUserTeam.rejected, (state) => {
       state.isLoading = false;
     });
   },
