@@ -23,22 +23,23 @@ export function Navigation({ navigationIsMinimized }: IProps) {
 
   return (
     <div className={`${styles.navigationPanel} ${navigationIsMinimized ? 'minimized' : ''}`}>
-      {navigationOptions.map((navigationObject, index) => {
-        const {icon, option, title} = navigationObject;
-        return (
-          <NavigationItem
-            key={index}
-            navigationIsMinimized={navigationIsMinimized}
-            isActive={checkIfIsActive(option)}
-            text={title}
-            Icon={icon}
-            dataId={option}
-            link={option}
-            userPrivileges={userData?.privileges}
-            limitedAccess={!userHasAllAccess(userData?.privileges)}
-          />
-        );
-      })}
+      <div style={{ position: 'relative' }}>
+        {navigationOptions.map((navigationObject, index) => {
+          const {icon, option, title} = navigationObject;
+          return (
+            <NavigationItem
+              key={index}
+              navigationIsMinimized={navigationIsMinimized}
+              isActive={checkIfIsActive(option)}
+              text={title}
+              Icon={icon}
+              link={option}
+              userPrivileges={userData?.privileges}
+              limitedAccess={!userHasAllAccess(userData?.privileges)}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

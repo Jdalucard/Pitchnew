@@ -1,15 +1,16 @@
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { useAppDispatch } from "../redux/hooks";
-import { getUserData, getUserProfileImage } from "../redux/user";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { getUserData, getUserProfileImage, userSelectors } from "../redux/user";
 import axios from "axios";
 import { socketsCommon } from "../sockets";
-import { getUserSubscriptionPlan } from "../redux/subscription";
+import { getUserCreditCounter, getUserSubscriptionPlan } from "../redux/subscription";
 
 export function useFetchUser() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const userData = useAppSelector(userSelectors.userData);
   
   const fetchUser = useCallback(async () => {
     const cookies = new Cookies();
@@ -20,15 +21,18 @@ export function useFetchUser() {
 
     const response = await dispatch(getUserData()).unwrap();
 
-    if (!response) {
-      navigate('/');
+    if (!response?.response) {
+      navigate('../');
     } else {
       dispatch(getUserProfileImage());
       dispatch(getUserSubscriptionPlan());
+      dispatch(getUserCreditCounter());
     }
   }, [dispatch, navigate]);
 
   useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+    if (!userData) {
+      fetchUser();
+    }
+  }, [fetchUser, userData]);
 }

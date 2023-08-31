@@ -1,9 +1,9 @@
 import { Typography, Tooltip, SvgIconTypeMap } from "@mui/material";
 import styles from './NavigationItem.module.css';
 import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
-  dataId: string,
   isActive: boolean,
   navigationIsMinimized: boolean,
   text: string,
@@ -14,7 +14,6 @@ interface IProps {
 }
 
 export function NavigationItem({
-  dataId,
   isActive,
   navigationIsMinimized,
   text,
@@ -23,6 +22,8 @@ export function NavigationItem({
   userPrivileges,
   limitedAccess,
 }: IProps) {
+  const navigate = useNavigate();
+
   return (
     <>
       {limitedAccess && userPrivileges && (
@@ -36,25 +37,21 @@ export function NavigationItem({
         )
       ) ? (
         <>
-          <a
-            data-tip
-            data-for={dataId}
-            href={link}
-            className={styles.navigationAnchor}
+          <div
+              className={`${styles.navigationItem} ${isActive ? styles.active : ''}`}
+              onClick={() => navigate(link)}
           >
-            <div className={`${styles.navigationItem} ${isActive ? styles.active : ''}`}>
-              <Tooltip title={navigationIsMinimized ? text: ''} placement="right">
-                <div className={`${styles.navIconWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}>
-                  <Icon sx={(theme) => ({ color: theme.palette.text.primary})}/>
-                </div>
-              </Tooltip>
-              {!navigationIsMinimized && (
-                <Typography variant="h5" color="text.primary" fontWeight="bold">
-                  {text}
-                </Typography>
-              )}
-            </div>
-          </a>
+            <Tooltip title={navigationIsMinimized ? text: ''} placement="right">
+              <div className={`${styles.navIconWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}>
+                <Icon sx={(theme) => ({ color: theme.palette.text.primary})}/>
+              </div>
+            </Tooltip>
+            {!navigationIsMinimized && (
+              <Typography variant="h5" color="text.primary" fontWeight="bold">
+                {text}
+              </Typography>
+            )}
+          </div>
           {text !== "Academy" && (
             <div className={styles.verticalDivider} />
           )}
@@ -65,25 +62,21 @@ export function NavigationItem({
             (userPrivileges.includes("allAccess") && text !== "Businesses" && text !== "People" &&
             (!userPrivileges.includes("superAdmin") || !userPrivileges.includes("betaUser"))) ? (
             <>
-              <a
-                data-tip
-                data-for={dataId}
-                href={link}
-                className={styles.navigationAnchor}
+              <div
+                className={`${styles.navigationItem} ${isActive ? styles.active : ''}`}
+                onClick={() => navigate(link)}
               >
-                <div className={`${styles.navigationItem} ${isActive ? styles.active : ''}`}>
-                  <Tooltip title={navigationIsMinimized ? text: ''} placement="right">
-                    <div className={`${styles.navIconWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}>
-                      <Icon sx={(theme) => ({ color: theme.palette.text.primary})}/>
-                    </div>
-                  </Tooltip>
-                  {!navigationIsMinimized && (
-                    <Typography variant="h5" color="text.primary" fontWeight="bold">
-                      {text}
-                    </Typography>
-                  )}
-                </div>
-              </a>
+                <Tooltip title={navigationIsMinimized ? text : ''} placement="right">
+                  <div className={`${styles.navIconWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}>
+                    <Icon sx={(theme) => ({ color: theme.palette.text.primary})}/>
+                  </div>
+                </Tooltip>
+                {!navigationIsMinimized && (
+                  <Typography variant="h5" color="text.primary" fontWeight="bold">
+                    {text}
+                  </Typography>
+                )}
+              </div>
               {text !== "Academy" && (
                 <div className={styles.verticalDivider} />
               )}
@@ -92,25 +85,21 @@ export function NavigationItem({
             <>
               {!limitedAccess && (
                 <>
-                  <a
-                    data-tip
-                    data-for={dataId}
-                    href={link}
-                    className={styles.navigationAnchor}
+                  <div
+                    className={`${styles.navigationItem} ${isActive ? styles.active : ''}`}
+                    onClick={() => navigate(link)}
                   >
-                    <div className={"NavigationItem" + (isActive ? styles.active : '')}>
-                      <Tooltip title={navigationIsMinimized ? text: ''} placement="right">
-                        <div className={`${styles.navIconWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}>
-                          <Icon sx={(theme) => ({ color: theme.palette.text.primary})}/>
-                        </div>
-                      </Tooltip>
-                      {!navigationIsMinimized && (
-                        <Typography variant="h5" color="text.primary" fontWeight="bold">
-                          {text}
-                        </Typography>
-                      )}
-                    </div>
-                  </a>
+                    <Tooltip title={navigationIsMinimized ? text : ''} placement="right">
+                      <div className={`${styles.navIconWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}>
+                        <Icon sx={(theme) => ({ color: theme.palette.text.primary})}/>
+                      </div>
+                    </Tooltip>
+                    {!navigationIsMinimized && (
+                      <Typography variant="h5" color="text.primary" fontWeight="bold">
+                        {text}
+                      </Typography>
+                    )}
+                  </div>
                   {text !== "Academy" && (
                     <div className={styles.verticalDivider} />
                   )}

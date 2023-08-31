@@ -8,7 +8,6 @@ import UsagePolicy from './components/privacyPolicy';
 import Main from './components/main';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 function App() {
   useAuthenticationListener();
 

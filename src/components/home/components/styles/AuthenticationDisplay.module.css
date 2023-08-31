@@ -7,13 +7,6 @@
   border-bottom: 1px solid #f1f2f3;
 }
 
-.credentialsTitle {
-  color: rgb(110,110,110);
-  font-size: 1rem;
-  font-weight: 500;
-  margin: 1rem 0;
-}
-
 .credentialsContent {
   display: flex;
   flex-direction: column;
@@ -27,13 +20,7 @@
   cursor: pointer
 }
 
-.forgotPasswordClick p {
-  color: #646cff;
-  font-size: 0.8rem;
-  margin: 0;
-}
-
-.forgotPasswordClick p:hover {
+.forgotPasswordClick:hover {
   text-decoration: underline;
 }
 
@@ -41,8 +28,9 @@
   display: flex;
   justify-content: center;
   margin-top: 1rem;
+  cursor: pointer;
 }
 
-.usagePolicyClick a {
-  font-size: 0.8rem;
+.usagePolicyClick:hover {
+  text-decoration: underline;
 }

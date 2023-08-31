@@ -21,7 +21,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
   const userData = useAppSelector(userSelectors.userData);
   const profileImage = useAppSelector(userSelectors.userProfileImage);
   const subscriptionPlan = useAppSelector(subscriptionSelectors.userSubscription);
-  const remainingCredits = useAppSelector(subscriptionSelectors.remainingCredits);
+  const remainingCredits = useAppSelector(subscriptionSelectors.credits)?.remaining;
 
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState(false);
   const [errorInProfileImage, setErrorInProfileImage] = useState(false);
@@ -71,7 +71,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
           </div>
           {subscriptionPlan && (
             <Typography variant="caption" color="text.secondary">
-              {`${remainingCredits ? remainingCredits + ' pitches - ' : ''} ${subscriptionPlan}`}
+              {`${remainingCredits ? remainingCredits + ' pitches - ' : ''} ${subscriptionPlan.type}`}
             </Typography>
           )}
         </div>

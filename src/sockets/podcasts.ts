@@ -35,5 +35,5 @@ export const podcastsSocket = {
     return socket;
   },
 
-  getActiveSocket: () => activeSocket
+  getActiveSocket: () => activeSocket,
 };

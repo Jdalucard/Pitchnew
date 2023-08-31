@@ -4,6 +4,7 @@ import {
   addSubscriptionPlanToStripe,
   addUserSubscriptionPlan,
   cancelUserSubscriptionPlan,
+  getBundlePlans,
   getStripeSubscriptionPlansData,
   getSubscriptionPlans,
   getUserCreditCounter,
@@ -13,17 +14,31 @@ import {
   updateUserSubscriptionPlan
 } from '.';
 
+export interface IUserSubscription {
+  _id?: string,
+  planId?: string,
+  dateEnd?: Date,
+  credits?: number,
+  type: string,
+  scheduledToCancel: boolean,
+}
+
+interface ICredits {
+  _id: string,
+  remaining: number,
+  used: number,
+}
 
 interface IState {
   isLoading: boolean,
-  userSubscription: string | null,
-  remainingCredits: number | null,
+  userSubscription: IUserSubscription | null,
+  credits: ICredits | null,
 }
 
 const initialState: IState = {
   isLoading: false,
   userSubscription: null,
-  remainingCredits: null,
+  credits: null,
 };
 
 export const subscriptionSlice = createSlice({
@@ -51,6 +66,16 @@ export const subscriptionSlice = createSlice({
     builder.addCase(paySubscription.fulfilled, (state) => {
       state.isLoading = false;
     }),
+    // getBundlePlans
+    builder.addCase(getBundlePlans.pending, (state) => {
+      state.isLoading = true;
+    }),
+    builder.addCase(getBundlePlans.rejected, (state) => {
+      state.isLoading = false;
+    }),
+    builder.addCase(getBundlePlans.fulfilled, (state) => {
+      state.isLoading = false;
+    })    
     // payBundle
     builder.addCase(payBundle.pending, (state) => {
       state.isLoading = true;
@@ -70,7 +95,7 @@ export const subscriptionSlice = createSlice({
     }),
     builder.addCase(getUserCreditCounter.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.remainingCredits = action.payload.remaining;
+      state.credits = action.payload;
     }),
     // getUserSubscriptionPlan
     builder.addCase(getUserSubscriptionPlan.pending, (state) => {
@@ -82,9 +107,12 @@ export const subscriptionSlice = createSlice({
     builder.addCase(getUserSubscriptionPlan.fulfilled, (state, action) => {
       state.isLoading = false;
       if (action.payload?.type) {
-        state.userSubscription = action.payload.type;
+        state.userSubscription = action.payload;
       } else {
-        state.userSubscription = 'Pay as you pitch';
+        state.userSubscription = {
+          type: 'Pay as you pitch',
+          scheduledToCancel: false,
+        }
       }
     }),
     // updateUserSubscriptionPlan
@@ -138,6 +166,6 @@ export const subscriptionSlice = createSlice({
     }),
     builder.addCase(getStripeSubscriptionPlansData.fulfilled, (state) => {
       state.isLoading = false;
-    })
+    })     
   },
 });

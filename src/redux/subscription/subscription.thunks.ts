@@ -1,10 +1,11 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { subscriptionStoreKey } from ".";
-import { errorAlert, errorSideAlert } from "../alerts";
+import { errorAlert, errorSideAlert, successAlert } from "../alerts";
+import { Token } from "@stripe/stripe-js";
 
 interface IPaySubscription {
-  token: string,
+  token: Token,
   planId: string
 }
 
@@ -27,6 +28,11 @@ interface IAddSubscriptionPlanToStripe {
   "metadata[app_name]": string,
 }
 
+interface IPayBundle {
+  token: Token,
+  bundleId: string,
+}
+
 const basePath = import.meta.env.VITE_API_BASE_URL
 const subscriptionPath = `${basePath}/subscriptions`;
 
@@ -38,7 +44,7 @@ export const getSubscriptionPlans = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error getting the subscription plans. Please, try again later.'));
+      thunkApi.dispatch(errorSideAlert('Error getting the subscription plans. Please, try again later.'));
     }
   }
 );
@@ -57,11 +63,24 @@ export const paySubscription = createAsyncThunk(
   }
 );
 
+export const getBundlePlans = createAsyncThunk(
+  `${subscriptionStoreKey}/getBundlePlans`,
+  async (_, thunkApi) => {
+    try {
+      const response = await axios.get(`${basePath}/bundles`);
+
+      return response.data;
+    } catch (error) {
+      thunkApi.dispatch(errorSideAlert('Error getting the bundle plans. Please, try again later.'));
+    }
+  }
+);
+
 export const payBundle = createAsyncThunk(
   `${subscriptionStoreKey}/payBundle`,
-  async (bundleType: string, thunkApi) => {
+  async (params: IPayBundle, thunkApi) => {
     try {
-      await axios.post(`${basePath}/credits`, { bundleType });
+      await axios.post(`${basePath}/payments/bundle`, params);
 
       return { success: true };
     } catch (error) {
@@ -78,7 +97,7 @@ export const getUserCreditCounter = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error getting the user credits counter. Please, try again later.'));
+      thunkApi.dispatch(errorSideAlert('Error getting the user credits counter. Please, try again later.'));
     }
   }
 );
@@ -115,6 +134,7 @@ export const cancelUserSubscriptionPlan = createAsyncThunk(
     try {
       const response = await axios.delete(`${subscriptionPath}/current`);
 
+      thunkApi.dispatch(successAlert('Plan cancelled sucessfully'));
       return response.data;
     } catch (error) {
       thunkApi.dispatch(errorAlert('Error cancelling the user subscription plan. Please, try again later.'));

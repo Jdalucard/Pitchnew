@@ -8,6 +8,7 @@ import Header from "../header";
 import Navigation from "../navigation";
 import styles from './Main.module.css';
 import { useFetchUser } from "../../hooks";
+import { BuyCredits } from "../buyCredits/BuyCredits";
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
@@ -24,34 +25,38 @@ export function Main() {
   }
   console.log("Main");
   return (
+<<<<<<< HEAD
     <div style={{ width: "100svw", height: "100svh" }}>
+=======
+    <div style={{ width: '100svw', height: '88svh' }}>
+>>>>>>> origin/main
       <Header
         navigationIsMinimized={navigationIsMinimized}
         toggleNavigationIsMinimized={toggleNavigationIsMinimized}
       />
       <Navigation navigationIsMinimized={navigationIsMinimized} />
+<<<<<<< HEAD
       <div
         className={`${styles.mainContentWrapper} ${
           navigationIsMinimized ? "minimized" : ""
         }`}
       >
+=======
+      <div className={`${styles.mainContentWrapper} ${navigationIsMinimized ? styles.minimized : ''}`}>
+>>>>>>> origin/main
         <Routes>
           <Route path={"dashboard"} element={<></>} />
           <Route path={"podcast-search"} element={<></>} />
           <Route path={"live-events"} element={<></>} />
-          <Route path={"business-search"} element={<></>} />
-          <Route path={"people-search"} element={<></>} />
           <Route path={"experts-search"} element={<></>} />
           <Route path={"media-search"} element={<></>} />
           <Route path={"conference-search"} element={<></>} />
           <Route path={"my-lists"} element={<></>} />
-          <Route path={"outreach-sequences/"} element={<></>} />
-          <Route path={"outreach-sequences-mail/"} element={<></>} />
+          <Route path={"outreach-sequences-mail"} element={<></>} />
           <Route path={"account"} element={<></>} />
-          <Route path={"payment/credits"} element={<></>} />
-          <Route path={"reports"} element={<></>} />
+          <Route path={"payment/credits"} element={<BuyCredits />} />
           <Route path={"templates"} element={<></>} />
-          <Route path={"academy"} element={<></>} />
+          <Route path={"academy"} element={<div id="candu-academy-content" className="candu-academy-content" />} />
         </Routes>
       </div>
     </div>
