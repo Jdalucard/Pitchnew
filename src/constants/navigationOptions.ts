@@ -41,7 +41,7 @@ export const navigationOptions = [
     icon: AccessibilityNewIcon
   },
   {
-    option: "my-lists",
+    option: "contacts",
     title: "Contacts",
     icon: RecentActorsIcon
   },

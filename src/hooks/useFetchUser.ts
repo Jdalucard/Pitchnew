@@ -6,6 +6,7 @@ import { getUserData, getUserProfileImage, userSelectors } from "../redux/user";
 import axios from "axios";
 import { socketsCommon } from "../sockets";
 import { getUserCreditCounter, getUserSubscriptionPlan } from "../redux/subscription";
+import { getUserContactLists } from "../redux/contactList/contactList.thunks";
 
 export function useFetchUser() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ export function useFetchUser() {
       dispatch(getUserProfileImage());
       dispatch(getUserSubscriptionPlan());
       dispatch(getUserCreditCounter());
+      dispatch(getUserContactLists({ page: 0, noLimit: true }));
     }
   }, [dispatch, navigate]);
 

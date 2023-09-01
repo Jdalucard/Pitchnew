@@ -31,11 +31,11 @@ interface IGuestsObject {
 export interface IUserContactList {
   _id: string,
   name: string,
-  empty: boolean | null,
-  podcasts: IPodcastObject[] | null,
-  episodes: IEpisodeObject[] | null,
-  events: IEventsObject[] | null,
-  organizers: IOrganizersObject[] | null,
-  sponsors: ISponsorsObject[] | null,
-  guests: IGuestsObject[] | null,
+  dateCreated: Date,
+  podcasts?: IPodcastObject[] | null,
+  episodes?: IEpisodeObject[] | null,
+  events?: IEventsObject[] | null,
+  organizers?: IOrganizersObject[] | null,
+  sponsors?: ISponsorsObject[] | null,
+  guests?: IGuestsObject[] | null,
 }

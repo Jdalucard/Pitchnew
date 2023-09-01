@@ -41,7 +41,7 @@ export const contactListSlice = createSlice({
       state.isLoading = false;
     }),
     builder.addCase(getUserContactLists.fulfilled, (state, action) => {
-      state.userContactLists = action.payload;
+      state.userContactLists = action.payload ?? [];
       state.isLoading = false;
     }),
     // getUserContactList

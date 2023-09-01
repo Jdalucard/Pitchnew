@@ -12,7 +12,7 @@ export interface IUserData {
   disabled: boolean | null,
   addedPrivileges: string[] | null,
   detail: {
-    _id: boolean | null,
+    _id: string | null,
     firstName: string | null,
     lastName: string | null,
     phone: string | null,

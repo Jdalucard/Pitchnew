@@ -4,11 +4,12 @@ import { useAppSelector } from "../../redux/hooks";
 import { userSelectors } from "../../redux/user";
 import { LoadingDisplay } from "../../common";
 import { loadingDisplayTypes } from "../../types";
+import { useFetchUser } from "../../hooks";
 import Header from "../header";
 import Navigation from "../navigation";
+import BuyCredits from "../buyCredits";
+import Contacts from "../contacts";
 import styles from './Main.module.css';
-import { useFetchUser } from "../../hooks";
-import { BuyCredits } from "../buyCredits/BuyCredits";
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
@@ -40,11 +41,12 @@ export function Main() {
           <Route path={"experts-search"} element={<></>} />
           <Route path={"media-search"} element={<></>} />
           <Route path={"conference-search"} element={<></>} />
-          <Route path={"my-lists"} element={<></>} />
+          <Route path={"contacts"} element={<Contacts />} />
           <Route path={"outreach-sequences-mail"} element={<></>} />
           <Route path={"account"} element={<></>} />
           <Route path={"payment/credits"} element={<BuyCredits />} />
           <Route path={"templates"} element={<></>} />
+          <Route path={"reports"} element={<></>} />
           <Route path={"academy"} element={<div id="candu-academy-content" className="candu-academy-content" />} />
         </Routes>
       </div>

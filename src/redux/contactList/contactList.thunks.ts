@@ -1,9 +1,8 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { contactListStoreKey } from "./contactList.const";
-import { errorAlert, warningAlert } from "../alerts";
-import { IContactListItem } from "../../types";
-import { IContactSequence } from "../../types";
+import { errorAlert, errorSideAlert, warningAlert } from "../alerts";
+import { IContactListItem, IUserContactList, IContactSequence } from "../../types";
 
 const contactListsPath = `${import.meta.env.VITE_API_BASE_URL}/lists`;
 
@@ -50,10 +49,23 @@ export const getUserContactLists = createAsyncThunk(
   async (query: IGetUserContactLists, thunkApi) => {
     try {
       const response = await axios.get(`${contactListsPath}?page=${query.page}${query.noLimit ? '&noLimit=1' : ''}`);
+
+      if (response?.data?.length) {
+        const lists: IUserContactList[] = [];
+
+        response.data.map((list: IUserContactList) => {
+          lists.push({
+            _id: list._id,
+            name: list.name,
+            dateCreated: list.dateCreated,
+          });
+        });
+
+        return lists;  
+      }
       
-      return response.data;  
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error getting the user lists. Please, try again later.'));
+      thunkApi.dispatch(errorSideAlert('Error getting the user lists. Please, try again later.'));
     }
   }
 );
