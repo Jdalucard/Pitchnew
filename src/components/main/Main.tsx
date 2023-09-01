@@ -12,12 +12,12 @@ import { BuyCredits } from '../buyCredits/BuyCredits';
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
   useFetchUser();
-  const [navigationIsMinimized, setNavigationIsMinimized] = useState(false);
+  const [navigationIsMinimized, setNavigationIsMinimized] = useState(false)
   const toggleNavigationIsMinimized = () => {
-    setNavigationIsMinimized((prev) => !prev);
-  };
+    setNavigationIsMinimized((prev) => !prev)
+  }
   if (userIsLoading) {
-    return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />;
+    return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />
   }
   return (
     <div style={{ width: '100svw', height: '88svh' }}>
