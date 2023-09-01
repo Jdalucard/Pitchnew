@@ -22,25 +22,25 @@
   padding: 0.5rem;
 }
 
-.logoWrapper img{
+.logoWrapper img {
   width: 25px;
   border-radius: 4px;
 }
 
 .logoWrapper.google {
-  border: 1px solid #4285F4;
+  border: 1px solid #4285f4;
 }
 
 .logoWrapper.linkedin {
-  border: 1px solid #4285F4;
+  border: 1px solid #4285f4;
 }
 
 .logoWrapper.facebook {
-  border: 1px solid #4285F4;
+  border: 1px solid #4285f4;
 }
 
 .logoWrapper.microsoft {
-  border: 1px solid rgb(110,110,110);
+  border: 1px solid rgb(110, 110, 110);
 }
 
 .textWrapper {
@@ -56,15 +56,15 @@
 }
 
 .textWrapper.google {
-  background-color: #4285F4;
+  background-color: #4285f4;
   color: #fff;
-  border: 1px solid #4285F4;  
+  border: 1px solid #4285f4;
 }
 
 .textWrapper.linkedin {
   background-color: rgb(0, 119, 181);
   color: #fff;
-  border: 1px solid rgb(0, 119, 181);  
+  border: 1px solid rgb(0, 119, 181);
 }
 
 .textWrapper.facebook {
@@ -75,6 +75,6 @@
 
 .textWrapper.microsoft {
   background-color: #fff;
-  color: rgb(110,110,110);
-  border: 1px solid rgb(110,110,110);
+  color: rgb(110, 110, 110);
+  border: 1px solid rgb(110, 110, 110);
 }

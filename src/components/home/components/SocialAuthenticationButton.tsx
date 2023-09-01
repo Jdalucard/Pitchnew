@@ -8,12 +8,16 @@ import styles from './styles/SocialAuthenticationButton.module.css';
 import { Typography } from '@mui/material';
 
 interface IProps {
-  network: socialNetworks,
-  idPrefix?: string,
-  onClick: () => void,
+  network: socialNetworks;
+  idPrefix?: string;
+  onClick: () => void;
 }
 
-export function SocialAuthenticationButton({ network, onClick, idPrefix }: IProps) {
+export function SocialAuthenticationButton({
+  network,
+  onClick,
+  idPrefix,
+}: IProps) {
   const getImageSource = () => {
     switch (network) {
       case socialNetworks.LINKEDIN:
@@ -26,8 +30,8 @@ export function SocialAuthenticationButton({ network, onClick, idPrefix }: IProp
         // case socialNetworks.GOOGLE
         return googleLogo;
     }
-  }
-  
+  };
+
   return (
     <div className={styles.socialAuthButton}>
       <button

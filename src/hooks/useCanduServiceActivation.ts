@@ -17,6 +17,6 @@ export function useCanduServiceActivation() {
       if (script) {
         document.body.removeChild(script);
       }
-    }
+    };
   }, []);
 }

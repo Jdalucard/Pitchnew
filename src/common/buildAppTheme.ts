@@ -25,7 +25,7 @@ export const buildAppTheme = () => ({
       secondary: 'rgba(13, 13, 13, 0.7)',
       primaryInverted: 'rgba(225, 225, 225, 1)',
       secondaryInverted: 'rgba(225, 225, 225, 0.7)',
-    },    
+    },
   },
   typography: {
     fontFamily: ['Open Sans', 'Roboto', 'Arial', 'sans-serif'].join(','),
@@ -44,10 +44,10 @@ export const buildAppTheme = () => ({
     },
     h5: {
       fontSize: '1.2rem',
-    },    
+    },
     h6: {
       fontSize: '1rem',
-    },     
+    },
     caption: {
       fontSize: '0.82rem',
     },
