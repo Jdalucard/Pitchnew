@@ -1,13 +1,12 @@
 // This is for adding types to the theme, so typescript can read them on use
 declare module '@mui/material/styles' {
   interface PaletteColor {
-    generalBoxShadow: string
+    generalBoxShadow: string;
   }
   interface TypeBackground {
-    transparent: string
+    transparent: string;
   }
 }
-
 
 export const buildAppTheme = () => ({
   palette: {

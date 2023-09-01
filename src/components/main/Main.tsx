@@ -1,17 +1,17 @@
-import { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { useAppSelector } from '../../redux/hooks'
-import { userSelectors } from '../../redux/user'
-import { LoadingDisplay } from '../../common'
-import { loadingDisplayTypes } from '../../types'
-import Header from '../header'
-import Navigation from '../navigation'
-import styles from './Main.module.css'
-import { useFetchUser } from '../../hooks'
-import { BuyCredits } from '../buyCredits/BuyCredits'
+import { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useAppSelector } from '../../redux/hooks';
+import { userSelectors } from '../../redux/user';
+import { LoadingDisplay } from '../../common';
+import { loadingDisplayTypes } from '../../types';
+import Header from '../header';
+import Navigation from '../navigation';
+import styles from './Main.module.css';
+import { useFetchUser } from '../../hooks';
+import { BuyCredits } from '../buyCredits/BuyCredits';
 export function Main() {
-  const userIsLoading = useAppSelector(userSelectors.isLoading)
-  useFetchUser()
+  const userIsLoading = useAppSelector(userSelectors.isLoading);
+  useFetchUser();
   const [navigationIsMinimized, setNavigationIsMinimized] = useState(false)
   const toggleNavigationIsMinimized = () => {
     setNavigationIsMinimized((prev) => !prev);
@@ -39,7 +39,7 @@ export function Main() {
           <Route path="experts-search" element={<></>} />
           <Route path="media-search" element={<></>} />
           <Route path="conference-search" element={<></>} />
-          <Route path="contacts" element={<Contacts />} />
+          <Route path="contacts" element={<Contacts/>} />
           <Route path="outreach-sequences-mail" element={<></>} />
           <Route path="account" element={<></>} />
           <Route path="payment/credits" element={<BuyCredits />} />
