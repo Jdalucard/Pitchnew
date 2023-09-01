@@ -80,16 +80,8 @@ export const addEmailTemplate = createAsyncThunk(
         try {
             const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/add-template";
 
-            //to delete
-            console.log('requestPath ', requestPath);
-            console.log('template ', template);
-
-
             //add the email template
             const response = await axios.put(requestPath, template);
-
-            //to delete
-            console.log('El responde fue ', response);
 
             //recover all the templates again
             dispatch(getAllTemplates());

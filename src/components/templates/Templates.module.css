@@ -65,6 +65,9 @@
 
 .cardContent{
     padding: 20px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .panel, .CustomTabPanel{

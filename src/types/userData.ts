@@ -1,5 +1,5 @@
 export interface IUserData {
-  _id: boolean | null,
+  _id: string,
   email: string,
   name: string,
   signupEmail: string,
@@ -13,7 +13,7 @@ export interface IUserData {
   disabled: boolean | null,
   addedPrivileges: string[] | null,
   detail: {
-    _id: boolean | null,
+    _id: string,
     firstName: string | null,
     lastName: string | null,
     phone: string | null,

@@ -13,5 +13,5 @@ export interface IEditEmail {
 
 export interface ITemplate{
     userId: string,
-    emailtemplate: IEmail,
+    emailtemplate: IEmail[],
 }
