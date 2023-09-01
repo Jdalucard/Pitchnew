@@ -29,3 +29,7 @@ body {
     background-color: #f9f9f9;
   }
 }
+
+.ElementsApp .InputElement {
+  border: 1px solid black!important;
+}

@@ -29,7 +29,7 @@ export function Main() {
   }
 
   return (
-    <div style={{ width: '100svw', height: '100svh' }}>
+    <div style={{ width: '100svw', height: '88svh' }}>
       <Header
         navigationIsMinimized={navigationIsMinimized}
         toggleNavigationIsMinimized={toggleNavigationIsMinimized}
