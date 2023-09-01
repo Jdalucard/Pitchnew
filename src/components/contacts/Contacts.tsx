@@ -5,7 +5,5 @@ import styles from './Contacts.module.css';
 export function Contacts() {
   const userLists = useAppSelector(contactListSelectors.contactLists);
 
-  return (
-    <></>
-  );
+  return <></>;
 }

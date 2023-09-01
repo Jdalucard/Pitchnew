@@ -4,5 +4,5 @@ export enum socialNetworks {
   GOOGLE = 'google',
   MICROSOFT = 'microsoft',
   GMAIL = 'gmail',
-  OUTLOOK = 'outlook'
+  OUTLOOK = 'outlook',
 }
