@@ -26,7 +26,7 @@ interface IState {
 const initialState: IState = {
   isLoading: false,
   userContactLists: [],
-};
+}
 
 export const contactListSlice = createSlice({
   name: contactListStoreKey,
