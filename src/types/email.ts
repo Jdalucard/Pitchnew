@@ -1,17 +1,24 @@
 export interface IEmail {
+    _id?: string,
+    id: string,
     subject: string,
     content: string,
     date: Date
 }
 
-export interface IEditEmail {
-    subject: string,
-    content: string,
-    date: Date,
-    editDate: Date
-}
-
 export interface ITemplate{
+    _id: string,
     userId: string,
     emailtemplate: IEmail[],
+}
+
+export interface IAddEmailTemplate{
+    userId: string,
+    template: IEmail,
+}
+
+export interface IEditEmailTemplate {
+    id: string,
+    _id: string,
+    template: IEmail
 }

@@ -2,8 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { templateStoreKey } from './template.const';
 import { ITemplate } from "../../types"
 
-import swal from 'sweetalert';
-
 import {
     getAllTemplates,
     getEmailTemplateById,
@@ -16,7 +14,6 @@ interface IState {
     isLoading: boolean;
     emailTemplates: ITemplate[];
 }
-
 
 
 const initialState: IState = {
@@ -38,14 +35,9 @@ export const templateSlice = createSlice({
         }),
         builder.addCase(getEmailTemplateById.fulfilled, (state, action) => {
             state.isLoading = false;
-
-            // **AQUI** RETORNAR EL TEMPLATE OBTENIDO EN EL FRONT
-
         }),
         builder.addCase(getEmailTemplateById.rejected, (state) => {
             state.isLoading = false;
-
-            swal("Error", "An error has occured, please try again later");
         });
 
         //addEmailTemplate
@@ -56,8 +48,6 @@ export const templateSlice = createSlice({
             state.isLoading = false;
 
             state.emailTemplates.push(action.payload)
-
-            swal("Success", action.payload.success, "Email Template added succesfully");
         }),
         builder.addCase(addEmailTemplate.rejected, (state) => {
             state.isLoading = false;
@@ -93,8 +83,6 @@ export const templateSlice = createSlice({
         }),
         builder.addCase(removeEmailTemplate.fulfilled, (state, action) => {
             state.isLoading = false;
-            //tengo que llamar a getAllTemplates here
-            swal("Success", action.payload.success, "Email Template removed succesfully");
         }),
         builder.addCase(removeEmailTemplate.rejected, (state) => {
             state.isLoading = false;

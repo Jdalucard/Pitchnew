@@ -1,6 +1,5 @@
 import React from 'react'
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import styles from '../Templates.module.css'
 
 interface TabPanelProps {
@@ -21,9 +20,9 @@ const CustomTabPanel = (props: TabPanelProps) => {
         {...other}
       >
         {value === index && (
-          <Box className={`${styles.CustomTabPanel}`}>
+          <div className={`${styles.CustomTabPanel}`}>
             <Typography>{children}</Typography>
-          </Box>
+          </div>
         )}
       </div>
     );

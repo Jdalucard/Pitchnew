@@ -1,10 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { emailStoreKey } from './email.const';
 
-import { IEmail } from '../../types';
-
-import swal from 'sweetalert';
-
 import {
     getEmailSignature,
     sendEmail,    
@@ -14,17 +10,11 @@ import {
 interface IState {
     isLoading: boolean;
     emailSignatureData: string;
-    //email: IEmail //** AQUI / este se podria obviar y obtener directo del resultado del api*/
   }
 
 const initialState: IState = {
     isLoading: false,
     emailSignatureData: '',
-    /*email: {
-        subject: '',
-        content: '',
-        date: new Date()
-    },*/
 };
 
 export const emailSlice = createSlice({
@@ -53,13 +43,9 @@ export const emailSlice = createSlice({
         }),
         builder.addCase(sendEmail.fulfilled, (state, action) => {
             state.isLoading = false;
-
-            swal("Success", action.payload.success, "Mail Sent Successfully");
         }),
         builder.addCase(sendEmail.rejected, (state) => {
             state.isLoading = false;
-
-            swal("Error", "An error has occured, please try again later");
         });
 
 
@@ -71,17 +57,9 @@ export const emailSlice = createSlice({
         }),
         builder.addCase(getEmailReport.fulfilled, (state, action) => {
             state.isLoading = false;
-
-            //** AQUI / este se podria obviar y obtener directo del resultado del api*/
-
-            /*state.email.subject = action.payload.emailtemplate[0].subject
-            state.email.content = action.payload.emailtemplate[0].content*/
-
         }),
         builder.addCase(getEmailReport.rejected, (state) => {
             state.isLoading = false;
-
-            swal("Error", "An error has occured, please try again later");
         });
 
     },

@@ -46,7 +46,7 @@ export function Main() {
           <Route path={"my-lists"} element={<></>} />
           <Route path={"outreach-sequences-mail"} element={<></>} />
           <Route path={"account"} element={<></>} />
-          <Route path={"payment/credits"} element={<></>} />
+          <Route path={"payment/credits"} element={<BuyCredits />} />
           <Route path={"reports"} element={<></>} />
           <Route path={"templates"} element={<Templates/>} />
           <Route path={"academy"} element={<></>} />
