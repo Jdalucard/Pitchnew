@@ -8,7 +8,10 @@ import { userSlice, userStoreKey } from './user';
 import { contactListStoreKey } from './contactList/contactList.const';
 import { contactListSlice } from './contactList/contactList.slice';
 import { subscriptionSlice, subscriptionStoreKey } from './subscription';
-import { searchParametersSlice, searchParametersStoreKey } from './searchParameters';
+import {
+  searchParametersSlice,
+  searchParametersStoreKey,
+} from './searchParameters';
 
 export const store = configureStore({
   reducer: {

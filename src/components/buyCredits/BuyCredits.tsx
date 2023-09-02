@@ -8,23 +8,23 @@ import styles from './BuyCredits.module.css';
 import { formatDateToReadable } from '../../common';
 
 export interface IBuyingItem {
-  selectedPlan?: ISubscription,
-  selectedBundle?: IBundle,
+  selectedPlan?: ISubscription;
+  selectedBundle?: IBundle;
 }
 
 export interface IFormData {
-  country: ILocationParameter | null,
-  state: ILocationParameter | null,
-  city: ILocationParameter | null,
-  address: string,
-  name: string,
+  country: ILocationParameter | null;
+  state: ILocationParameter | null;
+  city: ILocationParameter | null;
+  address: string;
+  name: string;
 }
 
 interface ILocationParameter {
-  _id: string,
-  label: string,
-  value: string,
-  refId: string
+  _id: string;
+  label: string;
+  value: string;
+  refId: string;
 }
 
 export function BuyCredits() {
@@ -48,7 +48,7 @@ export function BuyCredits() {
 
   // const fetchUserCountries = useCallback(async () => {
   //   const countries = await dispatch(getCountries()).unwrap();
-    
+
   //   if (countries) {
   //     setCountriesList(countries);
   //   }
@@ -117,11 +117,11 @@ export function BuyCredits() {
 
   const toggleBeginTransaction = (beginTransaction: boolean) => {
     setBeginTransaction(beginTransaction);
-  }
+  };
 
   const toggleSuccessItem = (successItem: IBuyingItem) => {
     setSuccessItem(successItem);
-  }
+  };
 
   return (
     <>
@@ -145,18 +145,19 @@ export function BuyCredits() {
           </Typography>
           <Typography variant="body1" color="text.primary">
             <b>Transaction date:</b> {formatDateToReadable(new Date(), true)}
-          </Typography> 
+          </Typography>
           {successItem.selectedPlan ? (
             <>
               <Typography variant="body1" color="text.primary">
                 <b>Plan:</b> {successItem.selectedPlan.name}
               </Typography>
               <Typography variant="body1" color="text.primary">
-                <b>Price:</b> {`$${successItem.selectedPlan.price} / ${successItem.selectedPlan.interval}`}
-              </Typography>               
+                <b>Price:</b>{' '}
+                {`$${successItem.selectedPlan.price} / ${successItem.selectedPlan.interval}`}
+              </Typography>
             </>
           ) : (
-            <>  
+            <>
               <Typography variant="body1" color="text.primary">
                 <b>Bundle:</b> {successItem.selectedBundle?.type}
               </Typography>
@@ -168,15 +169,15 @@ export function BuyCredits() {
               </Typography>
             </>
           )}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate('../outreach-sequences-mail')}
-              sx={{ mt: '1rem' }}
-            >
-              Back to main page
-            </Button>  
-        </div>  
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate('../outreach-sequences-mail')}
+            sx={{ mt: '1rem' }}
+          >
+            Back to main page
+          </Button>
+        </div>
       )}
     </>
   );

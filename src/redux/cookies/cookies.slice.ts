@@ -8,13 +8,13 @@ interface IState {
 }
 
 interface ISetSettings {
-  path: string,
-  expires?: Date,
+  path: string;
+  expires?: Date;
 }
 
 interface ISetCookies {
-  key: string,
-  value: string,
+  key: string;
+  value: string;
 }
 
 const initialState: IState = {
@@ -45,12 +45,8 @@ export const cookiesSlice = createSlice({
       const cookies = new Cookies();
 
       cookies.remove(action.payload, setSettings);
-    }    
+    },
   },
 });
 
-export const {
-  setUserJWT,
-  setCookies,
-  removeCookies,
-} = cookiesSlice.actions;
+export const { setUserJWT, setCookies, removeCookies } = cookiesSlice.actions;

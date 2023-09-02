@@ -1,9 +1,9 @@
-import axios from "axios";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { userStoreKey } from ".";
-import { removeCookies } from "../cookies";
-import { errorAlert, errorSideAlert, successAlert } from "../alerts";
-import Cookies from "universal-cookie";
+import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { userStoreKey } from '.';
+import { removeCookies } from '../cookies';
+import { errorAlert, errorSideAlert, successAlert } from '../alerts';
+import Cookies from 'universal-cookie';
 
 const basePath = import.meta.env.VITE_API_BASE_URL;
 const userPath = `${basePath}/users`;
@@ -26,7 +26,7 @@ export const getUserData = createAsyncThunk(
     } catch (error) {
       thunkApi.dispatch(removeCookies('jwt'));
     }
-  }
+  },
 );
 
 export const getUserProfileImage = createAsyncThunk(
@@ -37,9 +37,13 @@ export const getUserProfileImage = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the user profile image. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the user profile image. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const addUserProfileImage = createAsyncThunk(
@@ -47,14 +51,18 @@ export const addUserProfileImage = createAsyncThunk(
   async (data: FormData, thunkApi) => {
     try {
       await axios.post(`${userProfileImagePath}/add-userimage`, data);
-      
+
       thunkApi.dispatch(getUserProfileImage());
       thunkApi.dispatch(successAlert('Profile image added successfully'));
-      return { success: true }
+      return { success: true };
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error adding the user profile image. Please, try again later.'));
+      thunkApi.dispatch(
+        errorAlert(
+          'Error adding the user profile image. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const deleteUserProfileImage = createAsyncThunk(
@@ -65,9 +73,13 @@ export const deleteUserProfileImage = createAsyncThunk(
 
       thunkApi.dispatch(getUserProfileImage());
       thunkApi.dispatch(successAlert('Profile image removed successfully'));
-      return { success: true }
+      return { success: true };
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error removing the user profile image. Please, try again later.'));
+      thunkApi.dispatch(
+        errorAlert(
+          'Error removing the user profile image. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );

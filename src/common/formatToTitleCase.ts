@@ -6,7 +6,7 @@ export function formatToTitleCase(text: string) {
     const formattedWord = firstLetter + word.slice(1);
 
     formattedText = formattedText
-      ? (`${formattedText} ${formattedWord}`)
+      ? `${formattedText} ${formattedWord}`
       : formattedWord;
   });
 

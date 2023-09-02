@@ -7,7 +7,7 @@ import { NavigationItem } from './components';
 import styles from './Navigation.module.css';
 
 interface IProps {
-  navigationIsMinimized: boolean,
+  navigationIsMinimized: boolean;
 }
 
 export function Navigation({ navigationIsMinimized }: IProps) {
@@ -19,13 +19,17 @@ export function Navigation({ navigationIsMinimized }: IProps) {
       return true;
     }
     return false;
-  }
+  };
 
   return (
-    <div className={`${styles.navigationPanel} ${navigationIsMinimized ? 'minimized' : ''}`}>
+    <div
+      className={`${styles.navigationPanel} ${
+        navigationIsMinimized ? 'minimized' : ''
+      }`}
+    >
       <div style={{ position: 'relative' }}>
         {navigationOptions.map((navigationObject, index) => {
-          const {icon, option, title} = navigationObject;
+          const { icon, option, title } = navigationObject;
           return (
             <NavigationItem
               key={index}

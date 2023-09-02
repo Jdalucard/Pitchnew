@@ -5,7 +5,7 @@ import { alertsStoreKey } from './alerts.const';
 import spinnerGif from '../../assets/gifts/spinner.gif';
 
 interface IState {
-  alerts: null,
+  alerts: null;
 }
 
 const initialState: IState = {
@@ -28,26 +28,26 @@ export const alertsSlice = createSlice({
     openLoadingModal: (_, action) => {
       if (swal.getState && !swal.getState().isOpen) {
         swal({
-          title: "",
+          title: '',
           text: (action.payload || 'Loading') + ', please wait...',
           icon: spinnerGif,
-          closeOnClickOutside: false
+          closeOnClickOutside: false,
         });
       }
     },
     closeLoadingModal: () => {
-      if ((swal.getState && swal.close) && swal.getState().isOpen) {
+      if (swal.getState && swal.close && swal.getState().isOpen) {
         swal.close();
       }
     },
     errorAlert: (_, action) => {
-      swal("Error", action.payload, "error");
+      swal('Error', action.payload, 'error');
     },
     warningAlert: (_, action) => {
-      swal(action.payload.title, action.payload.message, "warning");
+      swal(action.payload.title, action.payload.message, 'warning');
     },
     successAlert: (_, action) => {
-      swal("Success", action.payload, "success");
+      swal('Success', action.payload, 'success');
     },
     successSideAlert: (_, action) => {
       if (swal.getState && swal.close && swal.getState().isOpen) {

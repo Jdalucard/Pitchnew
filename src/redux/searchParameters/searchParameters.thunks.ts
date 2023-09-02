@@ -1,9 +1,11 @@
-import axios from "axios";
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { searchParametersStoreKey } from ".";
-import { errorSideAlert } from "../alerts";
+import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { searchParametersStoreKey } from '.';
+import { errorSideAlert } from '../alerts';
 
-const searchParametersPath = `${import.meta.env.VITE_API_BASE_URL}/search-parameters`;
+const searchParametersPath = `${
+  import.meta.env.VITE_API_BASE_URL
+}/search-parameters`;
 
 export const getGenres = createAsyncThunk(
   `${searchParametersStoreKey}/getGenres`,
@@ -13,9 +15,13 @@ export const getGenres = createAsyncThunk(
 
       return response.data?.genresList;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the genres for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the genres for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getLanguages = createAsyncThunk(
@@ -26,9 +32,13 @@ export const getLanguages = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the languages for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the languages for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getLocations = createAsyncThunk(
@@ -39,9 +49,13 @@ export const getLocations = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the locations for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the locations for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getPlaces = createAsyncThunk(
@@ -52,9 +66,13 @@ export const getPlaces = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the places for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the places for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getMonths = createAsyncThunk(
@@ -65,9 +83,13 @@ export const getMonths = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the months for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the months for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getCountries = createAsyncThunk(
@@ -78,35 +100,51 @@ export const getCountries = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the countries for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the countries for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getStates = createAsyncThunk(
   `${searchParametersStoreKey}/getStates`,
   async (countryId: string, thunkApi) => {
     try {
-      const response = await axios.get(`${searchParametersPath}/states?countryId=${countryId}`);
+      const response = await axios.get(
+        `${searchParametersPath}/states?countryId=${countryId}`,
+      );
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the states for the specified country. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the states for the specified country. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getCities = createAsyncThunk(
   `${searchParametersStoreKey}/getCities`,
   async (stateId: string, thunkApi) => {
     try {
-      const response = await axios.get(`${searchParametersPath}/cities?stateId=${stateId}`);
+      const response = await axios.get(
+        `${searchParametersPath}/cities?stateId=${stateId}`,
+      );
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the cities for the specified state. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the cities for the specified state. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getRoles = createAsyncThunk(
@@ -117,9 +155,13 @@ export const getRoles = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the roles for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the roles for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getSchoolTypes = createAsyncThunk(
@@ -130,46 +172,68 @@ export const getSchoolTypes = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the school types for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the school types for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getSponsorIndustries = createAsyncThunk(
   `${searchParametersStoreKey}/getSponsorIndustries`,
   async (_, thunkApi) => {
     try {
-      const response = await axios.get(`${searchParametersPath}/sponsorIndustries`);
+      const response = await axios.get(
+        `${searchParametersPath}/sponsorIndustries`,
+      );
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the sponsor industries for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the sponsor industries for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getSponsorMarkets = createAsyncThunk(
   `${searchParametersStoreKey}/getSponsorMarkets`,
   async (_, thunkApi) => {
     try {
-      const response = await axios.get(`${searchParametersPath}/sponsorMarkets`);
+      const response = await axios.get(
+        `${searchParametersPath}/sponsorMarkets`,
+      );
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the sponsor markets for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the sponsor markets for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
 
 export const getGuestIndustries = createAsyncThunk(
   `${searchParametersStoreKey}/getGuestIndustries`,
   async (_, thunkApi) => {
     try {
-      const response = await axios.get(`${searchParametersPath}/guestIndustries`);
+      const response = await axios.get(
+        `${searchParametersPath}/guestIndustries`,
+      );
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorSideAlert('Error getting the guest industries for the search parameters. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error getting the guest industries for the search parameters. Please, try again later.',
+        ),
+      );
     }
-  }
+  },
 );
