@@ -3,31 +3,27 @@ import { teamsStoreKey } from "./teams.const";
 
 import {
   createTeam,
-  issueInvitation,
   getTeam,
   removeUserTeam,
 } from "./teams.thunks";
 
 //interfaz del equipo
-interface Team {
+ export interface Team {
   team: string | null;
   teamId: string | null;
-  users: { email: string }[];
+  email: string[]
 }
 
 //  estado del equipo
 interface TeamState {
   isLoading: boolean;
   team: Team | null;
-  teamId: string;
-  users: Team["users"];
+
 }
 
 export const initialState: TeamState = {
   isLoading: false,
   team: null,
-  teamId: "",
-  users: [],
 };
 
 export const teamsSlice = createSlice({
@@ -45,32 +41,8 @@ export const teamsSlice = createSlice({
       });
     builder.addCase(createTeam.fulfilled, (state, action) => {
       state.isLoading = false;
-      const newUsers = [...state.users, ...action.payload];
-      state.users = newUsers;
+      state.team = action.payload;
     }),
-      /* ISSUE INVITATION  */
-      builder.addCase(issueInvitation.pending, (state) => {
-        state.isLoading = true;
-      }),
-      builder.addCase(issueInvitation.fulfilled, (state, action) => {
-        const { teamId, email } = action.payload;
-        if (state.team && state.team.teamId === teamId) {
-          const updatedUsers = state.team.users.map((existingUser) =>
-            existingUser.email === email
-              ? { ...existingUser, email: email }
-              : existingUser
-          );
-
-          state.team = {
-            ...state.team,
-            users: updatedUsers,
-          };
-        }
-      });
-    builder.addCase(issueInvitation.rejected, (state) => {
-      state.isLoading = false;
-    });
-
     /* GETTEAM */
     builder.addCase(getTeam.pending, (state) => {
       state.isLoading = true;
@@ -87,22 +59,7 @@ export const teamsSlice = createSlice({
     builder.addCase(removeUserTeam.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(removeUserTeam.fulfilled, (state, action) => {
-      state.isLoading = false;
-      const { teamId, email } = action.payload;
-      const currentTeam = state.team;
-
-      if (currentTeam && currentTeam.teamId === teamId) {
-        const updatedUsers = currentTeam.users.filter(
-          (existingUser) => existingUser.email !== email
-        );
-
-        state.team = {
-          ...currentTeam,
-          users: updatedUsers,
-        };
-      }
-    });
+   
     builder.addCase(removeUserTeam.rejected, (state) => {
       state.isLoading = false;
     });
