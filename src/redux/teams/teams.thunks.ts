@@ -7,8 +7,6 @@ import { Team } from './teams.slice'
 const basePath = import.meta.env.VITE_API_BASE_URL
 const TEAMS_ENDPOINT = '/teams/'
 
-
-
 export const createTeam = createAsyncThunk(
   `${teamsStoreKey}/createTeam`,
   async (_, thunkApi) => {
@@ -21,12 +19,7 @@ export const createTeam = createAsyncThunk(
         team,
         email: [],
       };
-      // Obtiene el estado actual
-      const state = thunkApi.getState() as RootState;
-    
-      state.teams.team = newTeam;
-
-      return response.data;
+      return newTeam
     } catch (error) {
       thunkApi.dispatch(errorAlert('Error creating the team. Try again later.'))
     }
@@ -57,7 +50,7 @@ export const issueInvitation = createAsyncThunk(
           email: updatedEmails,
         };
       }
-      return response.data;
+      return state.teams.team
     } catch (error) {
       thunkApi.dispatch(
         errorAlert('Error issuing an invitation. Try again later.')

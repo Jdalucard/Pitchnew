@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { teamsStoreKey } from "./teams.const";
 
+
 import {
   createTeam,
   getTeam,
@@ -39,10 +40,15 @@ export const teamsSlice = createSlice({
       builder.addCase(createTeam.rejected, (state) => {
         state.isLoading = false;
       });
-    builder.addCase(createTeam.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.team = action.payload;
-    }),
+      builder.addCase(createTeam.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (action.payload !== undefined) {
+          state.team = action.payload;
+        } else {
+          state.team = null;
+        }
+      });
+
     /* GETTEAM */
     builder.addCase(getTeam.pending, (state) => {
       state.isLoading = true;
