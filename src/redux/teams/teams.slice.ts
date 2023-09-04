@@ -39,7 +39,7 @@ export const teamsSlice = createSlice({
       state.isLoading = false;
       state.team = action.payload ?? null;
     });
-    /*ISSUEINVITATION*/
+    /* ISSUEINVITATION */
     builder.addCase(issueInvitation.pending, (state) => {
       state.isLoading = true;
     });

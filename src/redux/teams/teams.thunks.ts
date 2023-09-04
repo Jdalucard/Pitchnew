@@ -3,33 +3,28 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { teamsStoreKey } from './teams.const';
 import { errorAlert } from '../alerts';
 import { RootState } from '../store';
-import { Team } from './teams.slice';
+import type { Team } from './teams.slice';
 
 const basePath = import.meta.env.VITE_API_BASE_URL;
 const TEAMS_ENDPOINT = '/teams/';
-
-interface IIussueInvitation {
-  team: string | null;
-  emails: string[];
-  teamId: string | null;
-}
 
 export const createTeam = createAsyncThunk(
   `${teamsStoreKey}/createTeam`,
   async (_, thunkApi) => {
     try {
-      const response = await axios.post(basePath + TEAMS_ENDPOINT, {});
+      const response = await axios.post(basePath + TEAMS_ENDPOINT);
 
       const { teamId, team } = response.data;
-      const newTeam: Team = {
+      const newTeam = {
         teamId,
         team,
         emails: [],
       };
+
       return newTeam;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert('Error creating the team. Try again later.'),
+        errorAlert('Error creating the team. Please, try again later.'),
       );
     }
   },
@@ -37,7 +32,7 @@ export const createTeam = createAsyncThunk(
 
 export const issueInvitation = createAsyncThunk(
   `${teamsStoreKey}/issueInvitation`,
-  async (params: IIussueInvitation, thunkApi) => {
+  async (params: Team, thunkApi) => {
     try {
       const response = await axios.post(
         `${basePath}${TEAMS_ENDPOINT}/invitation`,
@@ -73,7 +68,7 @@ export const issueInvitation = createAsyncThunk(
       return updatedTeam;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert('Error issuing an invitation. Try again later.'),
+        errorAlert('Error issuing an invitation. Please, try again later.'),
       );
     }
   },
@@ -88,7 +83,9 @@ export const getTeam = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert('Error retrieving the specified team. Try again later.'),
+        errorAlert(
+          'Error retrieving the specified team. Please, try again later.',
+        ),
       );
     }
   },
@@ -96,7 +93,7 @@ export const getTeam = createAsyncThunk(
 
 export const removeUserTeam = createAsyncThunk(
   `${teamsStoreKey}/removeUserTeam`,
-  async (params: IIussueInvitation, thunkApi) => {
+  async (params: Team, thunkApi) => {
     try {
       const { team, emails } = params;
       const url = `${basePath}${TEAMS_ENDPOINT}/${team}/users/${emails}`;
@@ -105,7 +102,9 @@ export const removeUserTeam = createAsyncThunk(
       return { team, emails };
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert('Error deleting the specified team. Try again later.'),
+        errorAlert(
+          'Error deleting the specified team. Please, try again later.',
+        ),
       );
     }
   },
