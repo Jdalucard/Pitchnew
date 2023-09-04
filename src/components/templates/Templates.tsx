@@ -94,7 +94,7 @@ export function Templates() {
     inputElement.style.padding = "10px";
 
     inputElement.value = templateSubject;
-    inputElement.onchange = (e) => setTemplateSubject(e.target.value || "");
+    inputElement.onchange = (e) => setTemplateSubject(e.target?.value || "");
     contentNode.insertBefore(inputElement, contentNode.firstChild);
 
     swal({
@@ -175,7 +175,7 @@ export function Templates() {
       
       const params = {
         userId: template.userId,
-        templateId: template.emailtemplate[0]._id,
+        templateId: template.emailtemplate[0]._id || '',
       };
 
       dispatch(removeEmailTemplate(params));
