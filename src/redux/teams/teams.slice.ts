@@ -1,18 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { teamsStoreKey } from "./teams.const";
-
-
 import {
   createTeam,
   getTeam,
   removeUserTeam,
+  issueInvitation
 } from "./teams.thunks";
 
 //interfaz del equipo
  export interface Team {
   team: string | null;
   teamId: string | null;
-  email: string[]
+  emails: string[]
 }
 
 //  estado del equipo
@@ -37,18 +36,35 @@ export const teamsSlice = createSlice({
     builder.addCase(createTeam.pending, (state) => {
       state.isLoading = true;
     }),
-      builder.addCase(createTeam.rejected, (state) => {
+    builder.addCase(createTeam.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.team=action.payload ?? null;
+      }),
+    builder.addCase(createTeam.rejected, (state) => {
         state.isLoading = false;
       });
-      builder.addCase(createTeam.fulfilled, (state, action) => {
-        state.isLoading = false;
-        if (action.payload !== undefined) {
-          state.team = action.payload;
-        } else {
-          state.team = null;
-        }
-      });
-
+      /*ISSUEINVITATION*/
+    builder.addCase(issueInvitation.pending, (state) => {
+      state.isLoading = true;
+    })
+    builder.addCase(issueInvitation.fulfilled, (state, action) => {
+      state.isLoading = false;
+      if (state.team) {
+        state.team = {
+          ...state.team,
+          emails: action.payload
+        };
+      } else {
+        state.team = {
+          teamId: null,
+          team: null,
+          emails: action.payload
+        };
+      }
+    });
+    builder.addCase(issueInvitation.rejected, (state) => {
+      state.isLoading = false;
+    })
     /* GETTEAM */
     builder.addCase(getTeam.pending, (state) => {
       state.isLoading = true;
