@@ -4,8 +4,15 @@ import { teamsStoreKey } from './teams.const'
 import { errorAlert } from '../alerts'
 import { RootState } from '../store'
 import { Team } from './teams.slice'
+
 const basePath = import.meta.env.VITE_API_BASE_URL
 const TEAMS_ENDPOINT = '/teams/'
+
+interface IIussueInvitation{
+  team: string | null
+  emails: string [];
+  teamId: string | null
+}
 
 export const createTeam = createAsyncThunk(
   `${teamsStoreKey}/createTeam`,
@@ -17,7 +24,7 @@ export const createTeam = createAsyncThunk(
       const newTeam: Team = {
         teamId,
         team,
-        email: [],
+        emails: [],
       };
       return newTeam
     } catch (error) {
@@ -28,34 +35,31 @@ export const createTeam = createAsyncThunk(
 
 export const issueInvitation = createAsyncThunk(
   `${teamsStoreKey}/issueInvitation`,
-  async (params: { team: string | null; email: string[] }, thunkApi) => {
+  async (params: IIussueInvitation, thunkApi) => {
     try {
       const response = await axios.post(
         `${basePath}${TEAMS_ENDPOINT}/invitation`,
         params
       );
-      // Si la solicitud es exitosa, actualiza el estado aquí
-      const { teamId, email } = response.data;
+
+      const { teamId, emails } = response.data;
+      const updateEmails: string[] = [];
       const state = thunkApi.getState() as RootState;
-      
+
       if (state.teams.team && state.teams.team.teamId === teamId) {
-        const updatedEmails = state.teams.team.email.map((existingEmail) =>
-          existingEmail === email
-            ? email // Actualiza el correo electrónico del usuario
-            : existingEmail
-        );
-      
-        state.teams.team = {
-          ...state.teams.team,
-          email: updatedEmails,
-        };
+        state.teams.team.emails.map((existingEmail) => {
+          if (existingEmail !== emails) {
+            updateEmails.push(emails);
+          }
+        }
       }
-      return state.teams.team
+
+      return updateEmails;
     } catch (error) {
       thunkApi.dispatch(
         errorAlert('Error issuing an invitation. Try again later.')
       );
-    
+      throw error; // Rethrow the error to inform the caller that an error occurred.
     }
   }
 );
@@ -74,12 +78,12 @@ export const getTeam = createAsyncThunk(
 );
 export const removeUserTeam = createAsyncThunk(
   `${teamsStoreKey}/removeUserTeam`,
-  async (params: { team: string | null; email: string[] }, thunkApi) => {
+  async (params: IIussueInvitation, thunkApi) => {
     try {
-      const { team, email } = params;
+      const { team, emails } = params;
       const url = `${basePath}${TEAMS_ENDPOINT}/${team}/users/${email}`;
       await axios.delete(url); 
-      return { team, email }; 
+      return { team, emails }; 
     } catch (error) {
       thunkApi.dispatch(
         errorAlert('Error deleting the specified team. Try again later.')
