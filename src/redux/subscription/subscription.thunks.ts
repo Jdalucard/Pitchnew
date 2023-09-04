@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { subscriptionStoreKey } from '.';
+import { IUserSubscription, subscriptionStoreKey } from '.';
 import { errorAlert, errorSideAlert, successAlert } from '../alerts';
 import { Token } from '@stripe/stripe-js';
 
@@ -127,8 +127,18 @@ export const getUserSubscriptionPlan = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const response = await axios.get(`${subscriptionPath}/current`);
+      let userSubscription: IUserSubscription;
 
-      return response.data;
+      if (response.data?.type) {
+        userSubscription = response.data;
+      } else {
+        userSubscription = {
+          type: 'Pay as you pitch',
+          scheduledToCancel: false,
+        };
+      }
+
+      return userSubscription;
     } catch (error) {
       thunkApi.dispatch(
         errorSideAlert(

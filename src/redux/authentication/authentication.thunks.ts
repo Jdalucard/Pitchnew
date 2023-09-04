@@ -159,7 +159,7 @@ export const processEmailConfiguration = createAsyncThunk(
   `${authenticationStoreKey}/processEmailConfiguration`,
   async (params: IProcessEmailConfiguration, thunkApi) => {
     const { jwt, emailAuthNetwork, sendBody } = params;
-    let requestPath: string | undefined;
+    let requestPath: string;
 
     if (emailAuthNetwork === socialNetworks.GMAIL) {
       requestPath = `${emailConfigPath}/gmail-activation`;
