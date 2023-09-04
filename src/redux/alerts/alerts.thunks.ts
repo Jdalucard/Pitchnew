@@ -1,38 +1,38 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
-import { alertsStoreKey } from ".";
-import { ContentOptions } from "sweetalert/typings/modules/options/content";
-import { ButtonList } from "sweetalert/typings/modules/options/buttons";
+import { alertsStoreKey } from '.';
+import { ContentOptions } from 'sweetalert/typings/modules/options/content';
+import { ButtonList } from 'sweetalert/typings/modules/options/buttons';
 
 interface IOpenConfirmation {
-  message: string,
-  title?: string,
-  confirmMessage?: string,
-  isInEditor?: boolean,
-  isInMailbox?: boolean,
+  message: string;
+  title?: string;
+  confirmMessage?: string;
+  isInEditor?: boolean;
+  isInMailbox?: boolean;
 }
 
 interface ISwalOptions {
-  title: string,
-  text: string,
-  icon?: string,
-  dangerMode?: boolean,
-  content: ContentOptions,
-  buttons?: ButtonList | (string | boolean)[],
-  closeOnClickOutside?: boolean,
-  className?: string,
+  title: string;
+  text: string;
+  icon?: string;
+  dangerMode?: boolean;
+  content: ContentOptions;
+  buttons?: ButtonList | (string | boolean)[];
+  closeOnClickOutside?: boolean;
+  className?: string;
 }
 
 interface IOpenDualConfirmation {
-  message: string,
-  title?: string,
-  button1: string,
-  button2: string,
+  message: string;
+  title?: string;
+  button1: string;
+  button2: string;
 }
 
 interface IOpenRemovalConfirmation {
-  item: string,
-  message: string,
+  item: string;
+  message: string;
 }
 
 export const openConfirmation = createAsyncThunk(
@@ -41,22 +41,22 @@ export const openConfirmation = createAsyncThunk(
     const { title, message, confirmMessage, isInEditor, isInMailbox } = params;
 
     const options: ISwalOptions = {
-      title: title || "Confirm",
+      title: title || 'Confirm',
       text: message,
-      content: { element: 'div'},
-      buttons: ["Cancel", (confirmMessage || "Confirm")],
-    }
+      content: { element: 'div' },
+      buttons: ['Cancel', confirmMessage || 'Confirm'],
+    };
 
     if (!isInEditor) {
       options.icon = 'warning';
       options.dangerMode = true;
     }
     if (isInMailbox) {
-      options.className = "mailbox_editor";
+      options.className = 'mailbox_editor';
     }
 
     return swal(options);
-  }
+  },
 );
 
 export const openDualActionConfirmation = createAsyncThunk(
@@ -65,9 +65,9 @@ export const openDualActionConfirmation = createAsyncThunk(
     const { title, message, button1, button2 } = params;
 
     return swal({
-      title: title || "Confirm",
+      title: title || 'Confirm',
       text: message,
-      icon: "warning",
+      icon: 'warning',
       dangerMode: true,
       buttons: {
         cancel: true,
@@ -81,7 +81,7 @@ export const openDualActionConfirmation = createAsyncThunk(
         },
       },
     });
-  }
+  },
 );
 
 export const openDeleteConfirmation = createAsyncThunk(
@@ -90,11 +90,13 @@ export const openDeleteConfirmation = createAsyncThunk(
     const { item, message } = params;
 
     return swal({
-      title: "Remove " + item + "?",
-      text: message ? message : "Once removed, you will not be able to recover this " + item,
-      icon: "warning",
+      title: 'Remove ' + item + '?',
+      text: message
+        ? message
+        : 'Once removed, you will not be able to recover this ' + item,
+      icon: 'warning',
       dangerMode: true,
-      buttons: ["Cancel", "Remove"],
+      buttons: ['Cancel', 'Remove'],
     });
-  }
+  },
 );

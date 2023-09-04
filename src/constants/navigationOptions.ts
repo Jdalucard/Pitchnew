@@ -11,53 +11,53 @@ import SchoolIcon from '@mui/icons-material/School';
 
 export const navigationOptions = [
   {
-    option: "dashboard",
-    title: "Dashboard",
-    icon: SpaceDashboardIcon
+    option: 'dashboard',
+    title: 'Dashboard',
+    icon: SpaceDashboardIcon,
   },
   {
-    option: "podcast-search",
-    title: "Podcasts",
-    icon: PodcastsIcon
+    option: 'podcast-search',
+    title: 'Podcasts',
+    icon: PodcastsIcon,
   },
   {
-    option: "live-events",
-    title: "Local Associations",
-    icon: EventIcon
+    option: 'live-events',
+    title: 'Local Associations',
+    icon: EventIcon,
   },
   {
-    option: "media-search",
-    title: "Media Outlets",
-    icon: NewspaperIcon
+    option: 'media-search',
+    title: 'Media Outlets',
+    icon: NewspaperIcon,
   },
   {
-    option: "conference-search",
-    title: "Conferences",
-    icon: CampaignIcon
+    option: 'conference-search',
+    title: 'Conferences',
+    icon: CampaignIcon,
   },
   {
-    option: "experts-search",
-    title: "Experts",
-    icon: AccessibilityNewIcon
+    option: 'experts-search',
+    title: 'Experts',
+    icon: AccessibilityNewIcon,
   },
   {
-    option: "my-lists",
-    title: "Contacts",
-    icon: RecentActorsIcon
+    option: 'contacts',
+    title: 'Contacts',
+    icon: RecentActorsIcon,
   },
   {
-    option: "outreach-sequences-mail",
-    title: "Mailbox",
-    icon: EmailIcon
+    option: 'outreach-sequences-mail',
+    title: 'Mailbox',
+    icon: EmailIcon,
   },
   {
-    option: "templates",
-    title: "Templates",
-    icon: ArticleIcon
+    option: 'templates',
+    title: 'Templates',
+    icon: ArticleIcon,
   },
   {
-    option: "academy",
-    title: "Academy",
-    icon: SchoolIcon
-  }
+    option: 'academy',
+    title: 'Academy',
+    icon: SchoolIcon,
+  },
 ];

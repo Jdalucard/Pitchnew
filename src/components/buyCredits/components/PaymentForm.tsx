@@ -1,21 +1,20 @@
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { StripeCardElementChangeEvent, Token } from "@stripe/stripe-js";
-import { IBundle, ISubscription } from ".";
-import { Button, Typography } from "@mui/material";
-import { formatToTitleCase } from "../../../common";
-import { IUserSubscription } from "../../../redux/subscription";
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { StripeCardElementChangeEvent, Token } from '@stripe/stripe-js';
+import { IBundle, ISubscription } from '.';
+import { Button, Typography } from '@mui/material';
+import { formatToTitleCase } from '../../../common';
+import { IUserSubscription } from '../../../redux/subscription';
 import SecurityIcon from '@mui/icons-material/Security';
 import styles from '../BuyCredits.module.css';
-import { useState } from "react";
-
+import { useState } from 'react';
 
 interface IProps {
-  userPlan: IUserSubscription | null,
-  selectedPlan?: ISubscription,
-  selectedBundle?: IBundle,
-  processPaySubscription?: (token: Token) => void,
-  processPayBundle?: (token: Token) => void,
-  upgradePlan?: () => void,
+  userPlan: IUserSubscription | null;
+  selectedPlan?: ISubscription;
+  selectedBundle?: IBundle;
+  processPaySubscription?: (token: Token) => void;
+  processPayBundle?: (token: Token) => void;
+  upgradePlan?: () => void;
 }
 
 export function PaymentForm({
@@ -49,11 +48,11 @@ export function PaymentForm({
         }
       }
     }
-  }
+  };
 
   const handleCardChange = (event: StripeCardElementChangeEvent) => {
     setFormIsComplete(event.complete);
-  }
+  };
 
   return (
     <div className={styles.paymentForm}>
@@ -75,16 +74,24 @@ export function PaymentForm({
           </Typography>
           <Typography variant="body1" color="text.primary">
             <b>Pitches:</b> {selectedBundle?.amount}
-          </Typography>          
+          </Typography>
         </>
       )}
       <Typography variant="body1" color="text.primary">
-        <b>Total to pay:</b> ${`${selectedPlan ? selectedPlan.price : selectedBundle?.price}`} {`${selectedPlan ? `/ ${selectedPlan.interval}` : ''}`}
+        <b>Total to pay:</b> $
+        {`${selectedPlan ? selectedPlan.price : selectedBundle?.price}`}{' '}
+        {`${selectedPlan ? `/ ${selectedPlan.interval}` : ''}`}
       </Typography>
       {processPaySubscription && (
-        <Typography variant="body2" color="text.primary" textAlign="center" mt="1rem">
-          <b>Note:</b> If you already have a plan, purchasing this new plan will replace the previous one.
-          You will be credited/debited the proration changes at the start of the next billing month.
+        <Typography
+          variant="body2"
+          color="text.primary"
+          textAlign="center"
+          mt="1rem"
+        >
+          <b>Note:</b> If you already have a plan, purchasing this new plan will
+          replace the previous one. You will be credited/debited the proration
+          changes at the start of the next billing month.
         </Typography>
       )}
       <form onSubmit={handleSubmit}>
@@ -93,8 +100,11 @@ export function PaymentForm({
         </Typography>
         <div className={styles.security}>
           <Typography variant="body2" color="text.secondary">
-            Powered & secured by <a href="https://stripe.com/" target="_blank">Stripe</a>
-          </Typography>        
+            Powered & secured by{' '}
+            <a href="https://stripe.com/" target="_blank">
+              Stripe
+            </a>
+          </Typography>
           <SecurityIcon color="primary" fontSize="small" />
         </div>
         <div className={styles.cardWrapper}>
@@ -151,5 +161,5 @@ export function PaymentForm({
         )}
       </form>
     </div>
-  )
+  );
 }

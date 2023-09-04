@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
-import { processSocialAuthenticationHelper, processEmailConfigurationHelper } from '../redux/authentication/helpers';
+import {
+  processSocialAuthenticationHelper,
+  processEmailConfigurationHelper,
+} from '../redux/authentication/helpers';
 import { callbackTypes, loadingDisplayTypes } from '../types';
 import { useAppDispatch } from '../redux/hooks';
 import { LoadingDisplay } from './LoadingDisplay';
 
 interface IProps {
-  type: callbackTypes,
+  type: callbackTypes;
 }
 
 export function Callback({ type }: IProps) {
@@ -17,12 +20,12 @@ export function Callback({ type }: IProps) {
         processSocialAuthenticationHelper({ dispatch });
         break;
       case callbackTypes.emailConfiguration:
-        processEmailConfigurationHelper({ dispatch })
+        processEmailConfigurationHelper({ dispatch });
         break;
       default:
         null;
     }
   }, [type, dispatch]);
-  
+
   return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />;
 }

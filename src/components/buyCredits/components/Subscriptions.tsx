@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { Token, loadStripe } from '@stripe/stripe-js';
-import { Button, Typography } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { Button, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import {
   cancelUserSubscriptionPlan,
   getSubscriptionPlans,
@@ -10,27 +10,27 @@ import {
   paySubscription,
   subscriptionSelectors,
   updateUserSubscriptionPlan,
-} from "../../../redux/subscription";
-import { IBuyingItem } from "../BuyCredits";
-import { openConfirmation } from "../../../redux/alerts/alerts.thunks";
+} from '../../../redux/subscription';
+import { IBuyingItem } from '../BuyCredits';
+import { openConfirmation } from '../../../redux/alerts/alerts.thunks';
 import styles from '../BuyCredits.module.css';
-import { PaymentForm } from ".";
-import { userSelectors } from "../../../redux/user";
-import { LoadingDisplay } from "../../../common";
-import { loadingDisplayTypes } from "../../../types";
+import { PaymentForm } from '.';
+import { userSelectors } from '../../../redux/user';
+import { LoadingDisplay } from '../../../common';
+import { loadingDisplayTypes } from '../../../types';
 
 export interface ISubscription {
-  id: string,
-  price: number,
-  interval: string,
-  name?: string,
-  description?: string,
+  id: string;
+  price: number;
+  interval: string;
+  name?: string;
+  description?: string;
 }
 
 interface IProps {
-  beginTransaction: boolean,
-  toggleBeginTransaction: (beginTransaction: boolean) => void,
-  toggleSuccessItem: (item: IBuyingItem) => void,
+  beginTransaction: boolean;
+  toggleBeginTransaction: (beginTransaction: boolean) => void;
+  toggleSuccessItem: (item: IBuyingItem) => void;
 }
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
@@ -38,7 +38,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 export function Subscriptions({
   beginTransaction,
   toggleBeginTransaction,
-  toggleSuccessItem
+  toggleSuccessItem,
 }: IProps) {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(subscriptionSelectors.isLoading);
@@ -65,46 +65,52 @@ export function Subscriptions({
   const handleSelectPlan = (selectedPlan: ISubscription) => {
     toggleBeginTransaction(true);
     setSelectedPlan(selectedPlan);
-  }
+  };
 
   const processPaySubscription = async (token: Token) => {
     const planId = selectedPlan?.id;
 
     if (planId) {
-      const response = await dispatch(paySubscription({
-        token,
-        planId,
-      })).unwrap();
+      const response = await dispatch(
+        paySubscription({
+          token,
+          planId,
+        }),
+      ).unwrap();
 
       if (response?.success) {
         dispatch(getUserSubscriptionPlan());
         toggleSuccessItem({ selectedPlan });
       }
     }
-  }
+  };
 
   const upgradePlan = async () => {
     const planId = selectedPlan?.id;
 
     if (planId) {
-      const response = await dispatch(updateUserSubscriptionPlan(planId)).unwrap();
+      const response = await dispatch(
+        updateUserSubscriptionPlan(planId),
+      ).unwrap();
 
       if (response) {
-        toggleSuccessItem({ selectedPlan });        
+        toggleSuccessItem({ selectedPlan });
       }
     }
-  }
-  
+  };
+
   const cancelPlan = async () => {
-    const confirmation = await dispatch(openConfirmation({
-      message: 'Cancel your current plan?',
-      confirmMessage: 'Cancel plan',
-    })).unwrap();
+    const confirmation = await dispatch(
+      openConfirmation({
+        message: 'Cancel your current plan?',
+        confirmMessage: 'Cancel plan',
+      }),
+    ).unwrap();
 
     if (confirmation) {
       dispatch(cancelUserSubscriptionPlan());
     }
-  }
+  };
 
   return (
     <>
@@ -119,7 +125,8 @@ export function Subscriptions({
                       <b>Your current plan:</b> {userPlan.type}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      <b>Credits per month:</b> {userPlan.credits ?? 'Infinite!'}
+                      <b>Credits per month:</b>{' '}
+                      {userPlan.credits ?? 'Infinite!'}
                     </Typography>
                   </div>
                   {!userPlan?.scheduledToCancel && (
@@ -137,12 +144,14 @@ export function Subscriptions({
                 </div>
                 {!userPlan?.scheduledToCancel ? (
                   <Typography variant="body2" color="text.secondary">
-                    <b>Note:</b> Canceling your current plan will remove all the pitches
-                    that you gained from it when the current billing month ends.
+                    <b>Note:</b> Canceling your current plan will remove all the
+                    pitches that you gained from it when the current billing
+                    month ends.
                   </Typography>
                 ) : (
                   <Typography variant="body2" color="text.secondary">
-                    <b>Note:</b> You have scheduled to cancel your subscription at the end of the month.
+                    <b>Note:</b> You have scheduled to cancel your subscription
+                    at the end of the month.
                   </Typography>
                 )}
               </div>
@@ -152,37 +161,52 @@ export function Subscriptions({
             Subscription plans
           </Typography>
           <div className={styles.itemsMappedWrapper}>
-            {isLoading && <LoadingDisplay type={loadingDisplayTypes.entireComponent} />}
-            {!isLoading && plans.map((plan, index) => {
-              return (
-                <div className={styles.planItem} key={index}>
-                  <div className={styles.header}>
-                    <Typography variant="h5" color="text.primaryInverted">{plan.name ?? `Plan #${index}`}</Typography>
-                  </div>
-                  <div className={styles.body}>
-                    {plan.description && (
-                      <Typography variant="body1" color="text.primary" gutterBottom>
-                        {plan.description}
+            {isLoading && (
+              <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
+            )}
+            {!isLoading &&
+              plans.map((plan, index) => {
+                return (
+                  <div className={styles.planItem} key={index}>
+                    <div className={styles.header}>
+                      <Typography variant="h5" color="text.primaryInverted">
+                        {plan.name ?? `Plan #${index}`}
                       </Typography>
-                    )}
-                    <Typography variant="body1" color="text.primary" gutterBottom>
-                      {`$${plan.price} / ${plan.interval}`}
-                    </Typography>
-                    {userPlan?.planId === plan.id ? (
-                      <Typography variant="body2" color="text.primary">Selected</Typography>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleSelectPlan(plan)}
+                    </div>
+                    <div className={styles.body}>
+                      {plan.description && (
+                        <Typography
+                          variant="body1"
+                          color="text.primary"
+                          gutterBottom
+                        >
+                          {plan.description}
+                        </Typography>
+                      )}
+                      <Typography
+                        variant="body1"
+                        color="text.primary"
+                        gutterBottom
                       >
-                        Purchase plan
-                      </Button>
-                    )}
+                        {`$${plan.price} / ${plan.interval}`}
+                      </Typography>
+                      {userPlan?.planId === plan.id ? (
+                        <Typography variant="body2" color="text.primary">
+                          Selected
+                        </Typography>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleSelectPlan(plan)}
+                        >
+                          Purchase plan
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       )}
@@ -194,7 +218,7 @@ export function Subscriptions({
             <div className={styles.transactionInProcess}>
               <Button
                 variant="outlined"
-                color="primary"  
+                color="primary"
                 onClick={() => {
                   toggleBeginTransaction(false);
                   setSelectedPlan(null);
@@ -211,7 +235,7 @@ export function Subscriptions({
                   processPaySubscription={processPaySubscription}
                 />
               </Elements>
-            </div>    
+            </div>
           )}
         </>
       )}

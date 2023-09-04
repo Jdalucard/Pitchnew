@@ -15,19 +15,19 @@ import { userHasAllAccess } from '../../../common';
 import { userSelectors } from '../../../redux/user';
 
 interface IProps {
-  userPrivileges: string[] | undefined
+  userPrivileges: string[] | undefined;
 }
 
 export function AccountMenu({ userPrivileges }: IProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const cookies = new Cookies;
+  const cookies = new Cookies();
   const isAdminMode = useAppSelector(userSelectors.isAdmin);
 
   const signOut = () => {
     dispatch(removeCookies('jwt'));
     navigate('/');
-  }
+  };
 
   const backToAdmin = () => {
     dispatch(setUserJWT(cookies.get('admin-token')));
@@ -35,81 +35,144 @@ export function AccountMenu({ userPrivileges }: IProps) {
     dispatch(removeCookies('lastPage'));
     dispatch(removeCookies('currentPage'));
     navigate('/');
-  }
+  };
 
   return (
     <div className={styles.headerDropMenu}>
       <div style={{ position: 'relative' }}>
-        <div className={styles.headerMenuItem} onClick={() => navigate('account/profile')}>
+        <div
+          className={styles.headerMenuItem}
+          onClick={() => navigate('account/profile')}
+        >
           <div className={styles.profileIconWrapper}>
-            <PersonIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
+            <PersonIcon
+              sx={(theme) => ({ color: theme.palette.text.primary })}
+              fontSize="small"
+            />
           </div>
-          <Typography variant="body1" color="text.primary">Profile</Typography>
+          <Typography variant="body1" color="text.primary">
+            Profile
+          </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div className={styles.headerMenuItem} onClick={() => navigate('account/configuration')}>
+        <div
+          className={styles.headerMenuItem}
+          onClick={() => navigate('account/configuration')}
+        >
           <div className={styles.profileIconWrapper}>
-            <SettingsIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
+            <SettingsIcon
+              sx={(theme) => ({ color: theme.palette.text.primary })}
+              fontSize="small"
+            />
           </div>
-          <Typography variant="body1" color="text.primary">Configuration</Typography>
+          <Typography variant="body1" color="text.primary">
+            Configuration
+          </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div className={styles.headerMenuItem} onClick={() => navigate('reports')}>
+        <div
+          className={styles.headerMenuItem}
+          onClick={() => navigate('reports')}
+        >
           <div className={styles.profileIconWrapper}>
-            <BarChartIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
+            <BarChartIcon
+              sx={(theme) => ({ color: theme.palette.text.primary })}
+              fontSize="small"
+            />
           </div>
-          <Typography variant="body1" color="text.primary">Reports</Typography>
+          <Typography variant="body1" color="text.primary">
+            Reports
+          </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div className={styles.headerMenuItem} onClick={() => navigate("account/team")}>
+        <div
+          className={styles.headerMenuItem}
+          onClick={() => navigate('account/team')}
+        >
           <div className={styles.profileIconWrapper}>
-            <GroupIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
+            <GroupIcon
+              sx={(theme) => ({ color: theme.palette.text.primary })}
+              fontSize="small"
+            />
           </div>
-          <Typography variant="body1" color="text.primary">Team</Typography>
+          <Typography variant="body1" color="text.primary">
+            Team
+          </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div className={styles.headerMenuItem} onClick={() => navigate("payment/credits")}>
+        <div
+          className={styles.headerMenuItem}
+          onClick={() => navigate('payment/credits')}
+        >
           <div className={styles.profileIconWrapper}>
-            <PaidIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
+            <PaidIcon
+              sx={(theme) => ({ color: theme.palette.text.primary })}
+              fontSize="small"
+            />
           </div>
-          <Typography variant="body1" color="text.primary">Payment option</Typography>
+          <Typography variant="body1" color="text.primary">
+            Payment option
+          </Typography>
         </div>
-        <div className={styles.verticalDivider} />      
+        <div className={styles.verticalDivider} />
         <div className={styles.headerMenuItem} onClick={signOut}>
           <div className={styles.profileIconWrapper}>
-            <LogoutIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
+            <LogoutIcon
+              sx={(theme) => ({ color: theme.palette.text.primary })}
+              fontSize="small"
+            />
           </div>
-          <Typography variant="body1" color="text.primary">Sign out</Typography>
+          <Typography variant="body1" color="text.primary">
+            Sign out
+          </Typography>
         </div>
         {userHasAllAccess(userPrivileges) && (
           <>
-            <div className={styles.verticalDivider} />        
-            <div className={styles.headerMenuItem} onClick={() => navigate("account/super-admin-searches")}>
+            <div className={styles.verticalDivider} />
+            <div
+              className={styles.headerMenuItem}
+              onClick={() => navigate('account/super-admin-searches')}
+            >
               <div className={styles.profileIconWrapper}>
-                <ContentPasteSearchIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
+                <ContentPasteSearchIcon
+                  sx={(theme) => ({ color: theme.palette.text.primary })}
+                  fontSize="small"
+                />
               </div>
-              <Typography variant="body1" color="text.primary">Admin: Searches</Typography>
+              <Typography variant="body1" color="text.primary">
+                Admin: Searches
+              </Typography>
             </div>
             <div className={styles.verticalDivider} />
-            <div className={styles.headerMenuItem} onClick={() => navigate("account/super-admin-users")}>
+            <div
+              className={styles.headerMenuItem}
+              onClick={() => navigate('account/super-admin-users')}
+            >
               <div className={styles.profileIconWrapper}>
-                <SettingsIcon sx={(theme) => ({ color: theme.palette.text.primary})} fontSize="small" />
+                <SettingsIcon
+                  sx={(theme) => ({ color: theme.palette.text.primary })}
+                  fontSize="small"
+                />
               </div>
-              <Typography variant="body1" color="text.primary">Admin: Users</Typography>
+              <Typography variant="body1" color="text.primary">
+                Admin: Users
+              </Typography>
             </div>
           </>
         )}
-        {isAdminMode &&
+        {isAdminMode && (
           <>
             <div className={styles.verticalDivider} />
             <div className={styles.headerMenuItem} onClick={backToAdmin}>
               <div className={styles.profileIconWrapper}>
                 <LogoutIcon color="primary" fontSize="small" />
               </div>
-              <Typography variant="body1" color="text.primary">Back to admin</Typography>
+              <Typography variant="body1" color="text.primary">
+                Back to admin
+              </Typography>
             </div>
           </>
-        }
+        )}
       </div>
     </div>
   );
