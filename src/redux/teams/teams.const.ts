@@ -1,1 +1,1 @@
-export const teamsStoreKey = "teams";
+export const teamsStoreKey = 'teams';

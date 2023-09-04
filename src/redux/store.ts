@@ -6,12 +6,11 @@ import { userSlice, userStoreKey } from './user';
 import { contactListStoreKey } from './contactList/contactList.const';
 import { contactListSlice } from './contactList/contactList.slice';
 import { subscriptionSlice, subscriptionStoreKey } from './subscription';
-import { teamsSlice,teamsStoreKey } from './teams';
+import { teamsSlice, teamsStoreKey } from './teams';
 import {
   searchParametersSlice,
   searchParametersStoreKey,
 } from './searchParameters';
-
 
 export const store = configureStore({
   reducer: {
@@ -22,7 +21,7 @@ export const store = configureStore({
     [contactListStoreKey]: contactListSlice.reducer,
     [subscriptionStoreKey]: subscriptionSlice.reducer,
     [searchParametersStoreKey]: searchParametersSlice.reducer,
-    [teamsStoreKey]:teamsSlice.reducer
+    [teamsStoreKey]: teamsSlice.reducer,
   },
 });
 
