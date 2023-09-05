@@ -10,8 +10,7 @@ import Navigation from '../navigation';
 import BuyCredits from '../buyCredits';
 import Contacts from '../contacts';
 import styles from './Main.module.css';
-import { useFetchUser } from "../../hooks";
-import { BuyCredits } from "../buyCredits/BuyCredits";
+import { Templates } from '../templates/Templates';
 
 export function Main() {
   
@@ -52,7 +51,7 @@ export function Main() {
           <Route path={"outreach-sequences-mail"} element={<></>} />
           <Route path={"account"} element={<></>} />
           <Route path={"payment/credits"} element={<BuyCredits />} />
-          <Route path={"templates"} element={<></>} />
+          <Route path={"templates"} element={<Templates />} />
           <Route path={"academy"} element={<div id="candu-academy-content" className="candu-academy-content" />} />
         </Routes>
       </div>

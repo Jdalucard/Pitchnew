@@ -10,20 +10,25 @@ import { warningAlert, openConfirmation } from '../../redux/alerts';
 
 import styles from './Templates.module.css';
 import { Box, Card, CardContent, Typography, Tabs, Tab, Button, Fab } from '@mui/material';
+import 'react-quill/dist/quill.snow.css'; // Importa los estilos CSS de react-quill
+
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import swal from 'sweetalert';
-
 import CustomTabPanel from './components/CustomTabPanel';
 
+import swal from 'sweetalert';
 import ReactQuill from 'react-quill';
 import ReactMarkdown from 'react-markdown';
-import 'react-quill/dist/quill.snow.css'; // Importa los estilos CSS de react-quill
 import turndown from 'turndown';
-import { ITemplate, IAddEmailTemplate, IEditEmailTemplate } from '../../types';
+
+import { emailValidation } from '../../common/emailValidation';
+
+import { crud } from '../../constants/crud';
+import { ITemplate, IAddEmailTemplate, IEditEmailTemplate, ISendEmail } from '../../types';
+import { sendEmail } from '../../redux/email';
 
 export function Templates() {
   const dispatch = useAppDispatch();
@@ -35,8 +40,6 @@ export function Templates() {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const [templateContent, setTemplateContent] = useState("");
-  const [templateSubject, setTemplateSubject] = useState("");
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -64,102 +67,10 @@ export function Templates() {
     dispatch(editEmailTemplate(params));
   }
 
-  const handleOpenEditor = ( type: string, template?: ITemplate ) => {
+  const handleSendEmail = (params : ISendEmail) =>{
 
-    if(template){
-      setTemplateContent(template.emailtemplate[0].content);
-      setTemplateSubject(template.emailtemplate[0].subject);
-    }
-
-    const contentNode = document.createElement("div");
-    contentNode.style.display = "flex";
-    contentNode.style.flexDirection = "column";
-    contentNode.style.width = "700px !important";
-
-    const reactQuillElement = React.createElement(ReactQuill, {
-      value: templateContent,
-      onChange: setTemplateContent,
-      ref: editorRef,
-      className: "custom-quill",
-    });
-
-    ReactDOM.render(reactQuillElement, contentNode);
-
-    const inputElement = document.createElement("input");
-
-    inputElement.id = "subject";
-    inputElement.name = "subject";
-    inputElement.placeholder = "Subject";
-    inputElement.style.marginBottom = "20px";
-    inputElement.style.padding = "10px";
-
-    inputElement.value = templateSubject;
-    inputElement.onchange = (e) => setTemplateSubject(e.target?.value || "");
-    contentNode.insertBefore(inputElement, contentNode.firstChild);
-
-    swal({
-      title: "Add Email Template",
-      text: "You can add email template for use it when you send mail",
-      content: { element: contentNode },
-      buttons: ["Cancel", "Add"],
-      className: "custom-modal",
-    }).then((value) => {
-      if (value) {
-        const subjectTitle = inputElement.value?.trim() || "";
-        const editorContent =
-          editorRef.current?.getEditor().root.innerHTML?.trim() || "";
-
-        const turndownService = new turndown();
-        const markdown = turndownService.turndown(editorContent || "");
-
-        if (markdown?.trim() === "") {
-          dispatch(
-            warningAlert({
-              title: "Empty Content",
-              message: "The content of the template cannot be empty",
-            })
-          );
-        } else if (subjectTitle === "") {
-          dispatch(
-            warningAlert({
-              title: "Empty Subject",
-              message: "The subject of the template cannot be empty",
-            })
-          );
-        } else if (markdown !== "" && subjectTitle !== "") {
-
-          if(type == 'edit'){
-
-            const params = {
-              userId: userData?._id || "",
-              template: {
-                _id:  template?.emailtemplate[0]._id || '',
-                subject: subjectTitle,
-                content: markdown || "",
-                date: new Date(),
-              },
-              id: template?._id || '',
-            };
-
-            handleEditTemplate(params);
-
-          }else if(type == 'add'){
-            const params = {
-              userId: userData?._id || "1",
-              template: {
-                id: '',
-                subject: subjectTitle,
-                content: markdown || "",
-                date: new Date(),
-              },
-            };
-
-            handleAddTemplate(params);
-          }
-        }
-      }
-    });
-  };
+    dispatch(sendEmail(params));
+  }
 
   const handleDeleteTemplate = async (template: ITemplate) => {
 
@@ -180,6 +91,190 @@ export function Templates() {
 
       dispatch(removeEmailTemplate(params));
     }
+  };
+
+  /**
+   * Function to convert form HTML to Markdown
+   * @param content 
+   * @returns 
+   */
+  const convertToMarkdown = (content : string) => {
+
+    const turndownService = new turndown();
+    const markdown = turndownService.turndown(content || "");
+
+    return markdown;
+
+  }
+
+
+  //HANDLE OPEN EDITOR
+  /**
+   * Open editor
+   * @param actionType type of action
+   * @param template 
+   */
+  const handleOpenEditor = ( actionType: string, template?: ITemplate) => {
+
+    //create the wrapper
+    const contentNode = document.createElement("div");
+    contentNode.style.display = "flex";
+    contentNode.style.flexDirection = "column";
+
+    const divElement = document.createElement("div");
+    divElement.style.display = "flex";
+    divElement.style.flexDirection = "column";
+    divElement.style.width = "100%";
+    divElement.style.marginBottom = "20px";
+
+    //creating the input
+    const inputElement = document.createElement("input");
+
+    //if user will send an email, set the input
+    if(actionType === crud.SEND){
+      
+      inputElement.id = "email";
+      inputElement.name = "email";
+      inputElement.placeholder = "Insert Email";
+      inputElement.type = "email";
+      inputElement.style.marginBottom = "20px";
+      inputElement.style.padding = "10px";
+
+      divElement.appendChild(inputElement);
+      contentNode.appendChild(divElement);
+
+    }else{ //if not, it will send or edit a template/email
+      const reactQuillElement = React.createElement(ReactQuill, {
+        value: actionType !== crud.ADD.toString() ? template?.emailtemplate[0].content || '' : '',
+        ref: editorRef,
+        className: "custom-quill",
+        style: {
+          display: 'flex',
+          flexDirection: 'column',
+          maxHeight: "40vh",
+          height: "40vh",
+          width: "100%",
+          marginBottom: '20px'
+        },
+      });   
+  
+      ReactDOM.render(reactQuillElement, contentNode);
+
+      inputElement.id = "subject";
+      inputElement.name = "subject";
+      inputElement.placeholder = "Subject";
+      inputElement.style.marginBottom = "20px";
+      inputElement.style.padding = "10px";
+      inputElement.value = actionType !== crud.ADD.toString() ? template?.emailtemplate[0].subject || '' : '';
+  
+      contentNode.insertBefore(inputElement, contentNode.firstChild);
+
+    }
+
+    
+    //open de modal
+    swal({
+      title: actionType === crud.ADD.toString() ? "Add Email Template" : actionType === crud.EDIT.toString() ? "Edit Email Template" : "Send Email",
+      text: actionType === crud.ADD.toString() ? "You can add email template for use it when you send mail" : actionType === crud.EDIT.toString() ? "You can edit this email template for use it when you send mail" : "",
+      content: { element: contentNode },
+      buttons: actionType === crud.ADD.toString() ? ["Cancel", "Add"] : actionType === crud.EDIT.toString() ? ["Cancel", "Edit"] : ["Cancel", "Send"],
+      className: "custom-modal",
+    }).then((value) => {
+
+      //if user select any option
+      if (value) {
+
+        //save subject and message
+        const subjectInput = inputElement.value?.trim() || "";
+        let editorContent = editorRef.current?.getEditor().root.innerHTML?.trim() || "";
+
+        //IF CONTENT IS EMPTY. DELETE ANY INNERHTML
+        if(editorRef.current?.getEditor().root.innerText.trim() === "") { 
+          editorContent = '';
+        }
+
+        //IF CONTENT OR SUBJECT IS EMPTY. SHOW ERROR
+        if (actionType !== crud.SEND && editorContent?.trim() === "") { 
+          dispatch(
+            warningAlert({
+              title: "Empty Content",
+              message: "The content of the template cannot be empty",
+            })
+          );
+        } else if (actionType !== crud.SEND && subjectInput?.trim() === "") {
+          dispatch(
+            warningAlert({
+              title: "Empty Subject",
+              message: "The subject of the template cannot be empty",
+            })
+          );
+        } else if(actionType === crud.SEND.toString()){
+          
+          //TO SEND AN EMAIL
+          const emailDestination = subjectInput;  
+
+          //VALIDATE IF EMAIL IS EMPTY OR NOT VALID
+          if(subjectInput?.trim() === "" || !emailValidation(emailDestination)){ 
+            dispatch(
+              warningAlert({
+                title: "Wrong Email",
+                message: "Insert an Email Valid",
+              })
+            );
+          }else {
+            //IF CONTENT AND EMAIL DESTINATION ARE VALID SET PARAMS
+
+            const params = {
+              emailData : {
+                emaiAccountdata: userData || undefined,
+                emailval: emailDestination,
+                message: template?.emailtemplate[0].content || '',
+                subject: template?.emailtemplate[0].subject  || '',
+              }
+            };
+
+            //SEND EMAIL
+            handleSendEmail(params);
+        
+          }
+
+          //IF USER WANTS TO EDIT OR CREATE
+        }else if (editorContent.trim() !== "" && subjectInput !== "") {
+          
+          //TO EDIT A TEMPLATE
+          if(actionType === crud.EDIT.toString()){  
+
+            const params = {
+              templateId: template?._id || '',
+              template: {
+                _id:  template?.emailtemplate[0]._id || '',
+                subject: subjectInput,
+                content: editorContent || "",
+                date: template?.emailtemplate[0].date || new Date(),
+                editDate: new Date()
+              },
+              userId: userData?._id || "",
+            };
+
+            handleEditTemplate(params);
+
+          }else if(actionType === crud.ADD.toString()){
+
+            const params = {
+              userId: userData?._id || "",
+              template: {
+                id: '',
+                subject: subjectInput,
+                content: editorContent || "",
+                date: new Date(),
+              },
+            };
+
+            handleAddTemplate(params);
+          }
+        }
+      }
+    });
   };
 
   return (
@@ -209,8 +304,6 @@ export function Templates() {
                 {" "}
                 Default Templates{" "}
               </Typography>
-
-              // *todo* : convertir en componente y validar caso vacio
             }
           </CustomTabPanel>
 
@@ -228,7 +321,7 @@ export function Templates() {
                       size="medium"
                       endIcon={<AddIcon />}
                       sx={{ float: "right" }}
-                      onClick={() => {handleOpenEditor('add')}}
+                      onClick={() => {handleOpenEditor(crud.ADD.toString())}}
                       className={`action-button ${styles.actionButton} `}
                     >
                       Add New Template
@@ -239,7 +332,7 @@ export function Templates() {
             ) : (
               <>
                 <Box className={`${styles.buttonCard}`}>
-                  <Fab className={`${styles.addButton}`} onClick={() => {handleOpenEditor('add')}}>
+                  <Fab className={`${styles.addButton}`} onClick={() => {handleOpenEditor(crud.ADD.toString())}}>
                     <AddIcon style={{ color: "white" }} />
                   </Fab>
                 </Box>
@@ -254,7 +347,7 @@ export function Templates() {
                               {item.emailtemplate[0].subject || ""}
                             </Typography>
                             <ReactMarkdown>
-                              {item.emailtemplate[0].content || ""}
+                              {convertToMarkdown(item.emailtemplate[0].content || "")}
                             </ReactMarkdown>
                           </CardContent>
 
@@ -270,14 +363,14 @@ export function Templates() {
                             <Fab
                               className={`${styles.addButton}`}
                               type="button"
-                              onClick={() => {handleOpenEditor('edit', item)}}
+                              onClick={() => {handleOpenEditor(crud.EDIT.toString(), item)}}
                             >
                               <EditIcon style={{ color: "white" }} />
                             </Fab>
                             <Fab
                               className={`${styles.addButton}`}
                               type="button"
-                              onClick={() => { console.log('EDIT') }}
+                              onClick={() => { handleOpenEditor(crud.SEND.toString(), item) }}
                             >
                               <SendIcon style={{ color: "white" }} />
                             </Fab>
@@ -286,7 +379,7 @@ export function Templates() {
                       </div>
                     );
                   }
-                  return null;
+                  return <></>;
                 })}
               </>
             )}

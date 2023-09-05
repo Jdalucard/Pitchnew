@@ -41,7 +41,7 @@ export const emailSlice = createSlice({
         builder.addCase(sendEmail.pending, (state) => {
             state.isLoading = true;
         }),
-        builder.addCase(sendEmail.fulfilled, (state, action) => {
+        builder.addCase(sendEmail.fulfilled, (state) => {
             state.isLoading = false;
         }),
         builder.addCase(sendEmail.rejected, (state) => {

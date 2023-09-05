@@ -1,9 +1,12 @@
+import { IUserData } from ".";
+
 export interface IEmail {
     _id?: string,
-    id?: string,
     subject: string,
     content: string,
-    date: Date
+    date: Date,
+    id?: string,
+    editDate?: Date,
 }
 
 export interface ITemplate{
@@ -18,7 +21,18 @@ export interface IAddEmailTemplate{
 }
 
 export interface IEditEmailTemplate {
-    id?: string,
+    templateId: string,
     template: IEmail
-    _id?: string,
+    userId?: string,
+}
+
+export interface IEmailData {
+    emaiAccountdata?: IUserData,
+    emailval : string,
+    message: string,
+    subject: string,
+}
+
+export interface ISendEmail{
+    emailData: IEmailData,
 }

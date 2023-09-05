@@ -1,23 +1,12 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { emailStoreKey } from ".";
-import { errorAlert } from "../alerts";
-import { IUserData } from '../../types';
-
-interface IEmailAccountData {
-    emailval: string,
-    message: string,
-    emailAccountData: IUserData,
-    subject: string
-}
+import { errorAlert, successAlert } from "../alerts";
+import { ISendEmail } from '../../types';
 
 
 interface IGetEmailSignature {
     userId: string,
-}
-
-interface ISendEmail {
-    note: IEmailAccountData
 }
 
 interface IGetEmailReport {
@@ -34,24 +23,33 @@ const ADD_TEMPLATE_ENDPOINT = '/email-templates/';
 
 export const sendEmail = createAsyncThunk(
     `${emailStoreKey}/sendemail`,
-    async (params: ISendEmail) => {
-        const { note } = params;
+    async (params: ISendEmail, thunkApi) => {
+
+        const { emailData } = params;
 
         try {
             const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + "sendemail";
 
-            const response = await axios.post(requestPath, note)
+            const response = await axios.post(requestPath, emailData)
+
+            if(response.status == 200){
+
+                thunkApi.dispatch(successAlert('The email was sended successfully.'))
+            }else{
+                thunkApi.dispatch(errorAlert('Oops, something went wrong. Please try again later.'))
+            }
 
             return response.data;
 
         } catch (error) {
             
-            errorAlert('Error, please try again later.')
+            thunkApi.dispatch(errorAlert('Oops, something went wrong. Please try again later.'))
 
         }
     }
 );
 
+//not used yet
 export const getEmailSignature = createAsyncThunk(
     `${emailStoreKey}/getemailsignature`,
     async (params: IGetEmailSignature) => {
@@ -65,8 +63,6 @@ export const getEmailSignature = createAsyncThunk(
 
         } catch (error) {
 
-            errorAlert('Error, please try again later.')
-
         }
     }
 );
@@ -75,7 +71,7 @@ export const getEmailSignature = createAsyncThunk(
 
 /****************************************REPORT AREA*****************************************/
 
-
+//not used yet
 export const getEmailReport = createAsyncThunk(
     `${emailStoreKey}/getemailreport`,
     async (params: IGetEmailReport) => {
@@ -88,8 +84,6 @@ export const getEmailReport = createAsyncThunk(
             return response.data;
 
         } catch (error) {
-
-            errorAlert('Error, please try again later.')
 
         }
     }

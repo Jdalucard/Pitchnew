@@ -44,7 +44,7 @@ export const getEmailTemplateById = createAsyncThunk(
 
 export const getAllTemplates = createAsyncThunk(
     `${templateStoreKey}/getemaildata`,
-    async () => {
+    async (_,thunkApi) => {
   
       try {
 
@@ -55,7 +55,7 @@ export const getAllTemplates = createAsyncThunk(
         return response.data;
       } catch (error) {
 
-        errorAlert('Error, please try again later.')
+        thunkApi.dispatch(errorAlert('Error, please try again later.'));
 
       }
     }
@@ -91,11 +91,11 @@ export const addEmailTemplate = createAsyncThunk(
 export const editEmailTemplate = createAsyncThunk(
     `${templateStoreKey}/editemailtemplate`,
     async (params: IEditEmailTemplate, thunkApi) => {
-        const { template, id } = params;
+        const { template, templateId } = params;
         
         try {
 
-            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + "/edit-template/" + template._id;
+            const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + templateId + "/edit-template/" + template._id;
 
 
             const response = await axios.put(requestPath, template);
