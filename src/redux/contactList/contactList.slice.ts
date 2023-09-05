@@ -17,20 +17,45 @@ import {
   getListContactItems,
 } from './contactList.thunks';
 
+interface IContactListItemDetail {
+  id: string;
+  name: string;
+  image: string | null;
+  cat: string;
+  pitched: boolean;
+  tag: string;
+  listenNotesId?: string;
+}
+
+export interface IContactListsWithItems {
+  podcasts: IContactListItemDetail[];
+  podcastEpisodes: IContactListItemDetail[];
+  eventOrganizations: IContactListItemDetail[];
+  speakers: IContactListItemDetail[];
+  mediaOutlets: IContactListItemDetail[];
+  conferences: IContactListItemDetail[];
+}
+
 interface IState {
   isLoading: boolean;
   userContactLists: IUserContactList[];
+  contactListsWithItems: IContactListsWithItems | null;
 }
 
 const initialState: IState = {
   isLoading: false,
   userContactLists: [],
+  contactListsWithItems: null,
 };
 
 export const contactListSlice = createSlice({
   name: contactListStoreKey,
   initialState,
-  reducers: {},
+  reducers: {
+    storeContactListItems: (state, action) => {
+      state.contactListsWithItems = action.payload;
+    },
+  },
   extraReducers(builder) {
     // getUserContactLists
     builder.addCase(getUserContactLists.pending, (state) => {
@@ -168,3 +193,5 @@ export const contactListSlice = createSlice({
     });
   },
 });
+
+export const { storeContactListItems } = contactListSlice.actions;

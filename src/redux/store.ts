@@ -3,8 +3,7 @@ import { cookiesSlice, cookiesStoreKey } from './cookies';
 import { alertsSlice, alertsStoreKey } from './alerts';
 import { authenticationSlice, authenticationStoreKey } from './authentication';
 import { userSlice, userStoreKey } from './user';
-import { contactListStoreKey } from './contactList/contactList.const';
-import { contactListSlice } from './contactList/contactList.slice';
+import { contactListStoreKey, contactListSlice } from './contactList';
 import { subscriptionSlice, subscriptionStoreKey } from './subscription';
 import { teamsSlice, teamsStoreKey } from './teams';
 import {
