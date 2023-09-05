@@ -7,3 +7,4 @@ export * from './buildAppTheme';
 export * from './LoadingDisplay';
 export * from './userHasAllAccess';
 export * from './formatDateToReadable';
+export * from './emailValidation';
