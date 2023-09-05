@@ -1,92 +1,81 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { templateStoreKey } from './template.const';
-import { ITemplate } from "../../types"
+import { ITemplate } from '../../types';
 
 import {
-    getAllTemplates,
-    getEmailTemplateById,
-    editEmailTemplate,
-    addEmailTemplate,
-    removeEmailTemplate,
+  getAllTemplates,
+  getEmailTemplateById,
+  editEmailTemplate,
+  addEmailTemplate,
+  removeEmailTemplate,
 } from '.';
 
 interface IState {
-    isLoading: boolean;
-    emailTemplates: ITemplate[];
+  isLoading: boolean;
+  emailTemplates: ITemplate[];
 }
 
-
 const initialState: IState = {
-    isLoading: false,
-    emailTemplates: [],
+  isLoading: false,
+  emailTemplates: [],
 };
 
-
 export const templateSlice = createSlice({
-    name: templateStoreKey,
-    initialState,
-    reducers: {
-    },
-    extraReducers: (builder) => {
-
-        //getEmailTemplateById
-        builder.addCase(getEmailTemplateById.pending, (state) => {
-            state.isLoading = true;
-        }),
-        builder.addCase(getEmailTemplateById.fulfilled, (state, action) => {
-            state.isLoading = false;
-        }),
-        builder.addCase(getEmailTemplateById.rejected, (state) => {
-            state.isLoading = false;
-        });
-
-        //addEmailTemplate
-        builder.addCase(addEmailTemplate.pending, (state) => {
-            state.isLoading = true;
-        }),
-        builder.addCase(addEmailTemplate.fulfilled, (state, action) => {
-            state.isLoading = false;
-
-            state.emailTemplates.push(action.payload)
-        }),
-        builder.addCase(addEmailTemplate.rejected, (state) => {
-            state.isLoading = false;
-        });
-
-        //getAllTemplates
-        builder.addCase(getAllTemplates.pending, (state) => {
-            state.isLoading = true;
-        }),
-        builder.addCase(getAllTemplates.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.emailTemplates = action.payload;
-        }),
-        builder.addCase(getAllTemplates.rejected, (state) => {
-            state.isLoading = false;
-        });
-
-        //editEmailtemplate
-        builder.addCase(editEmailTemplate.pending, (state) => {
-            state.isLoading = true;
-        }),
-        builder.addCase(editEmailTemplate.fulfilled, (state) => {
-            state.isLoading = false;
-            //tengo que llamar a getAllTemplates here
-        }),
-        builder.addCase(editEmailTemplate.rejected, (state) => {
-            state.isLoading = false;
-        });
-
-        //deleteEmailtemplate
-        builder.addCase(removeEmailTemplate.pending, (state) => {
-            state.isLoading = true;
-        }),
-        builder.addCase(removeEmailTemplate.fulfilled, (state, action) => {
-            state.isLoading = false;
-        }),
-        builder.addCase(removeEmailTemplate.rejected, (state) => {
-            state.isLoading = false;
-        });
-
-    },
+  name: templateStoreKey,
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    //getEmailTemplateById
+    builder.addCase(getEmailTemplateById.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getEmailTemplateById.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getEmailTemplateById.rejected, (state) => {
+      state.isLoading = false;
+    });
+    //addEmailTemplate
+    builder.addCase(addEmailTemplate.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(addEmailTemplate.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.emailTemplates = [...state.emailTemplates, action.payload];
+    });
+    builder.addCase(addEmailTemplate.rejected, (state) => {
+      state.isLoading = false;
+    });
+    //getAllTemplates
+    builder.addCase(getAllTemplates.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getAllTemplates.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.emailTemplates = action.payload;
+    });
+    builder.addCase(getAllTemplates.rejected, (state) => {
+      state.isLoading = false;
+    });
+    //editEmailtemplate
+    builder.addCase(editEmailTemplate.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(editEmailTemplate.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(editEmailTemplate.rejected, (state) => {
+      state.isLoading = false;
+    });
+    //deleteEmailtemplate
+    builder.addCase(removeEmailTemplate.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(removeEmailTemplate.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(removeEmailTemplate.rejected, (state) => {
+      state.isLoading = false;
+    });
+  },
 });

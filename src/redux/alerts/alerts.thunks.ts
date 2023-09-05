@@ -35,7 +35,6 @@ interface IOpenRemovalConfirmation {
   message: string;
 }
 
-
 export const openConfirmation = createAsyncThunk(
   `${alertsStoreKey}/openConfirmation`,
   async (params: IOpenConfirmation) => {
