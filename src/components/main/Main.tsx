@@ -5,6 +5,7 @@ import { userSelectors } from '../../redux/user';
 import { LoadingDisplay } from '../../common';
 import { loadingDisplayTypes } from '../../types';
 import { useFetchUser } from '../../hooks';
+import Templates from '../templates';
 import Header from '../header';
 import Navigation from '../navigation';
 import BuyCredits from '../buyCredits';
@@ -39,20 +40,20 @@ export function Main() {
         }`}
       >
         <Routes>
-          <Route path="dashboard" element={<></>} />
-          <Route path="podcast-search" element={<></>} />
-          <Route path="live-events" element={<></>} />
-          <Route path="experts-search" element={<></>} />
-          <Route path="media-search" element={<></>} />
-          <Route path="conference-search" element={<></>} />
-          <Route path="contacts" element={<Contacts />} />
-          <Route path="outreach-sequences-mail" element={<></>} />
-          <Route path="account" element={<></>} />
-          <Route path="payment/credits" element={<BuyCredits />} />
-          <Route path="templates" element={<></>} />
-          <Route path="reports" element={<></>} />
+          <Route path={'dashboard'} element={<></>} />
+          <Route path={'podcast-search'} element={<></>} />
+          <Route path={'live-events'} element={<></>} />
+          <Route path={'experts-search'} element={<></>} />
+          <Route path={'media-search'} element={<></>} />
+          <Route path={'conference-search'} element={<></>} />
+          <Route path={'my-lists'} element={<Contacts />} />
+          <Route path={'outreach-sequences-mail'} element={<></>} />
+          <Route path={'account'} element={<></>} />
+          <Route path={'reports'} element={<></>} />
+          <Route path={'payment/credits'} element={<BuyCredits />} />
+          <Route path={'templates'} element={<Templates />} />
           <Route
-            path="academy"
+            path={'academy'}
             element={
               <div
                 id="candu-academy-content"
