@@ -7,14 +7,10 @@ import { type RootState } from '../../store';
 
 interface IProps {
   socialSite: socialNetworks;
-  dispatch: ThunkDispatch<RootState, undefined, AnyAction> &
-    Dispatch<AnyAction>;
+  dispatch: ThunkDispatch<RootState, undefined, AnyAction> & Dispatch<AnyAction>;
 }
 
-export async function requestEmailConfigurationHelper({
-  socialSite,
-  dispatch,
-}: IProps) {
+export async function requestEmailConfigurationHelper({ socialSite, dispatch }: IProps) {
   const stateString = randomstring.generate(20);
 
   dispatch(

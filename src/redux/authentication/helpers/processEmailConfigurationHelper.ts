@@ -1,8 +1,5 @@
 import Cookies from 'universal-cookie';
-import {
-  getFromQueryParams,
-  verifyStateFromQueryParams,
-} from '../../../common';
+import { getFromQueryParams, verifyStateFromQueryParams } from '../../../utils';
 import { processEmailConfiguration } from '..';
 import { setCookies } from '../../cookies';
 import { authMessages } from '../../../constants';
@@ -10,8 +7,7 @@ import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { type RootState } from '../../store';
 
 interface IProps {
-  dispatch: ThunkDispatch<RootState, undefined, AnyAction> &
-    Dispatch<AnyAction>;
+  dispatch: ThunkDispatch<RootState, undefined, AnyAction> & Dispatch<AnyAction>;
 }
 
 export async function processEmailConfigurationHelper({ dispatch }: IProps) {
@@ -27,9 +23,7 @@ export async function processEmailConfigurationHelper({ dispatch }: IProps) {
       state: getFromQueryParams(queryParams, 'state'),
     };
 
-    await dispatch(
-      processEmailConfiguration({ jwt, emailAuthNetwork, sendBody }),
-    ).unwrap();
+    await dispatch(processEmailConfiguration({ jwt, emailAuthNetwork, sendBody })).unwrap();
 
     window.opener.postMessage('email-config', window.opener.origin);
   } else {
@@ -42,10 +36,7 @@ export async function processEmailConfigurationHelper({ dispatch }: IProps) {
           ', please try again.',
       }),
     );
-    window.opener.postMessage(
-      authMessages.POST_AUTH_ERROR,
-      window.opener.origin,
-    );
+    window.opener.postMessage(authMessages.POST_AUTH_ERROR, window.opener.origin);
   }
   setTimeout(window.close, 400);
 }

@@ -3,9 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { searchParametersStoreKey } from '.';
 import { errorSideAlert } from '../alerts';
 
-const searchParametersPath = `${
-  import.meta.env.VITE_API_BASE_URL
-}/search-parameters`;
+const searchParametersPath = `${import.meta.env.VITE_API_BASE_URL}/search-parameters`;
 
 export const getGenres = createAsyncThunk(
   `${searchParametersStoreKey}/getGenres`,
@@ -113,9 +111,7 @@ export const getStates = createAsyncThunk(
   `${searchParametersStoreKey}/getStates`,
   async (countryId: string, thunkApi) => {
     try {
-      const response = await axios.get(
-        `${searchParametersPath}/states?countryId=${countryId}`,
-      );
+      const response = await axios.get(`${searchParametersPath}/states?countryId=${countryId}`);
 
       return response.data;
     } catch (error) {
@@ -132,9 +128,7 @@ export const getCities = createAsyncThunk(
   `${searchParametersStoreKey}/getCities`,
   async (stateId: string, thunkApi) => {
     try {
-      const response = await axios.get(
-        `${searchParametersPath}/cities?stateId=${stateId}`,
-      );
+      const response = await axios.get(`${searchParametersPath}/cities?stateId=${stateId}`);
 
       return response.data;
     } catch (error) {
@@ -185,9 +179,7 @@ export const getSponsorIndustries = createAsyncThunk(
   `${searchParametersStoreKey}/getSponsorIndustries`,
   async (_, thunkApi) => {
     try {
-      const response = await axios.get(
-        `${searchParametersPath}/sponsorIndustries`,
-      );
+      const response = await axios.get(`${searchParametersPath}/sponsorIndustries`);
 
       return response.data;
     } catch (error) {
@@ -204,9 +196,7 @@ export const getSponsorMarkets = createAsyncThunk(
   `${searchParametersStoreKey}/getSponsorMarkets`,
   async (_, thunkApi) => {
     try {
-      const response = await axios.get(
-        `${searchParametersPath}/sponsorMarkets`,
-      );
+      const response = await axios.get(`${searchParametersPath}/sponsorMarkets`);
 
       return response.data;
     } catch (error) {
@@ -223,9 +213,7 @@ export const getGuestIndustries = createAsyncThunk(
   `${searchParametersStoreKey}/getGuestIndustries`,
   async (_, thunkApi) => {
     try {
-      const response = await axios.get(
-        `${searchParametersPath}/guestIndustries`,
-      );
+      const response = await axios.get(`${searchParametersPath}/guestIndustries`);
 
       return response.data;
     } catch (error) {

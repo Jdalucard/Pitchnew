@@ -21,9 +21,7 @@ export const podcastsSocket = {
     const url =
       import.meta.env.VITE_ENV === 'prod'
         ? PODCASTS_SOCKET_ENDPOINT
-        : `${
-            import.meta.env.VITE_SOCKET_API_BASE_URL
-          }${PODCASTS_SOCKET_ENDPOINT}`;
+        : `${import.meta.env.VITE_SOCKET_API_BASE_URL}${PODCASTS_SOCKET_ENDPOINT}`;
 
     const socket = io(encodeURI(url + '?' + queryParams), {
       reconnectionAttempts: 3,

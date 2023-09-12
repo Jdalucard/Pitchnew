@@ -57,8 +57,6 @@ export function useAuthenticationListener() {
   useEffect(() => {
     window.addEventListener('message', recieveMessage, false);
     return () =>
-      window.removeEventListener('message', () =>
-        console.log('Authentication handled.'),
-      );
+      window.removeEventListener('message', () => console.log('Authentication handled.'));
   }, [recieveMessage]);
 }

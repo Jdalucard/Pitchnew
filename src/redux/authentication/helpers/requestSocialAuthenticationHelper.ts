@@ -8,8 +8,7 @@ import { type RootState } from '../../store';
 interface IProps {
   socialSite: socialNetworks;
   isSignIn: boolean;
-  dispatch: ThunkDispatch<RootState, undefined, AnyAction> &
-    Dispatch<AnyAction>;
+  dispatch: ThunkDispatch<RootState, undefined, AnyAction> & Dispatch<AnyAction>;
 }
 
 export async function requestSocialAuthenticationHelper({

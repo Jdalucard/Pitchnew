@@ -1,11 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { teamsStoreKey } from './teams.const';
-import {
-  createTeam,
-  getTeam,
-  removeUserTeam,
-  issueInvitation,
-} from './teams.thunks';
+import { createTeam, getTeam, removeUserTeam, issueInvitation } from './teams.thunks';
 
 export interface Team {
   team: string | null;

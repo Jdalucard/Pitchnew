@@ -2,15 +2,16 @@ import { useLocation } from 'react-router-dom';
 import { navigationOptions } from '../../constants';
 import { useAppSelector } from '../../redux/hooks';
 import { userSelectors } from '../../redux/user';
-import { userHasAllAccess } from '../../common';
+import { userHasAllAccess } from '../../utils';
 import { NavigationItem } from './components';
 import styles from './Navigation.module.css';
 
 interface IProps {
   navigationIsMinimized: boolean;
+  toggleNavigationDisplay: () => void;
 }
 
-export function Navigation({ navigationIsMinimized }: IProps) {
+export function Navigation({ navigationIsMinimized, toggleNavigationDisplay }: IProps) {
   const location = useLocation();
   const userData = useAppSelector(userSelectors.userData);
 
@@ -22,11 +23,7 @@ export function Navigation({ navigationIsMinimized }: IProps) {
   };
 
   return (
-    <div
-      className={`${styles.navigationPanel} ${
-        navigationIsMinimized ? 'minimized' : ''
-      }`}
-    >
+    <div className={`${styles.navigationPanel} ${navigationIsMinimized ? 'minimized' : ''}`}>
       <div style={{ position: 'relative' }}>
         {navigationOptions.map((navigationObject, index) => {
           const { icon, option, title } = navigationObject;
@@ -40,6 +37,7 @@ export function Navigation({ navigationIsMinimized }: IProps) {
               link={option}
               userPrivileges={userData?.privileges}
               limitedAccess={!userHasAllAccess(userData?.privileges)}
+              toggleNavigationDisplay={toggleNavigationDisplay}
             />
           );
         })}

@@ -11,23 +11,20 @@ const userProfileImagePath = `${basePath}/userimage`;
 
 const cookies = new Cookies();
 
-export const getUserData = createAsyncThunk(
-  `${userStoreKey}/getUserData`,
-  async (_, thunkApi) => {
-    try {
-      const response = await axios.get(`${userPath}/me`);
+export const getUserData = createAsyncThunk(`${userStoreKey}/getUserData`, async (_, thunkApi) => {
+  try {
+    const response = await axios.get(`${userPath}/me`);
 
-      const isAdmin = cookies.get('admin-token');
+    const isAdmin = cookies.get('admin-token');
 
-      return {
-        response: response.data,
-        isAdmin,
-      };
-    } catch (error) {
-      thunkApi.dispatch(removeCookies('jwt'));
-    }
-  },
-);
+    return {
+      response: response.data,
+      isAdmin,
+    };
+  } catch (error) {
+    thunkApi.dispatch(removeCookies('jwt'));
+  }
+});
 
 export const getUserProfileImage = createAsyncThunk(
   `${userStoreKey}/getUserProfileImage`,
@@ -38,9 +35,7 @@ export const getUserProfileImage = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorSideAlert(
-          'Error getting the user profile image. Please, try again later.',
-        ),
+        errorSideAlert('Error getting the user profile image. Please, try again later.'),
       );
     }
   },
@@ -57,9 +52,7 @@ export const addUserProfileImage = createAsyncThunk(
       return { success: true };
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error adding the user profile image. Please, try again later.',
-        ),
+        errorAlert('Error adding the user profile image. Please, try again later.'),
       );
     }
   },
@@ -76,9 +69,7 @@ export const deleteUserProfileImage = createAsyncThunk(
       return { success: true };
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error removing the user profile image. Please, try again later.',
-        ),
+        errorAlert('Error removing the user profile image. Please, try again later.'),
       );
     }
   },

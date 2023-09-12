@@ -80,10 +80,7 @@ export const processSocialAuthentication = createAsyncThunk(
     const { authNetwork, sendBody } = params;
 
     try {
-      const response = await axios.post(
-        `${authPath}/${authNetwork}/login`,
-        sendBody,
-      );
+      const response = await axios.post(`${authPath}/${authNetwork}/login`, sendBody);
       return response.data;
     } catch (error) {
       const err = error as AxiosError<string>;
@@ -94,10 +91,7 @@ export const processSocialAuthentication = createAsyncThunk(
           value: err.response?.data || 'Error, please try again later.',
         }),
       );
-      window.opener.postMessage(
-        authMessages.POST_AUTH_ERROR,
-        window.opener.origin,
-      );
+      window.opener.postMessage(authMessages.POST_AUTH_ERROR, window.opener.origin);
     }
   },
 );
@@ -112,9 +106,7 @@ export const processRegularAuthentication = createAsyncThunk(
     } catch (error) {
       const err = error as AxiosError<string>;
       if (err.response) {
-        thunkApi.dispatch(
-          errorAlert(err.response.data ?? 'Error, please try again later.'),
-        );
+        thunkApi.dispatch(errorAlert(err.response.data ?? 'Error, please try again later.'));
       } else {
         throw error;
       }
@@ -128,15 +120,11 @@ export const processSignConfiguration = createAsyncThunk(
     const { jwt, authNetwork, sendBody } = params;
 
     try {
-      const response = await axios.put(
-        `${basePath}/users/social-login/${authNetwork}`,
-        sendBody,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
+      const response = await axios.put(`${basePath}/users/social-login/${authNetwork}`, sendBody, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
         },
-      );
+      });
       return response.data;
     } catch (error) {
       const err = error as AxiosError<string>;
@@ -147,10 +135,7 @@ export const processSignConfiguration = createAsyncThunk(
           value: err.response?.data ?? 'Error, please try again later.',
         }),
       );
-      window.opener.postMessage(
-        authMessages.POST_CONNECT_ERROR,
-        window.opener.origin,
-      );
+      window.opener.postMessage(authMessages.POST_CONNECT_ERROR, window.opener.origin);
     }
   },
 );
@@ -185,10 +170,7 @@ export const processEmailConfiguration = createAsyncThunk(
         }),
       );
 
-      window.opener.postMessage(
-        authMessages.POST_EMAIL_ERROR,
-        window.opener.origin,
-      );
+      window.opener.postMessage(authMessages.POST_EMAIL_ERROR, window.opener.origin);
     }
   },
 );
@@ -204,10 +186,7 @@ export const processResetPassword = createAsyncThunk(
       const err = error as AxiosError<string>;
 
       thunkApi.dispatch(
-        errorAlert(
-          err.response?.data ??
-            'An unexpected error occured, please try again later',
-        ),
+        errorAlert(err.response?.data ?? 'An unexpected error occured, please try again later'),
       );
     }
   },

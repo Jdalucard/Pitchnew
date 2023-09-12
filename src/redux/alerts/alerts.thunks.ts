@@ -91,9 +91,7 @@ export const openDeleteConfirmation = createAsyncThunk(
 
     return swal({
       title: 'Remove ' + item + '?',
-      text: message
-        ? message
-        : 'Once removed, you will not be able to recover this ' + item,
+      text: message ? message : 'Once removed, you will not be able to recover this ' + item,
       icon: 'warning',
       dangerMode: true,
       buttons: ['Cancel', 'Remove'],

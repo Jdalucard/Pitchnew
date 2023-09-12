@@ -24,8 +24,7 @@ export const getEmailTemplateById = createAsyncThunk(
     const { userId, withStages } = params;
 
     try {
-      const requestPath =
-        basePath + ADD_TEMPLATE_ENDPOINT + userId + '?withStages=' + withStages;
+      const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + userId + '?withStages=' + withStages;
 
       const response = await axios.get(requestPath);
 
@@ -57,16 +56,13 @@ export const addEmailTemplate = createAsyncThunk(
     const { userId, template } = params;
 
     try {
-      const requestPath =
-        basePath + ADD_TEMPLATE_ENDPOINT + userId + '/add-template';
+      const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + userId + '/add-template';
 
       //add the email template
       const response = await axios.put(requestPath, template);
 
       if (response.status === 200) {
-        thunkApi.dispatch(
-          successAlert(`Successfully added new Email Template.`),
-        );
+        thunkApi.dispatch(successAlert(`Successfully added new Email Template.`));
         //recover all the templates again
         thunkApi.dispatch(getAllTemplates());
       }
@@ -85,24 +81,16 @@ export const editEmailTemplate = createAsyncThunk(
 
     try {
       const requestPath =
-        basePath +
-        ADD_TEMPLATE_ENDPOINT +
-        templateId +
-        '/edit-template/' +
-        template._id;
+        basePath + ADD_TEMPLATE_ENDPOINT + templateId + '/edit-template/' + template._id;
 
       const response = await axios.put(requestPath, template);
 
       if (response.status == 200) {
         thunkApi.dispatch(getAllTemplates());
 
-        thunkApi.dispatch(
-          successAlert('The template was edited successfully.'),
-        );
+        thunkApi.dispatch(successAlert('The template was edited successfully.'));
       } else {
-        thunkApi.dispatch(
-          errorAlert('Oops, something went wrong. Please try again later.'),
-        );
+        thunkApi.dispatch(errorAlert('Oops, something went wrong. Please try again later.'));
       }
 
       return response.data;
@@ -120,11 +108,7 @@ export const removeEmailTemplate = createAsyncThunk(
     try {
       if (templateId && templateId.trim() !== '') {
         const requestPath =
-          basePath +
-          ADD_TEMPLATE_ENDPOINT +
-          userId +
-          '/remove-template/' +
-          templateId;
+          basePath + ADD_TEMPLATE_ENDPOINT + userId + '/remove-template/' + templateId;
 
         const response = await axios.delete(requestPath);
 
@@ -132,21 +116,15 @@ export const removeEmailTemplate = createAsyncThunk(
           //recover all the templates again
           thunkApi.dispatch(getAllTemplates());
 
-          thunkApi.dispatch(
-            successAlert('The template was deleted successfully.'),
-          );
+          thunkApi.dispatch(successAlert('The template was deleted successfully.'));
         } else {
-          thunkApi.dispatch(
-            errorAlert('Oops, something went wrong. Please try again later.'),
-          );
+          thunkApi.dispatch(errorAlert('Oops, something went wrong. Please try again later.'));
         }
 
         return response.data;
       }
     } catch (error) {
-      thunkApi.dispatch(
-        errorAlert('Oops, something went wrong. Please try again later.'),
-      );
+      thunkApi.dispatch(errorAlert('Oops, something went wrong. Please try again later.'));
     }
   },
 );

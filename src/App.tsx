@@ -18,10 +18,7 @@ function App() {
         <Route path={'/'} element={<Home />} />
         <Route path={'/invitation'} element={<Home isInvite />} />
         <Route path={'/data-usage-policy'} element={<UsagePolicy />} />
-        <Route
-          path={'/authcallback'}
-          element={<Callback type={callbackTypes.authentication} />}
-        />
+        <Route path={'/authcallback'} element={<Callback type={callbackTypes.authentication} />} />
         <Route
           path={'/emailcallback'}
           element={<Callback type={callbackTypes.emailConfiguration} />}

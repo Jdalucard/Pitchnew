@@ -5,10 +5,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUserData, getUserProfileImage, userSelectors } from '../redux/user';
 import axios from 'axios';
 import { socketsCommon } from '../sockets';
-import {
-  getUserCreditCounter,
-  getUserSubscriptionPlan,
-} from '../redux/subscription';
+import { getUserCreditCounter, getUserSubscriptionPlan } from '../redux/subscription';
 import { getUserContactLists } from '../redux/contactList/contactList.thunks';
 
 export function useFetchUser() {

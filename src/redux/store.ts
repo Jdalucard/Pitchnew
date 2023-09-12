@@ -8,10 +8,9 @@ import { userSlice, userStoreKey } from './user';
 import { contactListStoreKey, contactListSlice } from './contactList';
 import { subscriptionSlice, subscriptionStoreKey } from './subscription';
 import { teamsSlice, teamsStoreKey } from './teams';
-import {
-  searchParametersSlice,
-  searchParametersStoreKey,
-} from './searchParameters';
+import { searchParametersSlice, searchParametersStoreKey } from './searchParameters';
+import { podcastsSearchSlice, podcastsSearchStoreKey } from './podcastsSearch';
+import { outreachSequenceSlice, outreachSequenceStoreKey } from './outreachSequence';
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +24,8 @@ export const store = configureStore({
     [subscriptionStoreKey]: subscriptionSlice.reducer,
     [searchParametersStoreKey]: searchParametersSlice.reducer,
     [teamsStoreKey]: teamsSlice.reducer,
+    [podcastsSearchStoreKey]: podcastsSearchSlice.reducer,
+    [outreachSequenceStoreKey]: outreachSequenceSlice.reducer,
   },
 });
 

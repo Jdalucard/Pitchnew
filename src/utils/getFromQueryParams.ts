@@ -1,7 +1,4 @@
-export const getFromQueryParams = (
-  queryParams: string[],
-  parameter: string,
-) => {
+export const getFromQueryParams = (queryParams: string[], parameter: string) => {
   let foundCode: string | undefined;
 
   queryParams.forEach((element) => {

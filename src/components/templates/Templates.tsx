@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import swal from 'sweetalert';
 import ReactQuill from 'react-quill';
 import ReactMarkdown from 'react-markdown';
-import turndown from 'turndown';
 import { useAppSelector, useAppDispatch } from '../../redux/hooks';
 import { templateSelectors } from '../../redux/template';
 import {
@@ -15,31 +14,18 @@ import {
 import { userSelectors } from '../../redux/user';
 import { sendEmail } from '../../redux/email';
 import { warningAlert, openConfirmation } from '../../redux/alerts';
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Tabs,
-  Tab,
-  Button,
-  Fab,
-} from '@mui/material';
+import { Box, Card, CardContent, Typography, Tabs, Tab, Button, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CustomTabPanel from './components/CustomTabPanel';
-import { emailValidation } from '../../common';
+import { emailValidation } from '../../utils';
 import { crud } from '../../constants/crud';
-import {
-  ITemplate,
-  IAddEmailTemplate,
-  IEditEmailTemplate,
-  ISendEmail,
-} from '../../types';
+import { ITemplate, IAddEmailTemplate, IEditEmailTemplate, ISendEmail } from '../../types';
 import 'react-quill/dist/quill.snow.css'; // Importa los estilos CSS de react-quill
 import styles from './Templates.module.css';
+import { convertToMarkdown } from '../../utils';
 
 export function Templates() {
   const dispatch = useAppDispatch();
@@ -63,10 +49,7 @@ export function Templates() {
     fetchTemplates();
   }, [fetchTemplates]);
 
-  const handleChange = (
-    _: React.SyntheticEvent<Element, Event>,
-    newValue: number,
-  ) => {
+  const handleChange = (_: React.SyntheticEvent<Element, Event>, newValue: number) => {
     setActiveTab(newValue);
   };
 
@@ -101,13 +84,6 @@ export function Templates() {
     }
   };
 
-  const convertToMarkdown = (content: string) => {
-    const turndownService = new turndown();
-    const markdown = turndownService.turndown(content || '');
-
-    return markdown;
-  };
-
   const handleOpenEditor = (actionType: string, template?: ITemplate) => {
     //create the wrapper
     const contentNode = document.createElement('div');
@@ -137,10 +113,7 @@ export function Templates() {
     } else {
       //if not, it will send or edit a template/email
       const reactQuillElement = React.createElement(ReactQuill, {
-        value:
-          actionType !== crud.ADD.toString()
-            ? template?.emailtemplate[0].content || ''
-            : '',
+        value: actionType !== crud.ADD.toString() ? template?.emailtemplate[0].content || '' : '',
         ref: editorRef,
         className: 'custom-quill',
         style: {
@@ -161,9 +134,7 @@ export function Templates() {
       inputElement.style.marginBottom = '20px';
       inputElement.style.padding = '10px';
       inputElement.value =
-        actionType !== crud.ADD.toString()
-          ? template?.emailtemplate[0].subject || ''
-          : '';
+        actionType !== crud.ADD.toString() ? template?.emailtemplate[0].subject || '' : '';
 
       contentNode.insertBefore(inputElement, contentNode.firstChild);
     }
@@ -195,8 +166,7 @@ export function Templates() {
       if (value) {
         //save subject and message
         const subjectInput = inputElement.value?.trim() || '';
-        let editorContent =
-          editorRef.current?.getEditor().root.innerHTML?.trim() || '';
+        let editorContent = editorRef.current?.getEditor().root.innerHTML?.trim() || '';
 
         //IF CONTENT IS EMPTY. DELETE ANY INNERHTML
         if (editorRef.current?.getEditor().root.innerText.trim() === '') {
@@ -223,10 +193,7 @@ export function Templates() {
           const emailDestination = subjectInput;
 
           //VALIDATE IF EMAIL IS EMPTY OR NOT VALID
-          if (
-            subjectInput?.trim() === '' ||
-            !emailValidation(emailDestination)
-          ) {
+          if (subjectInput?.trim() === '' || !emailValidation(emailDestination)) {
             dispatch(
               warningAlert({
                 title: 'Wrong Email',
@@ -294,29 +261,21 @@ export function Templates() {
       <div className={`${styles.row}`}>
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              value={activeTab}
-              onChange={handleChange}
-              aria-label="basic tabs example"
-            >
+            <Tabs value={activeTab} onChange={handleChange} aria-label="basic tabs example">
               <Tab label="Default Templates" />
               <Tab label="My Templates" />
             </Tabs>
           </Box>
 
           <CustomTabPanel value={activeTab} index={0}>
-            <Typography className={`${styles.h2Sub}`}>
-              Default Templates
-            </Typography>
+            <Typography className={`${styles.h2Sub}`}>Default Templates</Typography>
           </CustomTabPanel>
           <CustomTabPanel value={activeTab} index={1}>
             {emailTemplates.length === 0 ? (
               <div className={`${styles.panel}`}>
                 <Card className={`${styles.card}`}>
                   <CardContent className={`${styles.cardContent}`}>
-                    <Typography variant="h3">
-                      You don't have templates yet
-                    </Typography>
+                    <Typography variant="h3">You don't have templates yet</Typography>
                     <Button
                       variant="contained"
                       color="primary"
@@ -355,9 +314,7 @@ export function Templates() {
                               {item.emailtemplate[0].subject || ''}
                             </Typography>
                             <ReactMarkdown>
-                              {convertToMarkdown(
-                                item.emailtemplate[0].content || '',
-                              )}
+                              {convertToMarkdown(item.emailtemplate[0].content || '')}
                             </ReactMarkdown>
                           </CardContent>
 

@@ -31,11 +31,7 @@ interface IProps {
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
-export function Bundles({
-  beginTransaction,
-  toggleBeginTransaction,
-  toggleSuccessItem,
-}: IProps) {
+export function Bundles({ beginTransaction, toggleBeginTransaction, toggleSuccessItem }: IProps) {
   const dispatch = useAppDispatch();
 
   const isLoading = useAppSelector(subscriptionSelectors.isLoading);
@@ -90,9 +86,7 @@ export function Bundles({
             Pitch refills
           </Typography>
           <div className={styles.itemsMappedWrapper}>
-            {isLoading && (
-              <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
-            )}
+            {isLoading && <LoadingDisplay type={loadingDisplayTypes.entireComponent} />}
             {!isLoading &&
               plans.map((plan, index) => {
                 return (
@@ -103,18 +97,10 @@ export function Bundles({
                       </Typography>
                     </div>
                     <div className={styles.body}>
-                      <Typography
-                        variant="body1"
-                        color="text.primary"
-                        gutterBottom
-                      >
+                      <Typography variant="body1" color="text.primary" gutterBottom>
                         {plan.amount} pitch{plan.amount > 1 ? 'es' : ''}
                       </Typography>
-                      <Typography
-                        variant="body1"
-                        color="text.primary"
-                        gutterBottom
-                      >
+                      <Typography variant="body1" color="text.primary" gutterBottom>
                         {`$${plan.price}`}
                       </Typography>
                       <Button

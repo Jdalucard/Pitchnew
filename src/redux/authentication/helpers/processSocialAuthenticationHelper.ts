@@ -1,8 +1,5 @@
 import Cookies from 'universal-cookie';
-import {
-  getFromQueryParams,
-  verifyStateFromQueryParams,
-} from '../../../common';
+import { getFromQueryParams, verifyStateFromQueryParams } from '../../../utils';
 import {
   IProcessSocialAuthenticationBody,
   processSignConfiguration,
@@ -14,8 +11,7 @@ import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { type RootState } from '../../store';
 
 interface IProps {
-  dispatch: ThunkDispatch<RootState, undefined, AnyAction> &
-    Dispatch<AnyAction>;
+  dispatch: ThunkDispatch<RootState, undefined, AnyAction> & Dispatch<AnyAction>;
 }
 
 export async function processSocialAuthenticationHelper({ dispatch }: IProps) {
@@ -72,10 +68,7 @@ export async function processSocialAuthenticationHelper({ dispatch }: IProps) {
           ', please try again.',
       }),
     );
-    window.opener.postMessage(
-      authMessages.POST_AUTH_ERROR,
-      window.opener.origin,
-    );
+    window.opener.postMessage(authMessages.POST_AUTH_ERROR, window.opener.origin);
   }
 
   setTimeout(window.close, 400);
