@@ -1,28 +1,14 @@
 import React, { useEffect } from 'react';
 import Highcharts from 'highcharts';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getlineReady } from '../../redux/reports/reports.slice';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsExportData from 'highcharts/modules/export-data';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { IAmountData, getlineReady } from '../../redux/reports/reports.slice';
 import { Chart } from './components/Chart';
 import { reportsSelectors } from '../../redux/reports';
 
 HighchartsExporting(Highcharts);
 HighchartsExportData(Highcharts);
-
-interface IseriesData {
-  name: string;
-  y: number;
-}
-
-interface LineProps {
-  title: string;
-  seriesData?: IseriesData[] | null;
-  updatedData?: IseriesData[] | null;
-  maxYAxis?: number;
-  yAxisTitle: string;
-  toolTipText: string;
-}
 
 const commonOptions = {
   defaultLineMaxYAxis: 6,
@@ -37,39 +23,47 @@ const commonOptions = {
   },
 };
 
-let maxYAxis = commonOptions.defaultLineMaxYAxis;
+interface IProps {
+  seriesData?: IAmountData[] | null;
+  updatedData?: IAmountData[] | null;
+  maxYAxis?: number;
+  yAxisTitle: string;
+  toolTipText: string;
+}
 
-export const LineChart: React.FC<LineProps> = (props: LineProps) => {
-  const ready = useAppSelector(reportsSelectors.ready);
+export const LineChart: React.FC<IProps> = (props) => {
   const dispatch = useAppDispatch();
+
+  let defaultMaxYAxis = commonOptions.defaultLineMaxYAxis;
+  const { maxYAxis, yAxisTitle, toolTipText, seriesData } = props;
+  const ready = useAppSelector(reportsSelectors.ready);
 
   useEffect(() => {
     dispatch(getlineReady(true));
   }, [dispatch]);
 
-  if (props.maxYAxis && props.maxYAxis > maxYAxis) maxYAxis = props.maxYAxis;
+  if (maxYAxis && maxYAxis > defaultMaxYAxis) {
+    defaultMaxYAxis = maxYAxis;
+  }
 
   const baseOptions: Highcharts.Options = {
     ...commonOptions.general,
-    title: {
-      text: props.title,
-    },
     yAxis: {
       title: {
-        text: props.yAxisTitle,
+        text: yAxisTitle,
       },
-      max: maxYAxis,
+      max: defaultMaxYAxis,
     },
     tooltip: {
-      pointFormat: `<b>{point.y}</b> ${props.toolTipText}`,
+      pointFormat: `<b>{point.y}</b> ${toolTipText}`,
     },
     xAxis: {
       tickInterval: 1,
       labels: {
         enabled: true,
         formatter: function () {
-          if (props.seriesData && props.seriesData[0]) {
-            return props.seriesData[0].name || '';
+          if (seriesData && seriesData[0]) {
+            return seriesData[0].name || '';
           } else {
             return '';
           }
@@ -80,7 +74,7 @@ export const LineChart: React.FC<LineProps> = (props: LineProps) => {
       {
         ...commonOptions.lineSeries,
         type: 'spline',
-        data: props.seriesData || undefined,
+        data: seriesData || undefined,
       },
     ],
   };
