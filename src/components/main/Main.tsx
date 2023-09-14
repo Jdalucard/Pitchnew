@@ -10,6 +10,7 @@ import Header from '../header';
 import Navigation from '../navigation';
 import BuyCredits from '../buyCredits';
 import Contacts from '../contacts';
+import Reports from '../reports';
 import styles from './Main.module.css';
 
 export function Main() {
@@ -50,7 +51,7 @@ export function Main() {
           <Route path={'contacts'} element={<Contacts />} />
           <Route path={'outreach-sequences-mail'} element={<></>} />
           <Route path={'account'} element={<></>} />
-          <Route path={'reports'} element={<></>} />
+          <Route path={'reports'} element={<Reports />} />
           <Route path={'payment/credits'} element={<BuyCredits />} />
           <Route path={'templates'} element={<Templates />} />
           <Route

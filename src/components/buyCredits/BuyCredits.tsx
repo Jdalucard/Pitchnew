@@ -60,7 +60,7 @@ export function BuyCredits() {
             Upgrade processed successfully
           </Typography>
           <Typography variant="body1" color="text.primary">
-            <b>Transaction date:</b> {formatDate(null, true)}
+            <b>Transaction date:</b> {formatDate(null)}
           </Typography>
           {successItem.selectedPlan ? (
             <>
