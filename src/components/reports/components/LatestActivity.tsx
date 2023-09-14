@@ -2,9 +2,9 @@ import { Typography } from '@mui/material';
 import { LoadingDisplay } from '../../../common';
 import { loadingDisplayTypes } from '../../../types';
 import { formatDate } from '../../../utils';
-import styles from '../Reports.module.css';
 import { useAppSelector } from '../../../redux/hooks';
 import { reportsSelectors } from '../../../redux/reports';
+import styles from '../Reports.module.css';
 
 interface ActivityData {
   date: string;

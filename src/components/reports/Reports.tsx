@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getOutreachActivity } from '../../redux/reports';
+import { fetchStageAmounts, fetchStageSummary, getOutreachActivity } from '../../redux/reports';
 import { LatestActivity, DailyReports, OutreachSummary } from './components';
 import { reportsSelectors } from '../../redux/reports';
 import { userSelectors } from '../../redux/user';
@@ -23,6 +23,8 @@ export const Reports = () => {
   useEffect(() => {
     if (userData) {
       dispatch(getOutreachActivity());
+      dispatch(fetchStageSummary({ updated: false }));
+      dispatch(fetchStageAmounts({ updated: false }));
     }
   }, [dispatch, userData]);
 
@@ -34,11 +36,7 @@ export const Reports = () => {
       <div className={styles.reportsModulesWrapper}>
         <LatestActivity activityData={activityData} />
         <OutreachSummary summaryData={summaryData} summarySubtitle={summarySubtitle} />
-        <DailyReports
-          amountData={amountData}
-          updatedData={updatedAmountData}
-          maxAmountValue={maxAmountValue}
-        />
+        <DailyReports amountData={amountData} maxAmountValue={maxAmountValue} />
       </div>
     </div>
   );

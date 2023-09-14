@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
 import { IAmountData, reportsSelectors } from '../../../redux/reports';
-import styles from '../Reports.module.css';
 import { useAppSelector } from '../../../redux/hooks';
 import { LoadingDisplay } from '../../../common';
 import { loadingDisplayTypes } from '../../../types';
-import { PieChart } from '../../charts/PieChart';
+import { PieChart } from '../../../common/charts/PieChart';
+import styles from '../Reports.module.css';
 
 interface IProps {
   summarySubtitle: string;
@@ -26,7 +26,7 @@ export function OutreachSummary({ summarySubtitle, summaryData }: IProps) {
           <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
         ) : (
           <>
-            {summaryData ? (
+            {summaryData?.length ? (
               <PieChart subtitle={summarySubtitle} seriesData={summaryData} />
             ) : (
               <Typography variant="body2" color="text.secondary">

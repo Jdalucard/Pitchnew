@@ -4,7 +4,7 @@ import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsExportData from 'highcharts/modules/export-data';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { IAmountData, getbaseOptions } from '../../redux/reports/reports.slice';
-import { Chart } from './components/Chart';
+import { Chart } from '../../common/charts/components/Chart';
 import { reportsSelectors } from '../../redux/reports';
 
 HighchartsExporting(Highcharts);

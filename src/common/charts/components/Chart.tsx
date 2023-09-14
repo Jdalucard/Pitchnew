@@ -1,7 +1,7 @@
 import React from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import styles from './Chart.module.css';
-import { LoadingDisplay } from '../../../common';
+import { LoadingDisplay } from '../..';
 import { loadingDisplayTypes } from '../../../types';
 
 interface ChartProps {

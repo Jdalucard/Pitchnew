@@ -1,20 +1,22 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import querystring from 'querystring';
+import moment from 'moment';
 import { reportsStoreKey } from './reports.const';
 import { errorSideAlert } from '../alerts';
 import { RootState } from '../store';
-import { formatSummary, formatAmounts } from './utils/data.formatter';
-import querystring from 'querystring';
-import moment from 'moment';
+import { formatAmountsData } from './utils/formatAmountsData';
 import { formatToDate } from '../../utils';
+import { formatSummaryData } from './utils';
 
 const CHARTS_ENDPOINT = '/charts/';
 const ACTIVITY_ENDPOINT = '/activity/';
 const basePath = import.meta.env.VITE_API_BASE_URL;
 
-interface FetchStageSummaryParams {
+interface IFetchStageSummaryParams {
   updated: boolean;
 }
+
 interface Chart {
   CHART_SUMMARY: string;
   CHART_AMOUNT: string;
@@ -43,30 +45,32 @@ export const getOutreachActivity = createAsyncThunk(
 
 export const fetchStageSummary = createAsyncThunk(
   `${reportsStoreKey}charts/fetchStageSummary`,
-  async (params: FetchStageSummaryParams, thunkApi) => {
+  async (params: IFetchStageSummaryParams, thunkApi) => {
     try {
       const state = thunkApi.getState() as RootState;
 
       const queryParams = {
-        dateStart: moment(state.reports.dateStart).format(typeChart.CHART_DATE_FORMAT),
-        dateTo: moment(state.reports.dateTo).format(typeChart.CHART_DATE_FORMAT),
+        dateStart: moment(formatToDate(state.reports.dateStart)).format(
+          typeChart.CHART_DATE_FORMAT,
+        ),
+        dateTo: moment(formatToDate(state.reports.dateTo)).format(typeChart.CHART_DATE_FORMAT),
       };
 
       const response = await axios.get(
         basePath + CHARTS_ENDPOINT + 'stages/summary?' + querystring.stringify(queryParams),
       );
 
-      const date = formatSummary(response.data);
+      const formattedData = formatSummaryData(response.data);
 
       const updateObject = {
-        updatedSummaryData: params.updated ? date : state.reports.updatedSummaryData,
-        summaryData: params.updated ? state.reports.summaryData : date,
+        updatedSummaryData: params.updated ? formattedData : state.reports.updatedSummaryData,
+        summaryData: params.updated ? state.reports.summaryData : formattedData,
       };
 
       return updateObject;
     } catch (error) {
       thunkApi.dispatch(
-        errorSideAlert('Error fetching the stage summary. Please, try again later.'),
+        errorSideAlert('Error fetching the stages summary. Please, try again later.'),
       );
     }
   },
@@ -74,7 +78,7 @@ export const fetchStageSummary = createAsyncThunk(
 
 export const fetchStageAmounts = createAsyncThunk(
   `${reportsStoreKey}charts/fetchStageAmounts`,
-  async (params: FetchStageSummaryParams, thunkApi) => {
+  async (params: IFetchStageSummaryParams, thunkApi) => {
     try {
       const state = thunkApi.getState() as RootState;
 
@@ -90,7 +94,7 @@ export const fetchStageAmounts = createAsyncThunk(
         basePath + CHARTS_ENDPOINT + 'stages/amounts?' + querystring.stringify(queryParams),
       );
 
-      const seriesData = formatAmounts(
+      const seriesData = formatAmountsData(
         response.data,
         formatToDate(state.reports.dateStart),
         formatToDate(state.reports.dateTo),
@@ -98,8 +102,11 @@ export const fetchStageAmounts = createAsyncThunk(
 
       const updateObject = {
         maxAmountValue: seriesData.maxAmount + 1,
-        [params.updated ? 'updatedAmountData' : 'amountData']: seriesData.series,
+        amountData: params.updated ? state.reports.amountData : seriesData.series,
+        updatedAmountData: params.updated ? seriesData.series : state.reports.updatedAmountData,
       };
+
+      console.log(updateObject);
 
       return updateObject;
     } catch (error) {

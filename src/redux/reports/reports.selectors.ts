@@ -12,6 +12,7 @@ const getAmountTimePeriod = (state: RootState) => state.reports.amountTimePeriod
 const amountData = (state: RootState) => state.reports.amountData;
 const isLoadingActivities = (state: RootState) => state.reports.isLoadingLastestActivityData;
 const isLoadingSumamry = (state: RootState) => state.reports.isLoadingSummaryData;
+const isLoadingAmounts = (state: RootState) => state.reports.isLoadingAmountData;
 
 export const reportsSelectors = {
   isLoading,
@@ -26,4 +27,5 @@ export const reportsSelectors = {
   amountData,
   isLoadingActivities,
   isLoadingSumamry,
+  isLoadingAmounts,
 };

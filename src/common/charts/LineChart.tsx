@@ -25,7 +25,6 @@ const commonOptions = {
 
 interface IProps {
   seriesData?: IAmountData[] | null;
-  updatedData?: IAmountData[] | null;
   maxYAxis?: number;
   yAxisTitle: string;
   toolTipText: string;
@@ -33,10 +32,10 @@ interface IProps {
 
 export const LineChart: React.FC<IProps> = (props) => {
   const dispatch = useAppDispatch();
+  const ready = useAppSelector(reportsSelectors.ready);
 
   let defaultMaxYAxis = commonOptions.defaultLineMaxYAxis;
   const { maxYAxis, yAxisTitle, toolTipText, seriesData } = props;
-  const ready = useAppSelector(reportsSelectors.ready);
 
   useEffect(() => {
     dispatch(getlineReady(true));
