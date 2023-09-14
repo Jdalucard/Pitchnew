@@ -1,6 +1,5 @@
 import { LineChart } from '../../charts/LineChart';
 import Typography from '@mui/material/Typography';
-/* import { Display } from '../Reports'; */
 import { LoadingIcon } from './LoadingIcon';
 import styles from './Reports.module.css';
 
