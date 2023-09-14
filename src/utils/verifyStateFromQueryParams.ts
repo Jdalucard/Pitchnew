@@ -5,10 +5,7 @@ export const verifyStateFromQueryParams = (queryParams: string[]) => {
   let found = false;
 
   queryParams.forEach((queryParam) => {
-    if (
-      queryParam.includes('state=') &&
-      cookies.get('stateString') === queryParam.split('=')[1]
-    ) {
+    if (queryParam.includes('state=') && cookies.get('stateString') === queryParam.split('=')[1]) {
       found = true;
     }
   });

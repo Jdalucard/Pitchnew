@@ -17,20 +17,149 @@ import {
   getListContactItems,
 } from './contactList.thunks';
 
+export interface IContactListItemDetailBaseInfo {
+  id: string;
+  name: string;
+  image: string | null;
+  category: string;
+  pitched: boolean;
+  tag: {
+    listName: string;
+    listId: string;
+  };
+  email?: string; // podcasts
+  position?: string; // medias && events
+  eventType?: string; // events
+}
+
+interface IContactListItemDetailDetails {
+  connected?: boolean;
+  email?: boolean;
+  businessName?: string; // speakers
+  website?: string; // speakers && events
+  socialMediaLink1?: string; // speakers
+  socialMediaLink2?: string; // speakers
+  socialMediaLink3?: string; // speakers
+  equipment?: string; // speakers
+  additionalInfo?: string; // speakers
+  optionalContactMethod?: string; // speakers
+  categories?: {
+    label: string;
+    value?: string;
+  }[]; // speakers && podcasts
+  subCategories?: string; // speakers
+  shortBio?: string; // speakers
+  topics?: string; // speakers
+  detailedProfile?: string; // speakers
+  qualification?: string; // speakers
+  audience?: string; // speakers
+  promotionPlan?: string; // speakers
+  sampleQuestion?: string; // speakers
+  ownPodcast?: string; // speaker
+  pastAppereance1?: string; // speakers
+  pastAppereance2?: string; // speakers
+  pastAppereance3?: string; // speakers
+  publisherName?: string; // podcasts
+  listenNotesId?: string; // podcasts
+  rating?: {
+    value: number;
+    reviewsAmount: number;
+  }; // podcasts
+  description?: string; // podcasts && conferences && events
+  publishDate?: Date; // podcastEpisodes
+  magazineGenre?: string; // medias
+  contactName?: {
+    firstName: string;
+    lastName?: string;
+  }; // medias && conferences && events
+  phoneNumber?: string; // medias && events
+  location?: {
+    city?: string;
+    state?: string;
+    country?: string;
+  }; // medias && conferences && events
+  conferenceCategory?: string; // conferences
+  estimatedAudience?: number; // conferences
+  date?: Date; // conferences
+  eventAddress?: {
+    value: string;
+    zipCode?: string;
+  }; // events
+  foundedYear?: string; // events
+  employeesRange?: string; // events
+  sector?: string; // events
+  industry?: string; // events
+  budget?: number; // events
+  places?: string[]; // events
+  socialLinks?: {
+    facebook?: string;
+    linkedin?: string;
+    crunchbase?: string;
+  }; // events
+  episodeEnclosureUrl?: string; // podcastEpisode
+  episodeDuration?: string; // podcastEpisode
+  episodeKeywords?: string[]; // podcastEpisode
+}
+
+export interface IContactListItemDetail {
+  baseInfo: IContactListItemDetailBaseInfo;
+  details?: IContactListItemDetailDetails;
+}
+
+export interface IContactListsWithItems {
+  evaluated: boolean;
+  items: IContactListItemDetail[];
+}
+
 interface IState {
   isLoading: boolean;
   userContactLists: IUserContactList[];
+  contactListsWithItems: IContactListsWithItems;
 }
 
 const initialState: IState = {
   isLoading: false,
   userContactLists: [],
+  contactListsWithItems: {
+    evaluated: false,
+    items: [],
+  },
 };
 
 export const contactListSlice = createSlice({
   name: contactListStoreKey,
   initialState,
-  reducers: {},
+  reducers: {
+    storeContactListItem: (state, action) => {
+      const item = action.payload;
+
+      state.contactListsWithItems = {
+        ...state.contactListsWithItems,
+        items: [...state.contactListsWithItems.items, item],
+      };
+    },
+    setItemsEvaluated: (state) => {
+      state.contactListsWithItems = {
+        ...state.contactListsWithItems,
+        evaluated: true,
+      };
+    },
+    updateItemsPostRemoval: (state, action) => {
+      const newItems: IContactListItemDetail[] = [];
+      const deletedItemIds = action.payload;
+
+      state.contactListsWithItems.items.map((existingItem) => {
+        if (!deletedItemIds.includes(existingItem.baseInfo.id)) {
+          newItems.push(existingItem);
+        }
+      });
+
+      state.contactListsWithItems = {
+        ...state.contactListsWithItems,
+        items: newItems,
+      };
+    },
+  },
   extraReducers(builder) {
     // getUserContactLists
     builder.addCase(getUserContactLists.pending, (state) => {
@@ -168,3 +297,6 @@ export const contactListSlice = createSlice({
     });
   },
 });
+
+export const { storeContactListItem, setItemsEvaluated, updateItemsPostRemoval } =
+  contactListSlice.actions;

@@ -33,11 +33,12 @@ export function Main() {
         navigationIsMinimized={navigationIsMinimized}
         toggleNavigationIsMinimized={toggleNavigationIsMinimized}
       />
-      <Navigation navigationIsMinimized={navigationIsMinimized} />
+      <Navigation
+        navigationIsMinimized={navigationIsMinimized}
+        toggleNavigationDisplay={toggleNavigationIsMinimized}
+      />
       <div
-        className={`${styles.mainContentWrapper} ${
-          navigationIsMinimized ? styles.minimized : ''
-        }`}
+        className={`${styles.mainContentWrapper} ${navigationIsMinimized ? styles.minimized : ''}`}
       >
         <Routes>
           <Route path={'dashboard'} element={<></>} />
@@ -46,7 +47,7 @@ export function Main() {
           <Route path={'experts-search'} element={<></>} />
           <Route path={'media-search'} element={<></>} />
           <Route path={'conference-search'} element={<></>} />
-          <Route path={'my-lists'} element={<Contacts />} />
+          <Route path={'contacts'} element={<Contacts />} />
           <Route path={'outreach-sequences-mail'} element={<></>} />
           <Route path={'account'} element={<></>} />
           <Route path={'reports'} element={<></>} />
@@ -54,12 +55,7 @@ export function Main() {
           <Route path={'templates'} element={<Templates />} />
           <Route
             path={'academy'}
-            element={
-              <div
-                id="candu-academy-content"
-                className="candu-academy-content"
-              />
-            }
+            element={<div id="candu-academy-content" className="candu-academy-content" />}
           />
         </Routes>
       </div>

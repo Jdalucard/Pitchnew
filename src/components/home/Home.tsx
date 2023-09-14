@@ -12,19 +12,14 @@ interface IProps {
 
 export function Home({ isInvite }: IProps) {
   const [forgetPasswordVisible, setForgetPasswordVisible] = useState(false);
-  const authenticationIsLoading = useAppSelector(
-    authenticationSelectors.isLoading,
-  );
+  const authenticationIsLoading = useAppSelector(authenticationSelectors.isLoading);
 
   const toggleForgotPassword = () => {
     setForgetPasswordVisible((prev) => !prev);
   };
 
   return (
-    <div
-      className={styles.home}
-      style={{ backgroundImage: `url(${backgroundImage})` }}
-    >
+    <div className={styles.home} style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className={styles.panel}>
         <div className={styles.logoWrapper}>
           <img src={logo} alt="Company logo" />

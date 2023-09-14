@@ -1,12 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { userStoreKey } from './user.const';
 import { IUserData } from '../../types';
-import {
-  addUserProfileImage,
-  deleteUserProfileImage,
-  getUserData,
-  getUserProfileImage,
-} from '.';
+import { addUserProfileImage, deleteUserProfileImage, getUserData, getUserProfileImage } from '.';
 
 interface IState {
   isLoading: boolean;

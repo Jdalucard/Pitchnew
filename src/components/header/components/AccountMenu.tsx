@@ -11,7 +11,7 @@ import styles from './AccountMenu.module.css';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { removeCookies, setUserJWT } from '../../../redux/cookies';
 import Cookies from 'universal-cookie';
-import { userHasAllAccess } from '../../../common';
+import { userHasAllAccess } from '../../../utils';
 import { userSelectors } from '../../../redux/user';
 
 interface IProps {
@@ -40,25 +40,16 @@ export function AccountMenu({ userPrivileges }: IProps) {
   return (
     <div className={styles.headerDropMenu}>
       <div style={{ position: 'relative' }}>
-        <div
-          className={styles.headerMenuItem}
-          onClick={() => navigate('account/profile')}
-        >
+        <div className={styles.headerMenuItem} onClick={() => navigate('account/profile')}>
           <div className={styles.profileIconWrapper}>
-            <PersonIcon
-              sx={(theme) => ({ color: theme.palette.text.primary })}
-              fontSize="small"
-            />
+            <PersonIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="small" />
           </div>
           <Typography variant="body1" color="text.primary">
             Profile
           </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div
-          className={styles.headerMenuItem}
-          onClick={() => navigate('account/configuration')}
-        >
+        <div className={styles.headerMenuItem} onClick={() => navigate('account/configuration')}>
           <div className={styles.profileIconWrapper}>
             <SettingsIcon
               sx={(theme) => ({ color: theme.palette.text.primary })}
@@ -70,10 +61,7 @@ export function AccountMenu({ userPrivileges }: IProps) {
           </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div
-          className={styles.headerMenuItem}
-          onClick={() => navigate('reports')}
-        >
+        <div className={styles.headerMenuItem} onClick={() => navigate('reports')}>
           <div className={styles.profileIconWrapper}>
             <BarChartIcon
               sx={(theme) => ({ color: theme.palette.text.primary })}
@@ -85,30 +73,18 @@ export function AccountMenu({ userPrivileges }: IProps) {
           </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div
-          className={styles.headerMenuItem}
-          onClick={() => navigate('account/team')}
-        >
+        <div className={styles.headerMenuItem} onClick={() => navigate('account/team')}>
           <div className={styles.profileIconWrapper}>
-            <GroupIcon
-              sx={(theme) => ({ color: theme.palette.text.primary })}
-              fontSize="small"
-            />
+            <GroupIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="small" />
           </div>
           <Typography variant="body1" color="text.primary">
             Team
           </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div
-          className={styles.headerMenuItem}
-          onClick={() => navigate('payment/credits')}
-        >
+        <div className={styles.headerMenuItem} onClick={() => navigate('payment/credits')}>
           <div className={styles.profileIconWrapper}>
-            <PaidIcon
-              sx={(theme) => ({ color: theme.palette.text.primary })}
-              fontSize="small"
-            />
+            <PaidIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="small" />
           </div>
           <Typography variant="body1" color="text.primary">
             Payment option
@@ -117,10 +93,7 @@ export function AccountMenu({ userPrivileges }: IProps) {
         <div className={styles.verticalDivider} />
         <div className={styles.headerMenuItem} onClick={signOut}>
           <div className={styles.profileIconWrapper}>
-            <LogoutIcon
-              sx={(theme) => ({ color: theme.palette.text.primary })}
-              fontSize="small"
-            />
+            <LogoutIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="small" />
           </div>
           <Typography variant="body1" color="text.primary">
             Sign out

@@ -5,4 +5,6 @@ export enum socialNetworks {
   MICROSOFT = 'microsoft',
   GMAIL = 'gmail',
   OUTLOOK = 'outlook',
+  INSTAGRAM = 'instagram',
+  CHRUNCH_BASE = 'crunch',
 }

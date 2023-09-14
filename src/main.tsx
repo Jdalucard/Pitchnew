@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createTheme, ThemeProvider, responsiveFontSizes } from '@mui/material';
+import { buildAppTheme } from './utils';
 import { store } from './redux/store.ts';
-import { buildAppTheme } from './common';
 import App from './App.tsx';
 import './index.css';
 

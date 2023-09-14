@@ -10,10 +10,7 @@ interface IProps {
   isLoading: boolean;
 }
 
-export function ForgotPasswordDisplay({
-  toggleForgotPassword,
-  isLoading,
-}: IProps) {
+export function ForgotPasswordDisplay({ toggleForgotPassword, isLoading }: IProps) {
   const dispatch = useAppDispatch();
 
   const [userEmail, setUserEmail] = useState('');
@@ -51,8 +48,8 @@ export function ForgotPasswordDisplay({
             color="text.primary"
             sx={{ m: '1rem 0', textAlign: 'center' }}
           >
-            Enter your account's email address and we will reset and send you a
-            provisional password.
+            Enter your account's email address and we will reset and send you a provisional
+            password.
           </Typography>
           <TextField
             type="email"
@@ -66,11 +63,7 @@ export function ForgotPasswordDisplay({
             required
           />
           <div className={styles.buttonWrapper}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={toggleForgotPassword}
-            >
+            <Button variant="outlined" color="primary" onClick={toggleForgotPassword}>
               Cancel
             </Button>
             <Button
@@ -87,15 +80,11 @@ export function ForgotPasswordDisplay({
       ) : (
         <>
           <Typography variant="body1" color="text.primary">
-            An email has been sent to the address you provided if there is a
-            user account associated with it
+            An email has been sent to the address you provided if there is a user account associated
+            with it
           </Typography>
           <div className={styles.buttonWrapper}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={toggleForgotPassword}
-            >
+            <Button variant="outlined" color="primary" onClick={toggleForgotPassword}>
               Back to sign in screen
             </Button>
           </div>

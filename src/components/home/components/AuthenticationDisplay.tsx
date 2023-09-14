@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Typography } from '@mui/material';
 import { socialNetworks } from '../../../constants';
-import { getFromQueryParams, LoadingDisplay } from '../../../common';
+import { getFromQueryParams } from '../../../utils';
+import { LoadingDisplay } from '../../../common';
 import { useAppDispatch } from '../../../redux/hooks';
 import { setCookies, setUserJWT } from '../../../redux/cookies';
 import { requestSocialAuthenticationHelper } from '../../../redux/authentication/helpers';
@@ -18,11 +19,7 @@ interface IProps {
   isLoading: boolean;
 }
 
-export function AuthenticationDisplay({
-  isInvite,
-  toggleForgotPassword,
-  isLoading,
-}: IProps) {
+export function AuthenticationDisplay({ isInvite, toggleForgotPassword, isLoading }: IProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -79,9 +76,7 @@ export function AuthenticationDisplay({
 
     const loginData = { email, password };
 
-    const token = await dispatch(
-      processRegularAuthentication(loginData),
-    ).unwrap();
+    const token = await dispatch(processRegularAuthentication(loginData)).unwrap();
 
     if (token) {
       dispatch(setUserJWT(token));
@@ -144,11 +139,7 @@ export function AuthenticationDisplay({
             />
           </div>
           <div className={styles.forgotPasswordClick}>
-            <Typography
-              variant="button"
-              color="primary"
-              onClick={toggleForgotPassword}
-            >
+            <Typography variant="button" color="primary" onClick={toggleForgotPassword}>
               Forgot your password?
             </Typography>
           </div>

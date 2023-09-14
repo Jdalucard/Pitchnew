@@ -17,27 +17,17 @@ interface IProps {
   toggleNavigationIsMinimized: () => void;
 }
 
-export function Header({
-  navigationIsMinimized,
-  toggleNavigationIsMinimized,
-}: IProps) {
+export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: IProps) {
   const userData = useAppSelector(userSelectors.userData);
   const profileImage = useAppSelector(userSelectors.userProfileImage);
-  const subscriptionPlan = useAppSelector(
-    subscriptionSelectors.userSubscription,
-  );
-  const remainingCredits = useAppSelector(subscriptionSelectors.credits)
-    ?.remaining;
+  const subscriptionPlan = useAppSelector(subscriptionSelectors.userSubscription);
+  const remainingCredits = useAppSelector(subscriptionSelectors.credits)?.remaining;
 
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState(false);
   const [errorInProfileImage, setErrorInProfileImage] = useState(false);
 
   useEffect(() => {
-    if (
-      window.innerWidth <= 600 &&
-      !navigationIsMinimized &&
-      profileMenuIsOpen
-    ) {
+    if (window.innerWidth <= 600 && !navigationIsMinimized && profileMenuIsOpen) {
       toggleProfileMenu();
     }
   }, [navigationIsMinimized, profileMenuIsOpen]);
@@ -49,15 +39,9 @@ export function Header({
   return (
     <div className={styles.headerWrapper}>
       <div className={styles.logoAndMobileToggleWrapper}>
-        <div
-          className={styles.mobileNavigationToggle}
-          onClick={toggleNavigationIsMinimized}
-        >
+        <div className={styles.mobileNavigationToggle} onClick={toggleNavigationIsMinimized}>
           {navigationIsMinimized ? (
-            <MenuIcon
-              sx={(theme) => ({ color: theme.palette.text.primary })}
-              fontSize="large"
-            />
+            <MenuIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="large" />
           ) : (
             <MenuOpenIcon
               sx={(theme) => ({ color: theme.palette.text.primary })}
@@ -103,9 +87,7 @@ export function Header({
             </Typography>
           )}
         </div>
-        {profileMenuIsOpen && (
-          <AccountMenu userPrivileges={userData?.privileges} />
-        )}
+        {profileMenuIsOpen && <AccountMenu userPrivileges={userData?.privileges} />}
       </div>
     </div>
   );

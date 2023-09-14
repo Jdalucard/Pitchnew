@@ -11,9 +11,7 @@ export const LoadingIcon = ({ hidden, size }: ILoadingIcon) => (
     src={spinner}
     alt="loading-icon"
     className={
-      'loading-icon' +
-      (hidden ? ' hidden' : '') +
-      (size ? ' ' + size : ' loading-default')
+      'loading-icon' + (hidden ? ' hidden' : '') + (size ? ' ' + size : ' loading-default')
     }
   />
 );

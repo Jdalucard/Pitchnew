@@ -89,9 +89,7 @@ export function Subscriptions({
     const planId = selectedPlan?.id;
 
     if (planId) {
-      const response = await dispatch(
-        updateUserSubscriptionPlan(planId),
-      ).unwrap();
+      const response = await dispatch(updateUserSubscriptionPlan(planId)).unwrap();
 
       if (response) {
         toggleSuccessItem({ selectedPlan });
@@ -125,8 +123,7 @@ export function Subscriptions({
                       <b>Your current plan:</b> {userPlan.type}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      <b>Credits per month:</b>{' '}
-                      {userPlan.credits ?? 'Infinite!'}
+                      <b>Credits per month:</b> {userPlan.credits ?? 'Infinite!'}
                     </Typography>
                   </div>
                   {!userPlan?.scheduledToCancel && (
@@ -144,14 +141,13 @@ export function Subscriptions({
                 </div>
                 {!userPlan?.scheduledToCancel ? (
                   <Typography variant="body2" color="text.secondary">
-                    <b>Note:</b> Canceling your current plan will remove all the
-                    pitches that you gained from it when the current billing
-                    month ends.
+                    <b>Note:</b> Canceling your current plan will remove all the pitches that you
+                    gained from it when the current billing month ends.
                   </Typography>
                 ) : (
                   <Typography variant="body2" color="text.secondary">
-                    <b>Note:</b> You have scheduled to cancel your subscription
-                    at the end of the month.
+                    <b>Note:</b> You have scheduled to cancel your subscription at the end of the
+                    month.
                   </Typography>
                 )}
               </div>
@@ -161,9 +157,7 @@ export function Subscriptions({
             Subscription plans
           </Typography>
           <div className={styles.itemsMappedWrapper}>
-            {isLoading && (
-              <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
-            )}
+            {isLoading && <LoadingDisplay type={loadingDisplayTypes.entireComponent} />}
             {!isLoading &&
               plans.map((plan, index) => {
                 return (
@@ -175,19 +169,11 @@ export function Subscriptions({
                     </div>
                     <div className={styles.body}>
                       {plan.description && (
-                        <Typography
-                          variant="body1"
-                          color="text.primary"
-                          gutterBottom
-                        >
+                        <Typography variant="body1" color="text.primary" gutterBottom>
                           {plan.description}
                         </Typography>
                       )}
-                      <Typography
-                        variant="body1"
-                        color="text.primary"
-                        gutterBottom
-                      >
+                      <Typography variant="body1" color="text.primary" gutterBottom>
                         {`$${plan.price} / ${plan.interval}`}
                       </Typography>
                       {userPlan?.planId === plan.id ? (

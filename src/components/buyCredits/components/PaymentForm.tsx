@@ -1,12 +1,12 @@
+import { useState } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { StripeCardElementChangeEvent, Token } from '@stripe/stripe-js';
-import { IBundle, ISubscription } from '.';
 import { Button, Typography } from '@mui/material';
-import { formatToTitleCase } from '../../../common';
-import { IUserSubscription } from '../../../redux/subscription';
 import SecurityIcon from '@mui/icons-material/Security';
+import { IBundle, ISubscription } from '.';
+import { formatToTitleCase } from '../../../utils';
+import { IUserSubscription } from '../../../redux/subscription';
 import styles from '../BuyCredits.module.css';
-import { useState } from 'react';
 
 interface IProps {
   userPlan: IUserSubscription | null;
@@ -78,20 +78,14 @@ export function PaymentForm({
         </>
       )}
       <Typography variant="body1" color="text.primary">
-        <b>Total to pay:</b> $
-        {`${selectedPlan ? selectedPlan.price : selectedBundle?.price}`}{' '}
+        <b>Total to pay:</b> ${`${selectedPlan ? selectedPlan.price : selectedBundle?.price}`}{' '}
         {`${selectedPlan ? `/ ${selectedPlan.interval}` : ''}`}
       </Typography>
       {processPaySubscription && (
-        <Typography
-          variant="body2"
-          color="text.primary"
-          textAlign="center"
-          mt="1rem"
-        >
-          <b>Note:</b> If you already have a plan, purchasing this new plan will
-          replace the previous one. You will be credited/debited the proration
-          changes at the start of the next billing month.
+        <Typography variant="body2" color="text.primary" textAlign="center" mt="1rem">
+          <b>Note:</b> If you already have a plan, purchasing this new plan will replace the
+          previous one. You will be credited/debited the proration changes at the start of the next
+          billing month.
         </Typography>
       )}
       <form onSubmit={handleSubmit}>
@@ -139,23 +133,13 @@ export function PaymentForm({
                 Change plan
               </Button>
             ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={!formIsComplete}
-              >
+              <Button variant="contained" color="primary" type="submit" disabled={!formIsComplete}>
                 Pay upgrade
               </Button>
             )}
           </>
         ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            disabled={!formIsComplete}
-          >
+          <Button variant="contained" color="primary" type="submit" disabled={!formIsComplete}>
             Pay bundle
           </Button>
         )}

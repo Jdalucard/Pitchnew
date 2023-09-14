@@ -45,9 +45,7 @@ export const getSubscriptionPlans = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorSideAlert(
-          'Error getting the subscription plans. Please, try again later.',
-        ),
+        errorSideAlert('Error getting the subscription plans. Please, try again later.'),
       );
     }
   },
@@ -63,9 +61,7 @@ export const paySubscription = createAsyncThunk(
       return { success: true };
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error processing the payment for the plan selected. Please, try again later.',
-        ),
+        errorAlert('Error processing the payment for the plan selected. Please, try again later.'),
       );
     }
   },
@@ -79,11 +75,7 @@ export const getBundlePlans = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(
-        errorSideAlert(
-          'Error getting the bundle plans. Please, try again later.',
-        ),
-      );
+      thunkApi.dispatch(errorSideAlert('Error getting the bundle plans. Please, try again later.'));
     }
   },
 );
@@ -114,9 +106,7 @@ export const getUserCreditCounter = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorSideAlert(
-          'Error getting the user credits counter. Please, try again later.',
-        ),
+        errorSideAlert('Error getting the user credits counter. Please, try again later.'),
       );
     }
   },
@@ -141,9 +131,7 @@ export const getUserSubscriptionPlan = createAsyncThunk(
       return userSubscription;
     } catch (error) {
       thunkApi.dispatch(
-        errorSideAlert(
-          'Error getting the user subscription plan. Please, try again later.',
-        ),
+        errorSideAlert('Error getting the user subscription plan. Please, try again later.'),
       );
     }
   },
@@ -160,9 +148,7 @@ export const updateUserSubscriptionPlan = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error updating the user subscription plan. Please, try again later.',
-        ),
+        errorAlert('Error updating the user subscription plan. Please, try again later.'),
       );
     }
   },
@@ -178,9 +164,7 @@ export const cancelUserSubscriptionPlan = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error cancelling the user subscription plan. Please, try again later.',
-        ),
+        errorAlert('Error cancelling the user subscription plan. Please, try again later.'),
       );
     }
   },
@@ -207,9 +191,7 @@ export const addUserSubscriptionPlan = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error cancelling the user subscription plan. Please, try again later.',
-        ),
+        errorAlert('Error cancelling the user subscription plan. Please, try again later.'),
       );
     }
   },
@@ -224,9 +206,7 @@ export const addSubscriptionPlanToStripe = createAsyncThunk(
       return { success: true };
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error adding the new subscription plan to Stripe. Please, try again later.',
-        ),
+        errorAlert('Error adding the new subscription plan to Stripe. Please, try again later.'),
       );
     }
   },
@@ -236,16 +216,12 @@ export const getStripeSubscriptionPlansData = createAsyncThunk(
   `${subscriptionStoreKey}/getStripeSubscriptionPlansData`,
   async (_, thunkApi) => {
     try {
-      const response = await axios.get(
-        `${subscriptionPath}/getStripePlansdata`,
-      );
+      const response = await axios.get(`${subscriptionPath}/getStripePlansdata`);
 
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error getting subscription plans data from Stripe. Please, try again later.',
-        ),
+        errorAlert('Error getting subscription plans data from Stripe. Please, try again later.'),
       );
     }
   },

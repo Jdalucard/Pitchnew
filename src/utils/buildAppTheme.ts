@@ -3,6 +3,10 @@ declare module '@mui/material/styles' {
   interface PaletteColor {
     generalBoxShadow: string;
   }
+  interface TypeText {
+    primaryInverted: string;
+    secondaryInverted: string;
+  }
   interface TypeBackground {
     transparent: string;
   }
@@ -12,6 +16,7 @@ export const buildAppTheme = () => ({
   palette: {
     primary: {
       main: 'rgba(0, 26, 183, 1)',
+      light: 'rgba(91, 190, 85, 1)',
       generalBoxShadow: '0 1px 4px rgba(0, 0, 0, .16)',
     },
     background: {
@@ -22,8 +27,8 @@ export const buildAppTheme = () => ({
     text: {
       primary: 'rgb(13 13, 13)',
       secondary: 'rgba(13, 13, 13, 0.7)',
-      primaryInverted: 'rgba(225, 225, 225, 1)',
-      secondaryInverted: 'rgba(225, 225, 225, 0.7)',
+      primaryInverted: 'rgba(255, 255, 255, 1)',
+      secondaryInverted: 'rgba(255, 255, 255, 0.7)',
     },
   },
   typography: {
@@ -52,24 +57,13 @@ export const buildAppTheme = () => ({
     },
   },
   // Here we can override MUI styles in their components
-  // components: {
-  //   MuiButton: {
-  //     styleOverrides: {
-  //       root: {
-  //         textDecoration: 'none',
-  //         boxShadow: 'none',
-  //         ':hover': {
-  //           boxShadow: 'none',
-  //         },
-  //       },
-  //     },
-  //   },
-  //   MuiListItem: {
-  //     styleOverrides: {
-  //       root: {
-  //         padding: 0,
-  //       },
-  //     },
-  //   },
-  // },
+  components: {
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+        },
+      },
+    },
+  },
 });

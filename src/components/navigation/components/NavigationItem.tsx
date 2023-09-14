@@ -11,6 +11,7 @@ interface IProps {
   link: string;
   userPrivileges: string[] | undefined;
   limitedAccess: boolean;
+  toggleNavigationDisplay: () => void;
 }
 
 export function NavigationItem({
@@ -21,8 +22,16 @@ export function NavigationItem({
   link,
   userPrivileges,
   limitedAccess,
+  toggleNavigationDisplay,
 }: IProps) {
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (!navigationIsMinimized) {
+      toggleNavigationDisplay();
+    }
+    navigate(link);
+  };
 
   return (
     <>
@@ -34,24 +43,15 @@ export function NavigationItem({
         text === 'Contacts' ||
         text === 'Templates' ||
         text === 'Academy' ||
-        userPrivileges.includes(
-          text.split(' ')[0].replace(/s$/, '').toLowerCase(),
-        )) ? (
+        userPrivileges.includes(text.split(' ')[0].replace(/s$/, '').toLowerCase())) ? (
         <>
           <div
-            className={`${styles.navigationItem} ${
-              isActive ? styles.active : ''
-            }`}
-            onClick={() => navigate(link)}
+            className={`${styles.navigationItem} ${isActive ? styles.active : ''}`}
+            onClick={handleClick}
           >
-            <Tooltip
-              title={navigationIsMinimized ? text : ''}
-              placement="right"
-            >
+            <Tooltip title={navigationIsMinimized ? text : ''} placement="right">
               <div
-                className={`${styles.navIconWrapper} ${
-                  navigationIsMinimized ? 'minimized' : ''
-                }`}
+                className={`${styles.navIconWrapper} ${navigationIsMinimized ? 'minimized' : ''}`}
               >
                 <Icon sx={(theme) => ({ color: theme.palette.text.primary })} />
               </div>
@@ -71,35 +71,23 @@ export function NavigationItem({
           userPrivileges.includes('allAccess') &&
           text !== 'Businesses' &&
           text !== 'People' &&
-          (!userPrivileges.includes('superAdmin') ||
-            !userPrivileges.includes('betaUser')) ? (
+          (!userPrivileges.includes('superAdmin') || !userPrivileges.includes('betaUser')) ? (
             <>
               <div
-                className={`${styles.navigationItem} ${
-                  isActive ? styles.active : ''
-                }`}
-                onClick={() => navigate(link)}
+                className={`${styles.navigationItem} ${isActive ? styles.active : ''}`}
+                onClick={handleClick}
               >
-                <Tooltip
-                  title={navigationIsMinimized ? text : ''}
-                  placement="right"
-                >
+                <Tooltip title={navigationIsMinimized ? text : ''} placement="right">
                   <div
                     className={`${styles.navIconWrapper} ${
                       navigationIsMinimized ? 'minimized' : ''
                     }`}
                   >
-                    <Icon
-                      sx={(theme) => ({ color: theme.palette.text.primary })}
-                    />
+                    <Icon sx={(theme) => ({ color: theme.palette.text.primary })} />
                   </div>
                 </Tooltip>
                 {!navigationIsMinimized && (
-                  <Typography
-                    variant="h5"
-                    color="text.primary"
-                    fontWeight="bold"
-                  >
+                  <Typography variant="h5" color="text.primary" fontWeight="bold">
                     {text}
                   </Typography>
                 )}
@@ -111,15 +99,10 @@ export function NavigationItem({
               {!limitedAccess && (
                 <>
                   <div
-                    className={`${styles.navigationItem} ${
-                      isActive ? styles.active : ''
-                    }`}
-                    onClick={() => navigate(link)}
+                    className={`${styles.navigationItem} ${isActive ? styles.active : ''}`}
+                    onClick={handleClick}
                   >
-                    <Tooltip
-                      title={navigationIsMinimized ? text : ''}
-                      placement="right"
-                    >
+                    <Tooltip title={navigationIsMinimized ? text : ''} placement="right">
                       <div
                         className={`${styles.navIconWrapper} ${
                           navigationIsMinimized ? 'minimized' : ''
@@ -133,18 +116,12 @@ export function NavigationItem({
                       </div>
                     </Tooltip>
                     {!navigationIsMinimized && (
-                      <Typography
-                        variant="h5"
-                        color="text.primary"
-                        fontWeight="bold"
-                      >
+                      <Typography variant="h5" color="text.primary" fontWeight="bold">
                         {text}
                       </Typography>
                     )}
                   </div>
-                  {text !== 'Academy' && (
-                    <div className={styles.verticalDivider} />
-                  )}
+                  {text !== 'Academy' && <div className={styles.verticalDivider} />}
                 </>
               )}
             </>

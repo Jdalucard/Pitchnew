@@ -2,11 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { contactListStoreKey } from './contactList.const';
 import { errorAlert, errorSideAlert, warningAlert } from '../alerts';
-import {
-  IContactListItem,
-  IUserContactList,
-  IContactSequence,
-} from '../../types';
+import { IContactListItem, IUserContactList, IContactSequence } from '../../types';
 
 const contactListsPath = `${import.meta.env.VITE_API_BASE_URL}/lists`;
 
@@ -53,14 +49,12 @@ export const getUserContactLists = createAsyncThunk(
   async (query: IGetUserContactLists, thunkApi) => {
     try {
       const response = await axios.get(
-        `${contactListsPath}?page=${query.page}${
-          query.noLimit ? '&noLimit=1' : ''
-        }`,
+        `${contactListsPath}?page=${query.page}${query.noLimit ? '&noLimit=1' : ''}`,
       );
 
-      if (response?.data?.length) {
-        const lists: IUserContactList[] = [];
+      const lists: IUserContactList[] = [];
 
+      if (response?.data?.length) {
         response.data.map((list: IUserContactList) => {
           lists.push({
             _id: list._id,
@@ -68,15 +62,11 @@ export const getUserContactLists = createAsyncThunk(
             dateCreated: list.dateCreated,
           });
         });
-
-        return lists;
       }
+
+      return lists;
     } catch (error) {
-      thunkApi.dispatch(
-        errorSideAlert(
-          'Error getting the user lists. Please, try again later.',
-        ),
-      );
+      thunkApi.dispatch(errorSideAlert('Error getting the user lists. Please, try again later.'));
     }
   },
 );
@@ -89,11 +79,7 @@ export const getUserContactList = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(
-        errorAlert(
-          'Error getting the list specified. Please, try again later.',
-        ),
-      );
+      thunkApi.dispatch(errorAlert('Error getting the list specified. Please, try again later.'));
     }
   },
 );
@@ -102,16 +88,12 @@ export const getUserContactListCountSummary = createAsyncThunk(
   `${contactListStoreKey}/getUserContactListsCountSummary`,
   async (listId: string, thunkApi) => {
     try {
-      const response = await axios.get(
-        `${contactListsPath}/${listId}/count-summary`,
-      );
+      const response = await axios.get(`${contactListsPath}/${listId}/count-summary`);
 
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error getting the count of contacts in a list. Please, try again later.',
-        ),
+        errorAlert('Error getting the count of contacts in a list. Please, try again later.'),
       );
     }
   },
@@ -126,9 +108,7 @@ export const createUserContactList = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'There is already a list with that name. Please, choose another name.',
-        ),
+        errorAlert('There is already a list with that name. Please, choose another name.'),
       );
     }
   },
@@ -142,11 +122,7 @@ export const deleteUserContactList = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(
-        errorAlert(
-          'Error deleting the list specified. Please, try again later.',
-        ),
-      );
+      thunkApi.dispatch(errorAlert('Error deleting the list specified. Please, try again later.'));
     }
   },
 );
@@ -163,9 +139,7 @@ export const getContactListItems = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error getting the items in the list specified. Please, try again later.',
-        ),
+        errorAlert('Error getting the items in the list specified. Please, try again later.'),
       );
     }
   },
@@ -204,9 +178,7 @@ export const addUserContactListItems = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error adding the contact to the list specified. Please, try again later.',
-        ),
+        errorAlert('Error adding the contact to the list specified. Please, try again later.'),
       );
     }
   },
@@ -221,12 +193,10 @@ export const deleteUserContactListItems = createAsyncThunk(
         data: listItemIds,
       });
 
-      return { success: true };
+      return { success: true, deletedItemIds: listItemIds };
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error deleting the contact from the list specified. Please, try again later.',
-        ),
+        errorAlert('Error deleting the contact from the list specified. Please, try again later.'),
       );
     }
   },
@@ -244,9 +214,7 @@ export const getUserContactListItemSequence = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error getting the contact list item sequence. Please, try again later.',
-        ),
+        errorAlert('Error getting the contact list item sequence. Please, try again later.'),
       );
     }
   },
@@ -264,9 +232,7 @@ export const activateUserContactListItemSequence = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error activating the contact list item sequence. Please, try again later.',
-        ),
+        errorAlert('Error activating the contact list item sequence. Please, try again later.'),
       );
     }
   },
@@ -306,9 +272,7 @@ export const connectContactsNew = createAsyncThunk(
       return { success: true };
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert(
-          'Error connecting to the new contact specified. Please, try again later.',
-        ),
+        errorAlert('Error connecting to the new contact specified. Please, try again later.'),
       );
     }
   },
@@ -318,9 +282,7 @@ export const getListContactItems = createAsyncThunk(
   `${contactListStoreKey}/getContactListsItems`,
   async (listId: string, thunkApi) => {
     try {
-      const response = await axios.get(
-        `${contactListsPath}/${listId}/contactitems`,
-      );
+      const response = await axios.get(`${contactListsPath}/${listId}/contactitems`);
 
       return response.data;
     } catch (error) {

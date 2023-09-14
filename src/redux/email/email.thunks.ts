@@ -23,9 +23,7 @@ export const sendEmail = createAsyncThunk(
       }
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(
-        errorAlert('Error sending email. Please, try again later.'),
-      );
+      thunkApi.dispatch(errorAlert('Error sending email. Please, try again later.'));
     }
   },
 );
@@ -35,17 +33,12 @@ export const getEmailSignature = createAsyncThunk(
   `${emailStoreKey}/getEmailSignature`,
   async (userId: string, thunkApi) => {
     try {
-      const requestPath =
-        basePath + EMAIL_ACCOUNTS_ENDPOINT + userId + '/getemailsignature';
+      const requestPath = basePath + EMAIL_ACCOUNTS_ENDPOINT + userId + '/getemailsignature';
       const response = await axios.get(requestPath);
 
       return response.data[0].emailsignature;
     } catch (error) {
-      thunkApi.dispatch(
-        errorSideAlert(
-          'Error getting email signature. Please, try again later.',
-        ),
-      );
+      thunkApi.dispatch(errorSideAlert('Error getting email signature. Please, try again later.'));
     }
   },
 );
@@ -55,15 +48,12 @@ export const getEmailReport = createAsyncThunk(
   `${emailStoreKey}/getEmailReport`,
   async (id: string, thunkApi) => {
     try {
-      const requestPath =
-        basePath + ADD_TEMPLATE_ENDPOINT + id + '/email-validity';
+      const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + id + '/email-validity';
       const response = await axios.get(requestPath);
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(
-        errorSideAlert('Error getting email report. Please, try again later.'),
-      );
+      thunkApi.dispatch(errorSideAlert('Error getting email report. Please, try again later.'));
     }
   },
 );

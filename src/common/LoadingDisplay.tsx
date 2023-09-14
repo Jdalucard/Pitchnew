@@ -27,9 +27,7 @@ export function LoadingDisplay({ type }: IProps) {
         width: getStyle('width'),
       }}
     >
-      <LoadingIcon
-        size={type === loadingDisplayTypes.entireScreen ? 'loading-huge' : ''}
-      />
+      <LoadingIcon size={type === loadingDisplayTypes.entireScreen ? 'loading-huge' : ''} />
     </div>
   );
 }

@@ -8,36 +8,28 @@ import type { Team } from './teams.slice';
 const basePath = import.meta.env.VITE_API_BASE_URL;
 const TEAMS_ENDPOINT = '/teams/';
 
-export const createTeam = createAsyncThunk(
-  `${teamsStoreKey}/createTeam`,
-  async (_, thunkApi) => {
-    try {
-      const response = await axios.post(basePath + TEAMS_ENDPOINT);
+export const createTeam = createAsyncThunk(`${teamsStoreKey}/createTeam`, async (_, thunkApi) => {
+  try {
+    const response = await axios.post(basePath + TEAMS_ENDPOINT);
 
-      const { teamId, team } = response.data;
-      const newTeam = {
-        teamId,
-        team,
-        emails: [],
-      };
+    const { teamId, team } = response.data;
+    const newTeam = {
+      teamId,
+      team,
+      emails: [],
+    };
 
-      return newTeam;
-    } catch (error) {
-      thunkApi.dispatch(
-        errorAlert('Error creating the team. Please, try again later.'),
-      );
-    }
-  },
-);
+    return newTeam;
+  } catch (error) {
+    thunkApi.dispatch(errorAlert('Error creating the team. Please, try again later.'));
+  }
+});
 
 export const issueInvitation = createAsyncThunk(
   `${teamsStoreKey}/issueInvitation`,
   async (params: Team, thunkApi) => {
     try {
-      const response = await axios.post(
-        `${basePath}${TEAMS_ENDPOINT}/invitation`,
-        params,
-      );
+      const response = await axios.post(`${basePath}${TEAMS_ENDPOINT}/invitation`, params);
 
       const { teamId, emails } = response.data;
       const updateEmails: string[] = [];
@@ -67,29 +59,20 @@ export const issueInvitation = createAsyncThunk(
 
       return updatedTeam;
     } catch (error) {
-      thunkApi.dispatch(
-        errorAlert('Error issuing an invitation. Please, try again later.'),
-      );
+      thunkApi.dispatch(errorAlert('Error issuing an invitation. Please, try again later.'));
     }
   },
 );
 
-export const getTeam = createAsyncThunk(
-  `${teamsStoreKey}/getTeam`,
-  async (id, thunkApi) => {
-    try {
-      const response = await axios.get(basePath + TEAMS_ENDPOINT + id);
+export const getTeam = createAsyncThunk(`${teamsStoreKey}/getTeam`, async (id, thunkApi) => {
+  try {
+    const response = await axios.get(basePath + TEAMS_ENDPOINT + id);
 
-      return response.data;
-    } catch (error) {
-      thunkApi.dispatch(
-        errorAlert(
-          'Error retrieving the specified team. Please, try again later.',
-        ),
-      );
-    }
-  },
-);
+    return response.data;
+  } catch (error) {
+    thunkApi.dispatch(errorAlert('Error retrieving the specified team. Please, try again later.'));
+  }
+});
 
 export const removeUserTeam = createAsyncThunk(
   `${teamsStoreKey}/removeUserTeam`,
@@ -101,11 +84,7 @@ export const removeUserTeam = createAsyncThunk(
 
       return { team, emails };
     } catch (error) {
-      thunkApi.dispatch(
-        errorAlert(
-          'Error deleting the specified team. Please, try again later.',
-        ),
-      );
+      thunkApi.dispatch(errorAlert('Error deleting the specified team. Please, try again later.'));
     }
   },
 );

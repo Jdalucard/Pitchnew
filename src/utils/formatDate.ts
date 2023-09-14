@@ -2,8 +2,15 @@ import momentTz from 'moment-timezone';
 
 const browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-export function formatDateToReadable(date: Date, notSeconds: boolean) {
-  const newDate = new Date(date);
+export function formatDate(date: string | null, notSeconds?: boolean) {
+  let newDate: Date;
+
+  if (date) {
+    newDate = new Date(date);
+  } else {
+    newDate = new Date();
+  }
+
   let format;
   if (notSeconds) {
     format = 'MM/DD/YYYY';
