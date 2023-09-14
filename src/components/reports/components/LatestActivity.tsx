@@ -1,42 +1,56 @@
-import { FC } from 'react';
-import { Display } from '../Reports';
 import { Typography } from '@mui/material';
-import { LoadingIcon } from './LoadingIcon';
-import { commonDataParsing } from '../../../utils/dataParsing';
-import styles from './Reports.module.css';
-
-interface LatestActivityProps {
-  activityData: ActivityData[] | null;
-}
+import { LoadingDisplay } from '../../../common';
+import { loadingDisplayTypes } from '../../../types';
+import { formatDate } from '../../../utils';
+import styles from '../Reports.module.css';
+import { useAppSelector } from '../../../redux/hooks';
+import { reportsSelectors } from '../../../redux/reports';
 
 interface ActivityData {
-  date: Date;
+  date: string;
   message: string;
 }
 
-export const LatestActivity: FC<LatestActivityProps> = ({ activityData }) => (
-  <div className="LatestActivity">
-    {activityData ? (
-      activityData.map((activity, index) => (
-        <div key={index} className={`row ${styles.activityItem}`}>
-          <div className="col-auto">
-            <Typography variant="h3" color="text.secondary">
-              {`${commonDataParsing.parseJSDateHuman(activity.date)}:`}
-              {Display.DISPLAY_SUB_SUBTITLE}
-            </Typography>
-          </div>
-          <div className="col-lg-auto col-12">
-            <Typography variant="body1">
-              {activity.message}
-              {Display.DISPLAY_NORMAL}
-            </Typography>
-          </div>
-        </div>
-      ))
-    ) : (
-      <div className="loading-activity">
-        <LoadingIcon size="loading-huge" />
+interface IProps {
+  activityData: ActivityData[] | null;
+}
+
+export const LatestActivity: React.FC<IProps> = ({ activityData }) => {
+  const isLoading = useAppSelector(reportsSelectors.isLoadingActivities);
+
+  return (
+    <div className={styles.reportsModuleWrapper}>
+      <div className={styles.reportsModuleHeader}>
+        <Typography variant="body1" color="text.secondary" fontWeight="bold">
+          Latest activity
+        </Typography>
       </div>
-    )}
-  </div>
-);
+      <div className={styles.reportsModuleBody}>
+        {isLoading ? (
+          <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
+        ) : (
+          <>
+            {activityData?.length ? (
+              activityData.map((activity, index) => (
+                <div key={index} className={styles.activityItem}>
+                  <div className="col-auto">
+                    <Typography variant="h3" color="text.secondary">
+                      {formatDate(activity.date)}
+                    </Typography>
+                  </div>
+                  <div className="col-lg-auto col-12">
+                    <Typography variant="body1">{activity.message}</Typography>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <Typography variant="body2" color="text.secondary">
+                No activity to show
+              </Typography>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};

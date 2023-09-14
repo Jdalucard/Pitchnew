@@ -1,21 +1,14 @@
+import { useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsExportData from 'highcharts/modules/export-data';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { useEffect } from 'react';
-import { getbaseOptions } from '../../redux/reports/reports.slice';
+import { IAmountData, getbaseOptions } from '../../redux/reports/reports.slice';
 import { Chart } from './components/Chart';
-import { reportsSelector } from '../../redux/reports';
+import { reportsSelectors } from '../../redux/reports';
 
 HighchartsExporting(Highcharts);
 HighchartsExportData(Highcharts);
-
-interface PieProps {
-  title: string;
-  subtitle: string;
-  seriesData?: { name: string; y: number }[];
-  updatedData: { name: string; y: number }[] | null;
-}
 
 const commonOptions = {
   defaultLineMaxYAxis: 6,
@@ -31,25 +24,17 @@ const commonOptions = {
 };
 
 function generatePieColors(): string[] {
-  const baseColor: Highcharts.ColorType | undefined =
-    Highcharts.getOptions()?.colors?.[0];
+  const baseColor: Highcharts.ColorType | undefined = Highcharts.getOptions()?.colors?.[0];
   const pieColors: string[] = [];
 
-  if (baseColor !== undefined) {
-    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-    for (let i: number = 0; i < 10; i += 1) {
-      const color: Highcharts.Color = Highcharts.color(baseColor).brighten(
-        (i - 3) / 7,
-      );
+  if (baseColor) {
+    for (let i = 0; i < 10; i++) {
+      const color: Highcharts.Color = Highcharts.color(baseColor).brighten((i - 3) / 7);
       if (typeof color === 'string') {
         const colorString: string = color;
         pieColors.push(colorString);
-      } else {
-        console.error('color no es una cadena');
       }
     }
-  } else {
-    console.error('baseColor es undefined');
   }
 
   return pieColors;
@@ -57,9 +42,14 @@ function generatePieColors(): string[] {
 
 const pieColorsResult = generatePieColors();
 
-export const PieChart: React.FC<PieProps> = (props: PieProps) => {
+interface IProps {
+  subtitle: string;
+  seriesData?: IAmountData[];
+}
+
+export const PieChart: React.FC<IProps> = ({ subtitle, seriesData }) => {
   const dispatch = useAppDispatch();
-  const ready = useAppSelector(reportsSelector.ready);
+  const ready = useAppSelector(reportsSelectors.ready);
 
   useEffect(() => {
     dispatch(getbaseOptions(true));
@@ -68,16 +58,13 @@ export const PieChart: React.FC<PieProps> = (props: PieProps) => {
   const baseOptions: Highcharts.Options = {
     ...commonOptions.general,
     chart: {
-      plotBackgroundColor: null ?? '#fff',
-      plotBorderWidth: null ?? 0,
+      plotBackgroundColor: '#fff',
+      plotBorderWidth: 0,
       plotShadow: false,
       type: 'pie',
     },
-    title: {
-      text: props.title,
-    },
     subtitle: {
-      text: props.subtitle,
+      text: subtitle,
     },
     tooltip: {
       pointFormat: 'Total: <b>{point.y}</b>',
@@ -102,14 +89,10 @@ export const PieChart: React.FC<PieProps> = (props: PieProps) => {
     series: [
       {
         type: 'pie',
-        data: props.seriesData,
+        data: seriesData,
       },
     ],
   };
 
-  return (
-    <div>
-      <Chart highcharts={Highcharts} options={baseOptions} ready={ready} />
-    </div>
-  );
+  return <Chart highcharts={Highcharts} options={baseOptions} ready={ready} />;
 };

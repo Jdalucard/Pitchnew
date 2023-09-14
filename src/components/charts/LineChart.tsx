@@ -5,7 +5,7 @@ import { getlineReady } from '../../redux/reports/reports.slice';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsExportData from 'highcharts/modules/export-data';
 import { Chart } from './components/Chart';
-import { reportsSelector } from '../../redux/reports';
+import { reportsSelectors } from '../../redux/reports';
 
 HighchartsExporting(Highcharts);
 HighchartsExportData(Highcharts);
@@ -40,7 +40,7 @@ const commonOptions = {
 let maxYAxis = commonOptions.defaultLineMaxYAxis;
 
 export const LineChart: React.FC<LineProps> = (props: LineProps) => {
-  const ready = useAppSelector(reportsSelector.ready);
+  const ready = useAppSelector(reportsSelectors.ready);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

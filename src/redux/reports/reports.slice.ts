@@ -1,44 +1,54 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { reportsStoreKey } from './reports.const';
 import {
-  outreachActivity,
+  getOutreachActivity,
   fetchStageSummary,
   fetchStageAmounts,
   fetchStageAmountsPodcast,
   fetchStageAmountsSpeaker,
   fetchStageAmountsMedia,
   fetchStageAmountsConference,
-  fetchStageAmountsAsscoaition,
+  fetchStageAmountsAssociation,
   fetchStageAmountsbookedPodcast,
   fetchStageAmountsbookedSpeaker,
   fetchStageAmountsbookedMedia,
-  fetchStageAmountsbookedAsscoaition,
+  fetchStageAmountsbookedAssociation,
 } from './reports.thunks';
 
-interface ActivityData {
-  date: Date;
+interface IActivityData {
+  date: string;
   message: string;
+}
+
+export interface IAmountData {
+  name: string;
+  y: number;
+  created?: string;
 }
 
 interface ReportsState {
   isLoading: boolean;
-  summaryData: { name: string; y: number }[] | null;
-  updatedSummaryData: { name: string; y: number }[] | null;
-  dateTo: Date | null;
-  dateStart: Date | null;
-  amountData: { name: string; y: number }[] | null;
-  updatedAmountData: { name: string; y: number }[] | null;
+  summaryData: IAmountData[] | null;
+  updatedSummaryData: IAmountData[] | null;
+  dateTo: string | null;
+  dateStart: string | null;
+  amountData: IAmountData[] | null;
+  updatedAmountData: IAmountData[] | null;
   maxAmountValue: number;
   summaryTimePeriod: string;
   amountTimePeriod: string;
-  activityData: ActivityData[] | null;
-  baseOptions: object | null;
+  activityData: IActivityData[] | null;
+  baseOptions: any | null;
   ready: boolean;
-  seriesData: { name: string; y: number }[] | null;
+  seriesData: IAmountData[] | null;
+  isLoadingLastestActivityData: boolean;
+  isLoadingSummaryData: boolean;
 }
 
 const initialState: ReportsState = {
   isLoading: false,
+  isLoadingLastestActivityData: false,
+  isLoadingSummaryData: false,
   summaryData: null,
   updatedSummaryData: null,
   dateTo: null,
@@ -79,27 +89,27 @@ export const reportsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // outreachActivity
-    builder.addCase(outreachActivity.pending, (state) => {
-      state.isLoading = true;
+    // getOutreachActivity
+    builder.addCase(getOutreachActivity.pending, (state) => {
+      state.isLoadingLastestActivityData = true;
     });
-    builder.addCase(outreachActivity.rejected, (state) => {
-      state.isLoading = false;
+    builder.addCase(getOutreachActivity.rejected, (state) => {
+      state.isLoadingLastestActivityData = false;
     });
-    builder.addCase(outreachActivity.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.activityData = action.payload?.activityData ?? null;
+    builder.addCase(getOutreachActivity.fulfilled, (state, action) => {
+      state.isLoadingLastestActivityData = false;
+      state.activityData = action.payload ?? null;
     });
     //fetchStageSummary
     builder.addCase(fetchStageSummary.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingSummaryData = true;
     });
     builder.addCase(fetchStageSummary.rejected, (state) => {
-      state.isLoading = false;
+      state.isLoadingSummaryData = false;
     });
 
     builder.addCase(fetchStageSummary.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingSummaryData = false;
       state.updatedSummaryData = action.payload?.updatedSummaryData ?? null;
       state.summaryData = action.payload?.summaryData ?? null;
     });
@@ -117,9 +127,7 @@ export const reportsSlice = createSlice({
       const updatedAmountData = action.payload?.updatedAmountData;
       const amountData = action.payload?.amountData;
 
-      state.updatedAmountData = Array.isArray(updatedAmountData)
-        ? updatedAmountData
-        : null;
+      state.updatedAmountData = Array.isArray(updatedAmountData) ? updatedAmountData : null;
       state.amountData = Array.isArray(amountData) ? amountData : null;
     });
     //fetchStageAmountsPodcast
@@ -162,14 +170,14 @@ export const reportsSlice = createSlice({
     builder.addCase(fetchStageAmountsConference.fulfilled, (state) => {
       state.isLoading = false;
     });
-    //fetchStageAmountsAsscoaition
-    builder.addCase(fetchStageAmountsAsscoaition.pending, (state) => {
+    //fetchStageAmountsAssociation
+    builder.addCase(fetchStageAmountsAssociation.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(fetchStageAmountsAsscoaition.rejected, (state) => {
+    builder.addCase(fetchStageAmountsAssociation.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(fetchStageAmountsAsscoaition.fulfilled, (state) => {
+    builder.addCase(fetchStageAmountsAssociation.fulfilled, (state) => {
       state.isLoading = false;
     });
     //fetchStageAmountsbookedPodcast
@@ -202,22 +210,18 @@ export const reportsSlice = createSlice({
     builder.addCase(fetchStageAmountsbookedMedia.fulfilled, (state) => {
       state.isLoading = false;
     });
-    //fetchStageAmountsbookedAsscoaition
-    builder.addCase(fetchStageAmountsbookedAsscoaition.pending, (state) => {
+    // fetchStageAmountsbookedAssociation
+    builder.addCase(fetchStageAmountsbookedAssociation.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(fetchStageAmountsbookedAsscoaition.rejected, (state) => {
+    builder.addCase(fetchStageAmountsbookedAssociation.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(fetchStageAmountsbookedAsscoaition.fulfilled, (state) => {
+    builder.addCase(fetchStageAmountsbookedAssociation.fulfilled, (state) => {
       state.isLoading = false;
     });
   },
 });
 
-export const {
-  getbaseOptions,
-  setsubtitles,
-  setamountTimePeriod,
-  getlineReady,
-} = reportsSlice.actions;
+export const { getbaseOptions, setsubtitles, setamountTimePeriod, getlineReady } =
+  reportsSlice.actions;

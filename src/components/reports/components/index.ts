@@ -1,3 +1,3 @@
 export * from './DailyReports';
 export * from './LatestActivity';
-export * from './LoadingIcon';
+export * from './OutreachSummary';

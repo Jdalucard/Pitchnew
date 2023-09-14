@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { reportsStoreKey } from './reports.const';
-import { errorAlert } from '../alerts';
+import { errorSideAlert } from '../alerts';
 import { RootState } from '../store';
 import { formatSummary, formatAmounts } from './utils/data.formatter';
 import querystring from 'querystring';
 import moment from 'moment';
+import { formatToDate } from '../../utils';
 
 const CHARTS_ENDPOINT = '/charts/';
 const ACTIVITY_ENDPOINT = '/activity/';
@@ -25,14 +26,17 @@ export const typeChart: Chart = {
   CHART_DATE_FORMAT: 'YYYY-MM-DD',
 };
 
-export const outreachActivity = createAsyncThunk(
+export const getOutreachActivity = createAsyncThunk(
   `${reportsStoreKey}activity/outreachActivity`,
   async (_, thunkApi) => {
     try {
       const response = await axios.get(basePath + ACTIVITY_ENDPOINT);
+
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert('Error getting outreach activity, Please, try again later.'),
+      );
     }
   },
 );
@@ -44,43 +48,30 @@ export const fetchStageSummary = createAsyncThunk(
       const state = thunkApi.getState() as RootState;
 
       const queryParams = {
-        dateStart: moment(state.reports.dateStart).format(
-          typeChart.CHART_DATE_FORMAT,
-        ),
-        dateTo: moment(state.reports.dateTo).format(
-          typeChart.CHART_DATE_FORMAT,
-        ),
+        dateStart: moment(state.reports.dateStart).format(typeChart.CHART_DATE_FORMAT),
+        dateTo: moment(state.reports.dateTo).format(typeChart.CHART_DATE_FORMAT),
       };
 
       const response = await axios.get(
-        basePath +
-          CHARTS_ENDPOINT +
-          'stages/summary?' +
-          querystring.stringify(queryParams),
+        basePath + CHARTS_ENDPOINT + 'stages/summary?' + querystring.stringify(queryParams),
       );
 
       const date = formatSummary(response.data);
 
       const updateObject = {
-        updatedSummaryData: params.updated
-          ? date
-          : state.reports.updatedSummaryData,
+        updatedSummaryData: params.updated ? date : state.reports.updatedSummaryData,
         summaryData: params.updated ? state.reports.summaryData : date,
       };
 
       return updateObject;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error. Please, try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert('Error fetching the stage summary. Please, try again later.'),
+      );
     }
   },
 );
 
-function getValidDate(date: Date | undefined | null): Date {
-  if (date instanceof Date) {
-    return date;
-  }
-  return new Date();
-}
 export const fetchStageAmounts = createAsyncThunk(
   `${reportsStoreKey}charts/fetchStageAmounts`,
   async (params: FetchStageSummaryParams, thunkApi) => {
@@ -88,37 +79,33 @@ export const fetchStageAmounts = createAsyncThunk(
       const state = thunkApi.getState() as RootState;
 
       const queryParams = {
-        dateStart: moment(getValidDate(state.reports.dateStart)).format(
+        dateStart: moment(formatToDate(state.reports.dateStart)).format(
           typeChart.CHART_DATE_FORMAT,
         ),
-        dateTo: moment(getValidDate(state.reports.dateTo)).format(
-          typeChart.CHART_DATE_FORMAT,
-        ),
+        dateTo: moment(formatToDate(state.reports.dateTo)).format(typeChart.CHART_DATE_FORMAT),
         period: 'daily',
       };
 
       const response = await axios.get(
-        basePath +
-          CHARTS_ENDPOINT +
-          'stages/amounts?' +
-          querystring.stringify(queryParams),
+        basePath + CHARTS_ENDPOINT + 'stages/amounts?' + querystring.stringify(queryParams),
       );
 
       const seriesData = formatAmounts(
         response.data,
-        getValidDate(state.reports.dateStart),
-        getValidDate(state.reports.dateTo),
+        formatToDate(state.reports.dateStart),
+        formatToDate(state.reports.dateTo),
       );
 
       const updateObject = {
         maxAmountValue: seriesData.maxAmount + 1,
-        [params.updated ? 'updatedAmountData' : 'amountData']:
-          seriesData.series,
+        [params.updated ? 'updatedAmountData' : 'amountData']: seriesData.series,
       };
 
       return updateObject;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please, Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert('Error fetching the stages amount. Please, Try again later.'),
+      );
     }
   },
 );
@@ -130,9 +117,12 @@ export const fetchStageAmountsPodcast = createAsyncThunk(
       const response = await axios.get(
         basePath + CHARTS_ENDPOINT + 'stages/amountspodcast?' + queryParams,
       );
+
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert('Error fetching the stages amount for podcasts. Please, try again later.'),
+      );
     }
   },
 );
@@ -144,9 +134,12 @@ export const fetchStageAmountsSpeaker = createAsyncThunk(
       const response = await axios.get(
         basePath + CHARTS_ENDPOINT + 'stages/amountsspeaker?' + queryParams,
       );
+
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert('Error fetching the stages amount for speakers. Please, try again later.'),
+      );
     }
   },
 );
@@ -158,9 +151,14 @@ export const fetchStageAmountsMedia = createAsyncThunk(
       const response = await axios.get(
         basePath + CHARTS_ENDPOINT + 'stages/amountsmedia?' + queryParams,
       );
+
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error fetching the stages amount for media outlets. Please, try again later.',
+        ),
+      );
     }
   },
 );
@@ -172,23 +170,33 @@ export const fetchStageAmountsConference = createAsyncThunk(
       const response = await axios.get(
         basePath + CHARTS_ENDPOINT + 'stages/amountsconference?' + queryParams,
       );
+
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error fetching the stages amount for conferences. Please, try again later.',
+        ),
+      );
     }
   },
 );
 
-export const fetchStageAmountsAsscoaition = createAsyncThunk(
+export const fetchStageAmountsAssociation = createAsyncThunk(
   `${reportsStoreKey}charts/fetchStageAmountsAsscoaition`,
   async (queryParams, thunkApi) => {
     try {
       const response = await axios.get(
         basePath + CHARTS_ENDPOINT + 'stages/amountsassociation?' + queryParams,
       );
+
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error fetching the stages amount for local associations. Please, try again later.',
+        ),
+      );
     }
   },
 );
@@ -198,14 +206,14 @@ export const fetchStageAmountsbookedPodcast = createAsyncThunk(
   async (queryParams, thunkApi) => {
     try {
       const response = await axios.get(
-        basePath +
-          CHARTS_ENDPOINT +
-          'stages/amountsbookedpodcast?' +
-          queryParams,
+        basePath + CHARTS_ENDPOINT + 'stages/amountsbookedpodcast?' + queryParams,
       );
+
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert('Error fetching the booked stages for podcasts. Please, try again later.'),
+      );
     }
   },
 );
@@ -215,14 +223,14 @@ export const fetchStageAmountsbookedSpeaker = createAsyncThunk(
   async (queryParams, thunkApi) => {
     try {
       const response = await axios.get(
-        basePath +
-          CHARTS_ENDPOINT +
-          'stages/amountsbookedpodcast?' +
-          queryParams,
+        basePath + CHARTS_ENDPOINT + 'stages/amountsbookedpodcast?' + queryParams,
       );
+
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert('Error fetching the booked stages for speakers. Please, try again later.'),
+      );
     }
   },
 );
@@ -236,24 +244,29 @@ export const fetchStageAmountsbookedMedia = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error fetching the booked stages for media outlets. Please, try again later.',
+        ),
+      );
     }
   },
 );
 
-export const fetchStageAmountsbookedAsscoaition = createAsyncThunk(
+export const fetchStageAmountsbookedAssociation = createAsyncThunk(
   `${reportsStoreKey}charts/fetchStageAmountsbookedAsscoaition`,
   async (queryParams, thunkApi) => {
     try {
       const response = await axios.get(
-        basePath +
-          CHARTS_ENDPOINT +
-          'stages/amountsbookedassociation?' +
-          queryParams,
+        basePath + CHARTS_ENDPOINT + 'stages/amountsbookedassociation?' + queryParams,
       );
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error Please ,Try again later.'));
+      thunkApi.dispatch(
+        errorSideAlert(
+          'Error fetching the booked stages for local associations. Please, try again later.',
+        ),
+      );
     }
   },
 );

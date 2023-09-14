@@ -1,38 +1,28 @@
 import { LineChart } from '../../charts/LineChart';
-import Typography from '@mui/material/Typography';
-import { LoadingIcon } from './LoadingIcon';
-import styles from './Reports.module.css';
+import { LoadingDisplay } from '../../../common';
+import { IAmountData } from '../../../redux/reports';
+import { loadingDisplayTypes } from '../../../types';
+import styles from '../Reports.module.css';
 
-interface IseriesData {
-  name: string;
-  y: number;
-}
-interface DailyData {
-  created: IseriesData[] | null;
-  sent: IseriesData[] | null;
-  opened: IseriesData[] | null;
-  replied: IseriesData[] | null;
-  booked: IseriesData[] | null;
-  postponed: IseriesData[] | null;
+interface IDailyData {
+  created: IAmountData[] | null;
+  sent: IAmountData[] | null;
+  opened: IAmountData[] | null;
+  replied: IAmountData[] | null;
+  booked: IAmountData[] | null;
+  postponed: IAmountData[] | null;
 }
 
-interface DailyReportsProps {
-  amountTimePeriod: string;
-  updatedData: IseriesData[] | null;
-  amountData: IseriesData[] | null;
+interface IProps {
+  updatedData: IAmountData[] | null;
+  amountData: IAmountData[] | null;
   maxAmountValue: number;
 }
 
-export const DailyReports: React.FC<DailyReportsProps> = ({
-  amountTimePeriod,
-  amountData,
-  updatedData,
-  maxAmountValue,
-}) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const isDailyData = (data: any): data is DailyData => {
+export const DailyReports: React.FC<IProps> = ({ amountData, updatedData, maxAmountValue }) => {
+  const isDailyData = (data: any) => {
     return (
-      data !== null &&
+      data &&
       typeof data === 'object' &&
       'created' in data &&
       'sent' in data &&
@@ -42,13 +32,9 @@ export const DailyReports: React.FC<DailyReportsProps> = ({
       'postponed' in data
     );
   };
+
   return (
     <>
-      <div className="col content-title-cont">
-        <Typography variant="h3" color="text.secondary">
-          {'Daily report (' + amountTimePeriod + ') '}
-        </Typography>
-      </div>
       <div className="row">
         <div className="col-12 col-xl-6">
           <div className={`m-2 p-1 ${styles.stageLineChartContainer}`}>
@@ -56,18 +42,14 @@ export const DailyReports: React.FC<DailyReportsProps> = ({
               <LineChart
                 title="Outreach sequences created"
                 toolTipText="created"
-                seriesData={
-                  isDailyData(amountData) ? amountData.created : amountData
-                }
+                seriesData={isDailyData(amountData) && amountData.created}
                 maxYAxis={maxAmountValue}
-                updatedData={
-                  isDailyData(updatedData) ? updatedData.created : updatedData
-                }
+                updatedData={isDailyData(updatedData) ? updatedData.created : updatedData}
                 yAxisTitle=""
               />
             ) : (
               <div className="loading-chart">
-                <LoadingIcon size="loading-huge" />
+                <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
               </div>
             )}
           </div>
@@ -85,7 +67,7 @@ export const DailyReports: React.FC<DailyReportsProps> = ({
               />
             ) : (
               <div className="loading-chart">
-                <LoadingIcon size="loading-huge" />
+                <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
               </div>
             )}
           </div>
@@ -98,14 +80,12 @@ export const DailyReports: React.FC<DailyReportsProps> = ({
                 toolTipText="opened"
                 seriesData={isDailyData(amountData) ? amountData.opened : null}
                 maxYAxis={maxAmountValue}
-                updatedData={
-                  isDailyData(updatedData) ? updatedData.opened : null
-                }
+                updatedData={isDailyData(updatedData) ? updatedData.opened : null}
                 yAxisTitle=""
               />
             ) : (
               <div className="loading-chart">
-                <LoadingIcon size="loading-huge" />
+                <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
               </div>
             )}
           </div>
@@ -118,14 +98,12 @@ export const DailyReports: React.FC<DailyReportsProps> = ({
                 toolTipText="replied"
                 seriesData={isDailyData(amountData) ? amountData.replied : null}
                 maxYAxis={maxAmountValue}
-                updatedData={
-                  isDailyData(updatedData) ? updatedData.replied : null
-                }
+                updatedData={isDailyData(updatedData) ? updatedData.replied : null}
                 yAxisTitle=""
               />
             ) : (
               <div className="loading-chart">
-                <LoadingIcon size="loading-huge" />
+                <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
               </div>
             )}
           </div>
@@ -138,14 +116,12 @@ export const DailyReports: React.FC<DailyReportsProps> = ({
                 toolTipText="booked"
                 seriesData={isDailyData(amountData) ? amountData.booked : null}
                 maxYAxis={maxAmountValue}
-                updatedData={
-                  isDailyData(updatedData) ? updatedData.booked : null
-                }
+                updatedData={isDailyData(updatedData) ? updatedData.booked : null}
                 yAxisTitle=""
               />
             ) : (
               <div className="loading-chart">
-                <LoadingIcon size="loading-huge" />
+                <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
               </div>
             )}
           </div>
@@ -156,18 +132,14 @@ export const DailyReports: React.FC<DailyReportsProps> = ({
               <LineChart
                 title="Outreach sequences postponed"
                 toolTipText="postponed"
-                seriesData={
-                  isDailyData(amountData) ? amountData.postponed : null
-                }
+                seriesData={isDailyData(amountData) ? amountData.postponed : null}
                 maxYAxis={maxAmountValue}
-                updatedData={
-                  isDailyData(updatedData) ? updatedData.postponed : null
-                }
+                updatedData={isDailyData(updatedData) ? updatedData.postponed : null}
                 yAxisTitle=""
               />
             ) : (
               <div className="loading-chart">
-                <LoadingIcon size="loading-huge" />
+                <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
               </div>
             )}
           </div>
