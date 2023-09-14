@@ -9,6 +9,7 @@ import { contactListStoreKey } from './contactList/contactList.const';
 import { contactListSlice } from './contactList/contactList.slice';
 import { subscriptionSlice, subscriptionStoreKey } from './subscription';
 import { teamsSlice, teamsStoreKey } from './teams';
+import { reportsSlice, reportsStoreKey } from './reports';
 import {
   searchParametersSlice,
   searchParametersStoreKey,
@@ -26,6 +27,7 @@ export const store = configureStore({
     [subscriptionStoreKey]: subscriptionSlice.reducer,
     [searchParametersStoreKey]: searchParametersSlice.reducer,
     [teamsStoreKey]: teamsSlice.reducer,
+    [reportsStoreKey]: reportsSlice.reducer,
   },
 });
 
