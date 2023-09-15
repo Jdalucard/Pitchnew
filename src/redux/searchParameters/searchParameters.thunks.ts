@@ -11,7 +11,7 @@ export const getGenres = createAsyncThunk(
     try {
       const response = await axios.get(`${searchParametersPath}/genres`);
 
-      return response.data?.genresList;
+      return response.data;
     } catch (error) {
       thunkApi.dispatch(
         errorSideAlert(

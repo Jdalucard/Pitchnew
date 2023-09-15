@@ -4,16 +4,14 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useGetUserContactItems } from '../../hooks';
 import { IContactListItemDetail, contactListSelectors } from '../../redux/contactList';
 import { useAppSelector } from '../../redux/hooks';
-import { ContactItems, ContactsFiltering, DetailedItem } from './components';
-import styles from './Contacts.module.css';
+import {
+  ContactItems,
+  ContactsFiltering,
+  DetailedItem,
+  IFilterContactsOptions,
+} from './components';
 import { contactCategories } from '../../constants';
-
-export interface IFilterOptions {
-  category: string;
-  pitchState: string;
-  contactList: string;
-  keyword: string;
-}
+import styles from './Contacts.module.css';
 
 export function Contacts() {
   const userContactItems = useAppSelector(contactListSelectors.contactListsWithItems);
@@ -31,7 +29,7 @@ export function Contacts() {
     setDisplayingItems(userContactItems.items);
   }, [userContactItems]);
 
-  const handleProcessFiltering = (filters: IFilterOptions) => {
+  const handleProcessFiltering = (filters: IFilterContactsOptions) => {
     const { category, pitchState, contactList, keyword } = filters;
 
     let newItemsDisplaying = userContactItems.items;
@@ -39,11 +37,11 @@ export function Contacts() {
       newItemsDisplaying = newItemsDisplaying.filter((item) => {
         if (
           category === contactCategories.podcast ||
-          category === contactCategories.podcastEpisde
+          category === contactCategories.podcastEpisode
         ) {
           return (
             item.baseInfo.category === contactCategories.podcast ||
-            item.baseInfo.category === contactCategories.podcastEpisde
+            item.baseInfo.category === contactCategories.podcastEpisode
           );
         } else {
           return item.baseInfo.category === category;

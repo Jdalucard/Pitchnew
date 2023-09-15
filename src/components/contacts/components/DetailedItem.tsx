@@ -38,7 +38,7 @@ export function DetailedItem({ info }: IProps) {
   const userPrimaryEmailAccount = useAppSelector(emailSelectors.primaryEmailAccount);
   const isPodcast =
     info.baseInfo.category === contactCategories.podcast ||
-    info.baseInfo.category === contactCategories.podcastEpisde;
+    info.baseInfo.category === contactCategories.podcastEpisode;
   const isConnectedButInactive =
     info.baseInfo.pitched && !info.details?.connected && !info.details?.email;
 

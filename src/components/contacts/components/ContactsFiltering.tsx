@@ -1,20 +1,26 @@
 import { useState } from 'react';
 import SavedSearchIcon from '@mui/icons-material/SavedSearch';
 import { Button, InputAdornment, MenuItem, SelectChangeEvent, TextField } from '@mui/material';
-import { IFilterOptions } from '../Contacts';
 import { useAppSelector } from '../../../redux/hooks';
 import { contactListSelectors } from '../../../redux/contactList';
 import styles from '../Contacts.module.css';
 
+export interface IFilterContactsOptions {
+  category: string;
+  pitchState: string;
+  contactList: string;
+  keyword: string;
+}
+
 interface IProps {
-  handleProcessFiltering: (filters: IFilterOptions) => void;
+  handleProcessFiltering: (filters: IFilterContactsOptions) => void;
 }
 
 export function ContactsFiltering({ handleProcessFiltering }: IProps) {
   const userLists = useAppSelector(contactListSelectors.contactLists);
 
   const [filtersEvaluated, setFiltersEvaluated] = useState(true);
-  const [filterOptions, setFilerOptions] = useState<IFilterOptions>({
+  const [filterOptions, setFilerOptions] = useState<IFilterContactsOptions>({
     category: 'all',
     pitchState: 'all',
     contactList: 'all',

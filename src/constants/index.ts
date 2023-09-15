@@ -4,3 +4,4 @@ export * from './navigationOptions';
 export * from './crud';
 export * from './outreachSequenceStates';
 export * from './contactCategories';
+export * from './mediaOutletCategories';

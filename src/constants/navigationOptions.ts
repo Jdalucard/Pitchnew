@@ -16,27 +16,27 @@ export const navigationOptions = [
     icon: SpaceDashboardIcon,
   },
   {
-    option: 'podcast-search',
+    option: 'searches/podcast-search',
     title: 'Podcasts',
     icon: PodcastsIcon,
   },
   {
-    option: 'live-events',
+    option: 'searches/events-search',
     title: 'Local Associations',
     icon: EventIcon,
   },
   {
-    option: 'media-search',
+    option: 'searches/media-search',
     title: 'Media Outlets',
     icon: NewspaperIcon,
   },
   {
-    option: 'conference-search',
+    option: 'searches/conference-search',
     title: 'Conferences',
     icon: CampaignIcon,
   },
   {
-    option: 'experts-search',
+    option: 'searches/experts-search',
     title: 'Experts',
     icon: AccessibilityNewIcon,
   },
