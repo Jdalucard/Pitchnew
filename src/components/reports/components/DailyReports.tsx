@@ -4,7 +4,6 @@ import { LoadingDisplay } from '../../../common';
 import { ISeriesObject, reportsSelectors } from '../../../redux/reports';
 import { loadingDisplayTypes } from '../../../types';
 import { outreachSequenceStates } from '../../../constants';
-import { formatToTitleCase } from '../../../utils';
 import { useAppSelector } from '../../../redux/hooks';
 import styles from '../Reports.module.css';
 

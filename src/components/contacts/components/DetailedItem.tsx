@@ -9,7 +9,6 @@ import { Box, Button, Divider, IconButton, Link, Tooltip, Typography } from '@mu
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import StarRateIcon from '@mui/icons-material/StarRate';
-import EmailIcon from '@mui/icons-material/Email';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -19,13 +18,15 @@ import LinkIcon from '@mui/icons-material/Link';
 import defaultImage from '../../../assets/logos/pitchdb-logo-short.png';
 import { formatToTitleCase, convertToMarkdown, formatDate } from '../../../utils';
 import { PodcastEpisodes } from '.';
-import { outreachSequenceStates, socialNetworks } from '../../../constants';
+import { contactCategories, outreachSequenceStates, socialNetworks } from '../../../constants';
 import { ILocation, IOutreachSequence } from '../../../types';
-import { useAppDispatch } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getSequenceByContactId } from '../../../redux/outreachSequence';
 import { getSequenceIcon } from './utils';
 import styles from '../Contacts.module.css';
 import { openDeleteConfirmation } from '../../../redux/alerts';
+import { emailSelectors } from '../../../redux/email';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   info: IContactListItemDetail;
@@ -33,8 +34,11 @@ interface IProps {
 
 export function DetailedItem({ info }: IProps) {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const userPrimaryEmailAccount = useAppSelector(emailSelectors.primaryEmailAccount);
   const isPodcast =
-    info.baseInfo.category === 'podcast' || info.baseInfo.category === 'podcastEpisode';
+    info.baseInfo.category === contactCategories.podcast ||
+    info.baseInfo.category === contactCategories.podcastEpisde;
   const isConnectedButInactive =
     info.baseInfo.pitched && !info.details?.connected && !info.details?.email;
 
@@ -140,8 +144,30 @@ export function DetailedItem({ info }: IProps) {
     }
   };
 
-  const handlePitch = async (item: IContactListItemDetailBaseInfo) => {
-    console.log('handle pitch!');
+  const findEmail = (item: IContactListItemDetail) => {
+    const itemSelector = `user${formatToTitleCase(item.baseInfo.category)}Id`;
+
+    const newSequence = {
+      itemSelector: info.details?.id ?? '',
+      listId: item.baseInfo.tag.listId,
+      listItemId: item.baseInfo.id,
+    };
+  };
+
+  const openEmail = (item: IContactListItemDetail) => {
+    console.log('repitch!');
+  };
+
+  const handlePitch = (item: IContactListItemDetail) => {
+    if (item.baseInfo.pitched) {
+      openEmail(item);
+    } else {
+      findEmail(item);
+    }
+  };
+
+  const handleConfigurePrimaryEmail = () => {
+    navigate('../configuration');
   };
 
   return (
@@ -282,14 +308,19 @@ export function DetailedItem({ info }: IProps) {
                 color="primary"
                 size="large"
                 endIcon={<ConnectWithoutContactIcon />}
-                onClick={() => handlePitch(info.baseInfo)}
-                disabled={isConnectedButInactive}
+                onClick={() => handlePitch(info)}
+                disabled={isConnectedButInactive || !userPrimaryEmailAccount}
               >
                 {info.baseInfo.pitched ? 'Pitch again' : 'Pitch'}
               </Button>
               {isConnectedButInactive && (
                 <Typography variant="caption" color="error">
                   Sorry, no contact email.
+                </Typography>
+              )}
+              {!userPrimaryEmailAccount && (
+                <Typography variant="caption" color="error">
+                  Configure your email account first.
                 </Typography>
               )}
               {}
@@ -544,6 +575,15 @@ export function DetailedItem({ info }: IProps) {
           </div>
         </div>
         <div className={styles.emailSequenceWrapper}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleConfigurePrimaryEmail}
+            size="large"
+            sx={{ marginBottom: '1rem' }}
+          >
+            Configure email account
+          </Button>
           <div className={styles.titleOnMiniModuleWrapper}>
             <Typography variant="h4" color="text.primary" alignSelf="center">
               Email sequence

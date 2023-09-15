@@ -6,6 +6,7 @@ import { IContactListItemDetail, contactListSelectors } from '../../redux/contac
 import { useAppSelector } from '../../redux/hooks';
 import { ContactItems, ContactsFiltering, DetailedItem } from './components';
 import styles from './Contacts.module.css';
+import { contactCategories } from '../../constants';
 
 export interface IFilterOptions {
   category: string;
@@ -36,9 +37,13 @@ export function Contacts() {
     let newItemsDisplaying = userContactItems.items;
     if (category !== 'all') {
       newItemsDisplaying = newItemsDisplaying.filter((item) => {
-        if (category === 'podcast' || category === 'podcastEpisode') {
+        if (
+          category === contactCategories.podcast ||
+          category === contactCategories.podcastEpisde
+        ) {
           return (
-            item.baseInfo.category === 'podcast' || item.baseInfo.category === 'podcastEpisode'
+            item.baseInfo.category === contactCategories.podcast ||
+            item.baseInfo.category === contactCategories.podcastEpisde
           );
         } else {
           return item.baseInfo.category === category;

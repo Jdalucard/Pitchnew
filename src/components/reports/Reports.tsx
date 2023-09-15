@@ -13,12 +13,12 @@ export const Reports = () => {
   const userData = useAppSelector(userSelectors.userData);
   const activityData = useAppSelector(reportsSelectors.activityData);
   const summaryData = useAppSelector(reportsSelectors.summaryData);
-  const updatedSummaryData = useAppSelector(reportsSelectors.updatedSummaryData);
   const summarySubtitle = useAppSelector(reportsSelectors.getSummarySubtitle);
-  const amountTimePeriod = useAppSelector(reportsSelectors.getAmountTimePeriod);
   const amountData = useAppSelector(reportsSelectors.amountData);
-  const updatedAmountData = useAppSelector(reportsSelectors.updatedAmountData);
   const maxAmountValue = useAppSelector(reportsSelectors.maxAmountValue);
+  // const updatedSummaryData = useAppSelector(reportsSelectors.updatedSummaryData);
+  // const amountTimePeriod = useAppSelector(reportsSelectors.getAmountTimePeriod);
+  // const updatedAmountData = useAppSelector(reportsSelectors.updatedAmountData);
 
   useEffect(() => {
     if (userData) {

@@ -16,12 +16,13 @@ import {
   connectContactsNew,
   getListContactItems,
 } from './contactList.thunks';
+import { contactCategories } from '../../constants';
 
 export interface IContactListItemDetailBaseInfo {
   id: string;
   name: string;
   image: string | null;
-  category: string;
+  category: contactCategories;
   pitched: boolean;
   tag: {
     listName: string;
@@ -33,6 +34,7 @@ export interface IContactListItemDetailBaseInfo {
 }
 
 interface IContactListItemDetailDetails {
+  id: string;
   connected?: boolean;
   email?: boolean;
   businessName?: string; // speakers

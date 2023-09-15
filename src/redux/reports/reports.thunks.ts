@@ -106,8 +106,6 @@ export const fetchStageAmounts = createAsyncThunk(
         updatedAmountData: params.updated ? seriesData.series : state.reports.updatedAmountData,
       };
 
-      console.log(updateObject);
-
       return updateObject;
     } catch (error) {
       thunkApi.dispatch(

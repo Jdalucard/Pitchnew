@@ -1,12 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUserData, getUserProfileImage, userSelectors } from '../redux/user';
-import axios from 'axios';
 import { socketsCommon } from '../sockets';
 import { getUserCreditCounter, getUserSubscriptionPlan } from '../redux/subscription';
 import { getUserContactLists } from '../redux/contactList/contactList.thunks';
+import { getPrimaryEmailAccount } from '../redux/email';
 
 export function useFetchUser() {
   const dispatch = useAppDispatch();
@@ -29,6 +30,7 @@ export function useFetchUser() {
       dispatch(getUserSubscriptionPlan());
       dispatch(getUserCreditCounter());
       dispatch(getUserContactLists({ page: 0, noLimit: true }));
+      dispatch(getPrimaryEmailAccount());
     }
   }, [dispatch, navigate]);
 

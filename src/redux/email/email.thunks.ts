@@ -28,6 +28,25 @@ export const sendEmail = createAsyncThunk(
   },
 );
 
+export const getPrimaryEmailAccount = createAsyncThunk(
+  `${emailStoreKey}/getPrimaryEmailAccount`,
+  async (_, thunkApi) => {
+    try {
+      const requestPath = basePath + EMAIL_ACCOUNTS_ENDPOINT + 'primary';
+      const response = await axios.get(requestPath);
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      thunkApi.dispatch(
+        errorSideAlert('Error getting the primary email account. Please, try again later.'),
+      );
+    }
+  },
+);
+
 //not used yet
 export const getEmailSignature = createAsyncThunk(
   `${emailStoreKey}/getEmailSignature`,

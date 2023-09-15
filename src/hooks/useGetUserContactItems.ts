@@ -41,6 +41,7 @@ export function useGetUserContactItems() {
                     tag: { listId, listName: list.name },
                   },
                   details: {
+                    id: userPodcast._id,
                     connected,
                     email: podcast.hasEmail,
                     listenNotesId: podcast.listenNotesId,
@@ -69,6 +70,7 @@ export function useGetUserContactItems() {
                     tag: { listId, listName: list.name },
                   },
                   details: {
+                    id: userPodcastEpisode._id,
                     connected,
                     email: episode.hasEmail,
                     listenNotesId: episode.podcastListenNotesId,
@@ -128,6 +130,7 @@ export function useGetUserContactItems() {
                     eventType: dataFileType === 1 ? 'School' : 'Event',
                   },
                   details: {
+                    id: userEventOrganization._id,
                     connected,
                     email: hasEmail,
                     description,
@@ -179,6 +182,7 @@ export function useGetUserContactItems() {
                     email: speaker.email,
                   },
                   details: {
+                    id: userSpeaker._id,
                     businessName: speaker.businessname,
                     website: speaker.website,
                     socialMediaLink1: speaker.socialMediaLink1,
@@ -219,6 +223,7 @@ export function useGetUserContactItems() {
                     position: mediaOutlet.position,
                   },
                   details: {
+                    id: userMediaOutlet._id,
                     connected,
                     email: mediaOutlet.hasEmail,
                     magazineGenre: mediaOutlet.magazineGenre,
@@ -252,6 +257,7 @@ export function useGetUserContactItems() {
                     tag: { listId, listName: list.name },
                   },
                   details: {
+                    id: userConference._id,
                     connected,
                     email: conference.hasEmail,
                     description: conference.eventDescription,
