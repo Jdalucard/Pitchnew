@@ -34,7 +34,7 @@ export interface IContactListItemDetailBaseInfo {
 }
 
 interface IContactListItemDetailDetails {
-  id: string;
+  id?: string;
   connected?: boolean;
   email?: boolean;
   businessName?: string; // speakers
@@ -68,7 +68,7 @@ interface IContactListItemDetailDetails {
     reviewsAmount: number;
   }; // podcasts
   description?: string; // podcasts && conferences && events
-  publishDate?: Date; // podcastEpisodes
+  publishDate?: string; // podcastEpisodes
   magazineGenre?: string; // medias
   contactName?: {
     firstName: string;
@@ -82,7 +82,7 @@ interface IContactListItemDetailDetails {
   }; // medias && conferences && events
   conferenceCategory?: string; // conferences
   estimatedAudience?: number; // conferences
-  date?: Date; // conferences
+  date?: string; // conferences
   eventAddress?: {
     value: string;
     zipCode?: string;
@@ -108,7 +108,7 @@ export interface IContactListItemDetail {
   details?: IContactListItemDetailDetails;
 }
 
-export interface IContactListsWithItems {
+export interface IContactListsItems {
   evaluated: boolean;
   items: IContactListItemDetail[];
 }
@@ -116,13 +116,13 @@ export interface IContactListsWithItems {
 interface IState {
   isLoading: boolean;
   userContactLists: IUserContactList[];
-  contactListsWithItems: IContactListsWithItems;
+  contactListsItems: IContactListsItems;
 }
 
 const initialState: IState = {
   isLoading: false,
   userContactLists: [],
-  contactListsWithItems: {
+  contactListsItems: {
     evaluated: false,
     items: [],
   },
@@ -135,14 +135,14 @@ export const contactListSlice = createSlice({
     storeContactListItem: (state, action) => {
       const item = action.payload;
 
-      state.contactListsWithItems = {
-        ...state.contactListsWithItems,
-        items: [...state.contactListsWithItems.items, item],
+      state.contactListsItems = {
+        ...state.contactListsItems,
+        items: [...state.contactListsItems.items, item],
       };
     },
     setItemsEvaluated: (state) => {
-      state.contactListsWithItems = {
-        ...state.contactListsWithItems,
+      state.contactListsItems = {
+        ...state.contactListsItems,
         evaluated: true,
       };
     },
@@ -150,14 +150,14 @@ export const contactListSlice = createSlice({
       const newItems: IContactListItemDetail[] = [];
       const deletedItemIds = action.payload;
 
-      state.contactListsWithItems.items.map((existingItem) => {
+      state.contactListsItems.items.map((existingItem) => {
         if (!deletedItemIds.includes(existingItem.baseInfo.id)) {
           newItems.push(existingItem);
         }
       });
 
-      state.contactListsWithItems = {
-        ...state.contactListsWithItems,
+      state.contactListsItems = {
+        ...state.contactListsItems,
         items: newItems,
       };
     },

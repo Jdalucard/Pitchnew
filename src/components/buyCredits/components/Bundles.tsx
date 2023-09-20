@@ -36,7 +36,6 @@ export function Bundles({ beginTransaction, toggleBeginTransaction, toggleSucces
 
   const isLoading = useAppSelector(subscriptionSelectors.isLoading);
   const userPlan = useAppSelector(subscriptionSelectors.userSubscription);
-  const userData = useAppSelector(userSelectors.userData);
 
   const [plans, setPlans] = useState<IBundle[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<IBundle | null>(null);
@@ -50,10 +49,8 @@ export function Bundles({ beginTransaction, toggleBeginTransaction, toggleSucces
   }, [dispatch]);
 
   useEffect(() => {
-    if (userData) {
-      fetchPlans();
-    }
-  }, [fetchPlans, userData]);
+    fetchPlans();
+  }, [fetchPlans]);
 
   const handleSelectPlan = (selectedPlan: IBundle) => {
     toggleBeginTransaction(true);

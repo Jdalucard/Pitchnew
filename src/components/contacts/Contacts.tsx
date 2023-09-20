@@ -14,9 +14,7 @@ import { contactCategories } from '../../constants';
 import styles from './Contacts.module.css';
 
 export function Contacts() {
-  const userContactItems = useAppSelector(contactListSelectors.contactListsWithItems);
-
-  useGetUserContactItems();
+  const userContactItems = useAppSelector(contactListSelectors.contactListsItems);
 
   const [displayingItems, setDisplayingItems] = useState<IContactListItemDetail[]>(
     userContactItems.items,

@@ -1,8 +1,8 @@
 export enum contactCategories {
   podcast = 'podcast',
-  podcastEpisode = 'podcastEpisode',
-  eventOrganization = 'eventOrganization',
+  podcastEpisode = 'podcast episode',
+  eventOrganization = 'event organization',
   speaker = 'speaker',
-  mediaOutlet = 'mediaOutlet',
+  mediaOutlet = 'media outlet',
   conference = 'conference',
 }

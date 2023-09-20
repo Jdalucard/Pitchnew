@@ -4,7 +4,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { userSelectors } from '../../redux/user';
 import { LoadingDisplay } from '../../common';
 import { loadingDisplayTypes } from '../../types';
-import { useFetchUser } from '../../hooks';
+import { useFetchUser, useGetUserContactItems } from '../../hooks';
 import Templates from '../templates';
 import Header from '../header';
 import Navigation from '../navigation';
@@ -16,6 +16,7 @@ import styles from './Main.module.css';
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
+  const userData = useAppSelector(userSelectors.userData);
 
   useFetchUser();
 
@@ -25,7 +26,7 @@ export function Main() {
     setNavigationIsMinimized((prev) => !prev);
   };
 
-  if (userIsLoading) {
+  if (userIsLoading || !userData) {
     return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />;
   }
 

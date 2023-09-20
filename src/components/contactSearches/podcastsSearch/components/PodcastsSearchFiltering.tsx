@@ -10,34 +10,28 @@ import {
 } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
+import { useAppDispatch } from '../../../../redux/hooks';
 import { contactCategories, mediaOutletCategories } from '../../../../constants';
-import { ICategorySelect } from '../../../../types';
 import type { Dayjs } from 'dayjs';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { getGenres, getLanguages } from '../../../../redux/searchParameters';
-import { userSelectors } from '../../../../redux/user';
 import styles from '../../ContactSearches.module.css';
+import { IPodcastsCategory, IPodcastsGenre } from '../PodcastsSearch';
 
-const mainCategoriesForPodcasts: ICategorySelect[] = [
-  { label: 'Podcasts', value: contactCategories.podcast },
-  { label: 'Episodes', value: contactCategories.podcastEpisode },
-];
-
-const mainCategoriesForMediaOutlets: ICategorySelect[] = [
-  { label: 'Magazines', value: mediaOutletCategories.magazine },
-  { label: 'Newspapers', value: mediaOutletCategories.newspaper },
-  { label: 'Radio stations', value: mediaOutletCategories.radio },
-  { label: 'TV stations', value: mediaOutletCategories.tv },
-  { label: 'Newspapers', value: mediaOutletCategories.newspaper },
-];
+// const mainCategoriesForMediaOutlets: ICategorySelect[] = [
+//   { label: 'Magazines', value: mediaOutletCategories.magazine },
+//   { label: 'Newspapers', value: mediaOutletCategories.newspaper },
+//   { label: 'Radio stations', value: mediaOutletCategories.radio },
+//   { label: 'TV stations', value: mediaOutletCategories.tv },
+//   { label: 'Newspapers', value: mediaOutletCategories.newspaper },
+// ];
 
 export interface IFilterPodcastsSearchsOptions {
-  mainCategory: ICategorySelect | null;
-  keyword: string;
-  genre: string;
-  language: string;
+  mainCategory: IPodcastsCategory;
+  keywords: string;
+  genre: IPodcastsGenre;
+  language: IPodcastsCategory;
   publishedBefore: Dayjs | null;
   publishedAfter: Dayjs | null;
 }
@@ -48,17 +42,16 @@ interface IProps {
 
 export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
   const dispatch = useAppDispatch();
-  const userData = useAppSelector(userSelectors.userData);
 
   const [filtersEvaluated, setFiltersEvaluated] = useState(true);
   const [displayingMoreFilters, setDisplayingMoreFilter] = useState(false);
-  const [genresList, setGenresList] = useState<ICategorySelect[]>([]);
-  const [languagesList, setLanguagesList] = useState<ICategorySelect[]>([]);
+  const [genresList, setGenresList] = useState<IPodcastsGenre[]>([]);
+  const [languagesList, setLanguagesList] = useState<IPodcastsCategory[]>([]);
   const [filterOptions, setFilerOptions] = useState<IFilterPodcastsSearchsOptions>({
     mainCategory: { label: 'Podcasts', value: contactCategories.podcast },
-    keyword: '',
-    genre: 'all',
-    language: 'all',
+    keywords: '',
+    genre: { label: 'All genres', value: 0 },
+    language: { label: 'All languages', value: 'all' },
     publishedBefore: null,
     publishedAfter: null,
   });
@@ -76,10 +69,8 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
   }, [dispatch]);
 
   useEffect(() => {
-    if (userData) {
-      fetchParameters();
-    }
-  }, [fetchParameters, userData]);
+    fetchParameters();
+  }, [fetchParameters]);
 
   const handleFiltersChange = (
     event: SelectChangeEvent<string> | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -106,7 +97,7 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
     setFiltersEvaluated(false);
   };
 
-  const handleFiltersMainCategoryChange = (selected: ICategorySelect) => {
+  const handleFiltersMainCategoryChange = (selected: IPodcastsCategory) => {
     setFilerOptions((prev) => {
       return {
         ...prev,
@@ -143,6 +134,7 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
                   : 'auto',
             },
           })}
+          size="small"
         >
           Podcasts
         </Button>
@@ -169,6 +161,7 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
                   : 'auto',
             },
           })}
+          size="small"
         >
           Episodes
         </Button>
@@ -259,7 +252,7 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
             type="text"
             label="Keyword search"
             name="keyword"
-            value={filterOptions.keyword}
+            value={filterOptions.keywords}
             onChange={handleFiltersChange}
             fullWidth
             InputProps={{

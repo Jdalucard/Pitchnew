@@ -6,11 +6,12 @@ import {
   setItemsEvaluated,
   storeContactListItem,
 } from '../redux/contactList';
+import { contactCategories } from '../constants';
 
 export function useGetUserContactItems() {
   const dispatch = useAppDispatch();
   const userLists = useAppSelector(contactListSelectors.contactLists);
-  const contactListsWithItems = useAppSelector(contactListSelectors.contactListsWithItems);
+  const contactListsItems = useAppSelector(contactListSelectors.contactListsItems);
 
   const getListItems = useCallback(
     async (listId: string) => {
@@ -20,7 +21,7 @@ export function useGetUserContactItems() {
   );
 
   useEffect(() => {
-    if (!contactListsWithItems.evaluated && userLists.length) {
+    if (!contactListsItems.evaluated && userLists.length) {
       userLists.map(async (list) => {
         const listItems = await getListItems(list._id);
 
@@ -36,7 +37,7 @@ export function useGetUserContactItems() {
                     id: _id,
                     name: podcast.title,
                     image: podcast.image,
-                    category: 'podcast',
+                    category: contactCategories.podcast,
                     pitched: !!(connected && podcast.hasEmail),
                     tag: { listId, listName: list.name },
                   },
@@ -65,7 +66,7 @@ export function useGetUserContactItems() {
                     id: _id,
                     name: episode.title,
                     image: episode.image,
-                    category: 'podcastEpisode',
+                    category: contactCategories.podcastEpisode,
                     pitched: !!(connected && episode.hasEmail),
                     tag: { listId, listName: list.name },
                   },
@@ -123,7 +124,7 @@ export function useGetUserContactItems() {
                     id: _id,
                     name: itemName,
                     image: logo,
-                    category: 'eventOrganization',
+                    category: contactCategories.eventOrganization,
                     pitched: !!(connected && hasEmail),
                     tag: { listId, listName: list.name },
                     position,
@@ -176,7 +177,7 @@ export function useGetUserContactItems() {
                     id: _id,
                     name: itemName,
                     image: logo,
-                    category: 'speaker',
+                    category: contactCategories.speaker,
                     pitched: !!(connected && speaker.email),
                     tag: { listId, listName: list.name },
                     email: speaker.email,
@@ -217,7 +218,7 @@ export function useGetUserContactItems() {
                     id: _id,
                     name: mediaOutlet.companyName ?? '',
                     image: null,
-                    category: 'mediaOutlet',
+                    category: contactCategories.mediaOutlet,
                     pitched: !!(connected && mediaOutlet.email),
                     tag: { listId, listName: list.name },
                     position: mediaOutlet.position,
@@ -252,7 +253,7 @@ export function useGetUserContactItems() {
                     id: _id,
                     name: conference.eventName,
                     image: logo,
-                    category: 'conference',
+                    category: contactCategories.conference,
                     pitched: !!(connected && conference.hasEmail),
                     tag: { listId, listName: list.name },
                   },
@@ -280,5 +281,5 @@ export function useGetUserContactItems() {
 
       dispatch(setItemsEvaluated());
     }
-  }, [contactListsWithItems, dispatch, getListItems, userLists]);
+  }, [userLists]);
 }

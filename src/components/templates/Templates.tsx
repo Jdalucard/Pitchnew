@@ -37,17 +37,9 @@ export function Templates() {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const fetchTemplates = useCallback(async () => {
-    const userId = userData?._id;
-
-    if (userId) {
-      await dispatch(getAllTemplates());
-    }
-  }, [dispatch, userData]);
-
   useEffect(() => {
-    fetchTemplates();
-  }, [fetchTemplates]);
+    dispatch(getAllTemplates());
+  }, [dispatch]);
 
   const handleChange = (_: React.SyntheticEvent<Element, Event>, newValue: number) => {
     setActiveTab(newValue);

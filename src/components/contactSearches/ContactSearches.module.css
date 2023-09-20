@@ -38,3 +38,126 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+
+.searchResultsWrapper {
+  margin-top: 1rem;
+  width: 90%;
+}
+
+.resultsHeaderCorrector {
+  background-color: #fff;
+  position: sticky;
+  top: 4rem;
+  z-index: 8;
+  display: flex;
+  justify-content: center;
+}
+
+.searchResultsHeader {
+  margin-top: 1.1rem;
+  border: 1px solid #fff;
+  width: 100%;
+  background-color: #f1f2f3;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+  border-radius: 4px;
+  display: flex;
+  padding: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  @media only screen and (max-width: 800px) {
+    justify-content: center;
+  }
+}
+
+.addToContactsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selectionControlWrapper {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  padding-right: 1rem;
+  border-right: 1px solid #fff;
+}
+
+.searchResultsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.25rem 0;
+  border: 1px solid #f1f2f3;
+}
+
+.isLoadingWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.loadingResultsOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.checkBoxWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.itemImageWrapper {
+  width: 6rem;
+}
+
+.itemImageWrapper img {
+  border-radius: 4px;
+}
+
+.textDescriptionWrapper {
+  width: 60%;
+}
+
+.ratingsWrapper {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.listTagsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.listTag {
+  background-color: rgba(91, 190, 85, 1);
+  border-radius: 4px;
+  padding: 0.25rem;
+}
+
+.searchItem {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+}
+
+.searchItem.itemSelected {
+  background-color: rgba(88, 86, 214, 0.1);
+}
+
+.searchItem:nth-of-type(even) {
+  background-color: #f1f2f3;
+}
+
+.searchItem.itemSelected:nth-of-type(even) {
+  background-color: rgba(88, 86, 214, 0.1);
+}

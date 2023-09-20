@@ -1,2 +1,2 @@
-export { podcastsSocket as default } from './podcasts';
+export { podcastsSocket as default } from './podcastsSocket';
 export * from './socketsCommon';

@@ -3,6 +3,7 @@ import { List, Typography } from '@mui/material';
 import { IContactListItemDetail } from '../../../redux/contactList';
 import { ContactItem } from '.';
 import styles from '../Contacts.module.css';
+import { contactCategories } from '../../../constants';
 
 interface IContactListsItemsByCategory {
   podcasts: IContactListItemDetail[];
@@ -29,14 +30,7 @@ export function ContactItems({ displayingItems, handleShowItemDetail }: IProps) 
   });
 
   const filterByCategories = useCallback((items: IContactListItemDetail[]) => {
-    const categories = [
-      'podcast',
-      'podcastEpisode',
-      'eventOrganization',
-      'speaker',
-      'mediaOutlet',
-      'conference',
-    ];
+    const categories = Object.values(contactCategories);
 
     const podcasts: IContactListItemDetail[] = [];
     const podcastEpisodes: IContactListItemDetail[] = [];
@@ -46,25 +40,24 @@ export function ContactItems({ displayingItems, handleShowItemDetail }: IProps) 
     const conferences: IContactListItemDetail[] = [];
 
     categories.map((category) => {
-      const filteredItems = items.filter((item) => item.baseInfo.category === category);
-
+      const filteredItems = items.filter((item) => item.baseInfo?.category === category);
       switch (category) {
-        case 'podcast':
+        case contactCategories.podcast:
           podcasts.push(...filteredItems);
           break;
-        case 'podcastEpisode':
+        case contactCategories.podcastEpisode:
           podcastEpisodes.push(...filteredItems);
           break;
-        case 'eventOrganization':
+        case contactCategories.eventOrganization:
           eventOrganizations.push(...filteredItems);
           break;
-        case 'speaker':
+        case contactCategories.speaker:
           speakers.push(...filteredItems);
           break;
-        case 'mediaOutlet':
+        case contactCategories.mediaOutlet:
           mediaOutlets.push(...filteredItems);
           break;
-        case 'conference':
+        case contactCategories.conference:
           conferences.push(...filteredItems);
           break;
         default:

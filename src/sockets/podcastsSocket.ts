@@ -1,6 +1,6 @@
 import io, { Socket } from 'socket.io-client';
-import { socketsCommon } from '.';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
+import Cookies from 'universal-cookie';
 
 const PODCASTS_SOCKET_ENDPOINT = '/so-podcasts';
 const SOCKETIO_DEFAULT_URL = '/socket.io';
@@ -30,7 +30,10 @@ export const podcastsSocket = {
           ? '/socket-api' + SOCKETIO_DEFAULT_URL
           : SOCKETIO_DEFAULT_URL,
     });
-    socket.emit('jwt-authentication', socketsCommon.jwt);
+    const cookies = new Cookies();
+    const jwt = cookies.get('jwt');
+
+    socket.emit('jwt-authentication', `Bearer ${jwt}`);
     activeSocket = socket;
 
     return socket;
