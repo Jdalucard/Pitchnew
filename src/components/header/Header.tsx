@@ -41,9 +41,14 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
       <div className={styles.logoAndMobileToggleWrapper}>
         <div className={styles.mobileNavigationToggle} onClick={toggleNavigationIsMinimized}>
           {navigationIsMinimized ? (
-            <MenuIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="large" />
+            <MenuIcon
+              className={styles.menuOpen}
+              sx={(theme) => ({ color: theme.palette.text.primary })}
+              fontSize="large"
+            />
           ) : (
             <MenuOpenIcon
+              className={styles.menuOpen}
               sx={(theme) => ({ color: theme.palette.text.primary })}
               fontSize="large"
             />
@@ -62,6 +67,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
           />
         ) : (
           <AccountCircleRoundedIcon
+            className={styles.profileIcon}
             sx={(theme) => ({ color: theme.palette.text.primary })}
             fontSize="large"
           />
@@ -80,7 +86,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
             </div>
           </div>
           {subscriptionPlan && (
-            <Typography variant="caption" color="text.secondary">
+            <Typography className={styles.name} variant="caption" color="text.secondary">
               {`${remainingCredits ? remainingCredits + ' pitches - ' : ''} ${
                 subscriptionPlan.type
               }`}

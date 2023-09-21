@@ -254,7 +254,10 @@ export function Templates() {
     <div className={`${styles.row}`}>
       <div className={`${styles.notes} ${styles.title}`}>
         <div className={`${styles.displayTitle}`}>
-          <Typography variant="h2"> Email Templates </Typography>
+          <Typography variant="h2" m="0rem 1.2rem">
+            {' '}
+            Email Templates{' '}
+          </Typography>
         </div>
       </div>
 
@@ -262,8 +265,8 @@ export function Templates() {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={activeTab} onChange={handleChange} aria-label="basic tabs example">
-              <Tab label="Default Templates" />
-              <Tab label="My Templates" />
+              <Tab className={styles.tab} label="Default Templates" />
+              <Tab className={styles.tab} label="My Templates" />
             </Tabs>
           </Box>
 
@@ -301,7 +304,7 @@ export function Templates() {
                       handleOpenEditor(crud.ADD.toString());
                     }}
                   >
-                    <AddIcon style={{ color: 'white' }} />
+                    <AddIcon className={styles.addIcon} />
                   </Fab>
                 </Box>
                 {emailTemplates.map((item, index) => {
@@ -320,12 +323,13 @@ export function Templates() {
 
                           <Box className={`${styles.buttonCard}`}>
                             <Fab
+                              className={`${styles.deleteIconback}`}
                               type="button"
                               onClick={() => {
                                 handleDeleteTemplate(item);
                               }}
                             >
-                              <DeleteIcon style={{ color: 'black' }} />
+                              <DeleteIcon className={styles.deleteIcon} />
                             </Fab>
                             <Fab
                               className={`${styles.addButton}`}
@@ -334,7 +338,7 @@ export function Templates() {
                                 handleOpenEditor(crud.EDIT.toString(), item);
                               }}
                             >
-                              <EditIcon style={{ color: 'white' }} />
+                              <EditIcon className={styles.editandSendIcon} />
                             </Fab>
                             <Fab
                               className={`${styles.addButton}`}
@@ -343,7 +347,7 @@ export function Templates() {
                                 handleOpenEditor(crud.SEND.toString(), item);
                               }}
                             >
-                              <SendIcon style={{ color: 'white' }} />
+                              <SendIcon className={styles.editandSendIcon} />
                             </Fab>
                           </Box>
                         </Card>

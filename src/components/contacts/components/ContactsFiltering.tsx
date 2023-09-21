@@ -54,7 +54,7 @@ export function ContactsFiltering({ handleProcessFiltering }: IProps) {
             <MenuItem value="mediaOutlet">Media outlets</MenuItem>
             <MenuItem value="conference">Conferences</MenuItem>
           </TextField>
-          {userLists?.length && (
+          {!!userLists.length && (
             <TextField
               name="contactList"
               label="Contact list"

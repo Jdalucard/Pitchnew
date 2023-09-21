@@ -20,16 +20,26 @@
 .filtersWrapper {
   display: flex;
   gap: 1rem;
+  @media only screen and (max-width: 600px) {
+      flex-direction: column;
+    }
 }
 
 .filterInputSelectWrapper {
   width: 10.8rem;
+  @media only screen and (max-width: 600px) {
+      width: 100%;
+  
+    }
 }
 
 .selectWrappers {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
+  @media only screen and (max-width: 600px) {
+      flex-direction: column;
+    }
 }
 
 .contactItemsWrapper {

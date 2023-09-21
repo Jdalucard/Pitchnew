@@ -17,6 +17,9 @@
   border-radius: 4px;
   background-color: rgba(241, 242, 243, 1);
   max-width: 25rem;
+  @media only screen and (max-width: 480px) {
+      margin: 0 2rem;
+    }
 }
 
 .cancelPlanWrapper {
@@ -24,6 +27,11 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  @media only screen and (max-width: 425px) {
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
 }
 
 .itemsMappedWrapper {
@@ -31,6 +39,9 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 2rem;
+  @media only screen and (max-width: 480px) {
+      margin: 0.5rem;
+    }
 }
 
 .planItem {
@@ -94,6 +105,11 @@
   border: 1px solid rgba(241, 242, 243, 1);
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  @media only screen and (max-width: 480px) {
+      width: auto;
+      padding: 1rem;
+      margin: 0 1rem;
+    }
 }
 
 .paymentForm form {
@@ -101,6 +117,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 
 .cardWrapper {

@@ -61,6 +61,12 @@
   color: #ffffff;
   cursor: pointer;
   margin-left: 10px !important;
+  z-index: unset !important;
+  
+    @media only screen and (max-width: 600px) {
+      width: 30px !important;
+      height: 30px !important;
+    }
 }
 
 .addButton:hover {
@@ -92,6 +98,9 @@
   display: flex;
   justify-content: end;
   margin: 10px;
+  @media only screen and (max-width: 600px) {
+      padding: 0.5rem;
+    }
 }
 
 .cardContent {
@@ -106,6 +115,9 @@
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
+  @media only screen and (max-width: 600px) {
+      margin: 0 1rem;
+    }
 }
 
 .CustomTabPanel {
@@ -116,6 +128,9 @@
 
 .row {
   padding: 0px 50px 0px 0px;
+  @media only screen and (max-width: 600px) {
+      padding: 0px !important
+    }
 }
 
 .h2Sub {
@@ -143,4 +158,44 @@
 
 .custom-input {
   width: 100% !important;
+}
+
+.tab {
+
+
+  @media only screen and (max-width: 600px) {
+    text-transform: capitalize !important;
+    padding: 0rem 0.3rem !important;
+    margin: 0rem 1rem ! important;
+  }
+}
+
+.deleteIconback {
+  z-index: unset !important;
+
+  @media only screen and (max-width: 600px) {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+
+
+.addIcon {
+  color: #fff;
+}
+
+.deleteIcon {
+  @media only screen and (max-width: 600px) {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+.editandSendIcon {
+  color: #fff;
+
+  @media only screen and (max-width: 600px) {
+    width: 20px !important;
+    height: 20px !important;
+  }
 }
