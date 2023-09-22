@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
@@ -26,15 +26,18 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState(false);
   const [errorInProfileImage, setErrorInProfileImage] = useState(false);
 
+  const toggleProfileMenu = useCallback(() => {
+    setProfileMenuIsOpen((prev) => !prev);
+    if (!navigationIsMinimized) {
+      toggleNavigationIsMinimized();
+    }
+  }, [navigationIsMinimized, toggleNavigationIsMinimized]);
+
   useEffect(() => {
     if (window.innerWidth <= 600 && !navigationIsMinimized && profileMenuIsOpen) {
       toggleProfileMenu();
     }
-  }, [navigationIsMinimized, profileMenuIsOpen]);
-
-  const toggleProfileMenu = () => {
-    setProfileMenuIsOpen((prev) => !prev);
-  };
+  }, [navigationIsMinimized, profileMenuIsOpen, toggleProfileMenu]);
 
   return (
     <div className={styles.headerWrapper}>
@@ -58,7 +61,12 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
           <img src={logo} width="100%" height="100%" />
         </div>
       </div>
-      <div className={styles.profileOptionsWrapper} onClick={toggleProfileMenu}>
+      <div
+        className={styles.profileOptionsWrapper}
+        onClick={() => {
+          toggleProfileMenu();
+        }}
+      >
         {profileImage && !errorInProfileImage ? (
           <img
             src={import.meta.env.VITE_PROFILE_ENDPOINT_URL + profileImage}
