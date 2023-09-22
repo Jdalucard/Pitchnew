@@ -24,6 +24,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
   const remainingCredits = useAppSelector(subscriptionSelectors.credits)?.remaining;
 
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState(false);
+  const [generalMenuIsOpen, setgeneralMenuIsOpen] = useState(false);
   const [errorInProfileImage, setErrorInProfileImage] = useState(false);
 
   const toggleProfileMenu = useCallback(() => {
@@ -31,7 +32,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
     if (!navigationIsMinimized) {
       toggleNavigationIsMinimized();
     }
-  }, [navigationIsMinimized, toggleNavigationIsMinimized]);
+  }, [navigationIsMinimized, toggleNavigationIsMinimized, setProfileMenuIsOpen]);
 
   useEffect(() => {
     if (window.innerWidth <= 600 && !navigationIsMinimized && profileMenuIsOpen) {
@@ -39,10 +40,27 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
     }
   }, [navigationIsMinimized, profileMenuIsOpen, toggleProfileMenu]);
 
+  const toggleGeneralMenu = useCallback(() => {
+    setgeneralMenuIsOpen((prev) => !prev);
+    setProfileMenuIsOpen(false);
+    toggleNavigationIsMinimized();
+  }, [toggleNavigationIsMinimized]);
+
+  useEffect(() => {
+    if (
+      window.innerWidth <= 600 &&
+      !navigationIsMinimized &&
+      profileMenuIsOpen &&
+      !generalMenuIsOpen
+    ) {
+      toggleProfileMenu();
+    }
+  }, [navigationIsMinimized, profileMenuIsOpen, toggleProfileMenu, generalMenuIsOpen]);
+
   return (
     <div className={styles.headerWrapper}>
       <div className={styles.logoAndMobileToggleWrapper}>
-        <div className={styles.mobileNavigationToggle} onClick={toggleNavigationIsMinimized}>
+        <div className={styles.mobileNavigationToggle} onClick={toggleGeneralMenu}>
           {navigationIsMinimized ? (
             <MenuIcon
               className={styles.menuOpen}
@@ -61,12 +79,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
           <img src={logo} width="100%" height="100%" />
         </div>
       </div>
-      <div
-        className={styles.profileOptionsWrapper}
-        onClick={() => {
-          toggleProfileMenu();
-        }}
-      >
+      <div className={styles.profileOptionsWrapper} onClick={toggleProfileMenu}>
         {profileImage && !errorInProfileImage ? (
           <img
             src={import.meta.env.VITE_PROFILE_ENDPOINT_URL + profileImage}
