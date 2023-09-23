@@ -2,9 +2,10 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { contactListStoreKey } from './contactList.const';
 import { errorAlert, errorSideAlert, warningAlert } from '../alerts';
-import { IContactListItem, IUserContactList, IContactSequence } from '../../types';
-import { storeContactListItem } from '.';
+import { IUserContactList, IContactSequence } from '../../types';
+import { IContactListItemDetail, storeContactListItems } from '.';
 import { contactCategories } from '../../constants';
+import { IPodcastResult } from '../../components/contactSearches/podcastsSearch/PodcastsSearch';
 
 const contactListsPath = `${import.meta.env.VITE_API_BASE_URL}/lists`;
 
@@ -21,8 +22,8 @@ interface ICreateUserContactList {
 
 interface IAddItemsToUserContactList {
   listId: string;
-  itemType: string; // TODO: define this properly! for now idk wtf
-  items: IContactListItem[];
+  itemType: string;
+  items: IPodcastResult[];
 }
 
 interface IGetContactListItems {
@@ -48,7 +49,7 @@ interface IGetUserContactListItemSequence {
 
 export const getUserContactLists = createAsyncThunk(
   `${contactListStoreKey}/getUserContactLists`,
-  async (query: IGetUserContactLists, { dispatch }) => {
+  async (query: IGetUserContactLists, thunkApi) => {
     try {
       const response = await axios.get(
         `${contactListsPath}?page=${query.page}${query.noLimit ? '&noLimit=1' : ''}`,
@@ -66,267 +67,259 @@ export const getUserContactLists = createAsyncThunk(
         });
       }
       // Evaluating listItems
-      lists.map(async (list) => {
-        const listItems = await await dispatch(getListContactItems(list._id)).unwrap();
+      const listIdsAsStrings = lists.map((list) => list._id).join(',');
 
-        if (listItems.length) {
-          listItems.map((item: any) => {
-            if (item.userPodcast) {
-              const { userPodcast, _id, listId } = item;
-              const { podcast, connected } = userPodcast;
+      const listItems = await thunkApi.dispatch(getListContactItems(listIdsAsStrings)).unwrap();
 
-              dispatch(
-                storeContactListItem({
-                  baseInfo: {
-                    id: _id,
-                    name: podcast.title,
-                    image: podcast.image,
-                    category: contactCategories.podcast,
-                    pitched: !!(connected && podcast.hasEmail),
-                    tag: { listId, listName: list.name },
-                  },
-                  details: {
-                    id: userPodcast._id,
-                    connected,
-                    email: podcast.hasEmail,
-                    listenNotesId: podcast.listenNotesId,
-                    publisherName: podcast.publisherName,
-                    categories: podcast.genres,
-                    rating: {
-                      value: podcast.rating,
-                      reviewsAmount: podcast.ratingsAmount,
-                    },
-                    description: podcast.description,
-                  },
-                }),
-              );
-            } else if (item.userPodcastEpisode) {
-              const { userPodcastEpisode, _id, listId } = item;
-              const { episode, connected } = userPodcastEpisode;
+      if (listItems?.length) {
+        const listItemsMapped: IContactListItemDetail[] = [];
 
-              dispatch(
-                storeContactListItem({
-                  baseInfo: {
-                    id: _id,
-                    name: episode.title,
-                    image: episode.image,
-                    category: contactCategories.podcastEpisode,
-                    pitched: !!(connected && episode.hasEmail),
-                    tag: { listId, listName: list.name },
-                  },
-                  details: {
-                    id: userPodcastEpisode._id,
-                    connected,
-                    email: episode.hasEmail,
-                    listenNotesId: episode.podcastListenNotesId,
-                    publisherName: episode.publisherName,
-                    categories: episode.genres,
-                    rating: {
-                      value: episode.rating,
-                      reviewsAmount: episode.ratingsAmount,
-                    },
-                    description: episode.description,
-                    publishDate: episode.publishDate,
-                    episodeDuration: episode.duration,
-                    episodeKeywords: episode.keywords,
-                  },
-                }),
-              );
-            } else if (item.userEventOrganization) {
-              const { userEventOrganization, _id, listId } = item;
-              const { eventOrganization } = userEventOrganization;
-              const {
+        listItems.map((item: any) => {
+          if (item.userPodcast) {
+            const { userPodcast, _id, listId } = item;
+            const { podcast, connected } = userPodcast;
+
+            listItemsMapped.push({
+              baseInfo: {
+                id: _id,
+                name: podcast.title,
+                image: podcast.image,
+                category: contactCategories.podcast,
+                pitched: !!(connected && podcast.hasEmail),
+                listId,
+              },
+              details: {
+                id: userPodcast._id,
                 connected,
-                hasEmail,
-                dataFileType,
-                organization,
-                schoolName,
-                enrichment,
-                website,
+                email: podcast.hasEmail,
+                listenNotesId: podcast.listenNotesId,
+                publisherName: podcast.publisherName,
+                categories: podcast.genres,
+                rating: {
+                  value: podcast.rating,
+                  reviewsAmount: podcast.ratingsAmount,
+                },
+                description: podcast.description,
+              },
+            });
+          } else if (item.userPodcastEpisode) {
+            const { userPodcastEpisode, _id, listId } = item;
+            const { episode, connected } = userPodcastEpisode;
+
+            listItemsMapped.push({
+              baseInfo: {
+                id: _id,
+                name: episode.title,
+                image: episode.image,
+                category: contactCategories.podcastEpisode,
+                pitched: !!(connected && episode.hasEmail),
+                listId,
+              },
+              details: {
+                id: userPodcastEpisode._id,
+                connected,
+                email: episode.hasEmail,
+                listenNotesId: episode.listenNotesId,
+                publisherName: episode.publisherName,
+                categories: episode.genres,
+                rating: {
+                  value: episode.rating,
+                  reviewsAmount: episode.ratingsAmount,
+                },
+                description: episode.description,
+                publishDate: episode.publishDate,
+                episodeDuration: episode.duration,
+                episodeKeywords: episode.keywords,
+              },
+            });
+          } else if (item.userEventOrganization) {
+            const { userEventOrganization, _id, listId } = item;
+            const { eventOrganization } = userEventOrganization;
+            const {
+              connected,
+              hasEmail,
+              dataFileType,
+              organization,
+              schoolName,
+              enrichment,
+              website,
+              position,
+              description,
+              firstName,
+              lastName,
+              phone,
+              personPhone,
+              address,
+              zipCode,
+              organizationWebsite,
+              city,
+              state,
+              country,
+              budget,
+              places,
+            } = eventOrganization;
+
+            const itemName = dataFileType === 2 ? organization : schoolName;
+            const logo = enrichment ? enrichment.logo : `https://logo.clearbit.com/${website}`;
+
+            listItemsMapped.push({
+              baseInfo: {
+                id: _id,
+                name: itemName,
+                image: logo,
+                category: contactCategories.eventOrganization,
+                pitched: !!(connected && hasEmail),
+                listId,
                 position,
+                eventType: dataFileType === 1 ? 'School' : 'Event',
+              },
+              details: {
+                id: userEventOrganization._id,
+                connected,
+                email: hasEmail,
                 description,
-                firstName,
-                lastName,
-                phone,
-                personPhone,
-                address,
-                zipCode,
-                organizationWebsite,
-                city,
-                state,
-                country,
+                contactName: {
+                  firstName,
+                  lastName,
+                },
+                phoneNumber: personPhone || phone,
+                eventAddress: {
+                  value: address,
+                  zipCode,
+                },
+                website: organizationWebsite,
+                foundedYear: enrichment?.foundedYear,
+                employeesRange: enrichment?.metrics?.employeesRange,
+                sector: enrichment?.category?.sector,
+                industry: enrichment?.category?.industry,
+                location: {
+                  city,
+                  state,
+                  country,
+                },
                 budget,
                 places,
-              } = eventOrganization;
+                socialLinks: {
+                  facebook: enrichment?.facebook?.handle,
+                  linkedin: enrichment?.linkedin?.handle,
+                  crunchbase: enrichment?.crunchbase?.handle,
+                },
+              },
+            });
+          } else if (item.userSpeaker) {
+            const { userSpeaker, _id, listId } = item;
+            const { speaker, connected } = userSpeaker;
 
-              const itemName = dataFileType === 2 ? organization : schoolName;
-              const logo = enrichment ? enrichment.logo : `https://logo.clearbit.com/${website}`;
+            const itemName = speaker.name ?? speaker.email;
+            const logo = speaker.image ?? '';
 
-              dispatch(
-                storeContactListItem({
-                  baseInfo: {
-                    id: _id,
-                    name: itemName,
-                    image: logo,
-                    category: contactCategories.eventOrganization,
-                    pitched: !!(connected && hasEmail),
-                    tag: { listId, listName: list.name },
-                    position,
-                    eventType: dataFileType === 1 ? 'School' : 'Event',
-                  },
-                  details: {
-                    id: userEventOrganization._id,
-                    connected,
-                    email: hasEmail,
-                    description,
-                    contactName: {
-                      firstName,
-                      lastName,
-                    },
-                    phoneNumber: personPhone || phone,
-                    eventAddress: {
-                      value: address,
-                      zipCode,
-                    },
-                    website: organizationWebsite,
-                    foundedYear: enrichment?.foundedYear,
-                    employeesRange: enrichment?.metrics?.employeesRange,
-                    sector: enrichment?.category?.sector,
-                    industry: enrichment?.category?.industry,
-                    location: {
-                      city,
-                      state,
-                      country,
-                    },
-                    budget,
-                    places,
-                    socialLinks: {
-                      facebook: enrichment?.facebook?.handle,
-                      linkedin: enrichment?.linkedin?.handle,
-                      crunchbase: enrichment?.crunchbase?.handle,
-                    },
-                  },
-                }),
-              );
-            } else if (item.userSpeaker) {
-              const { userSpeaker, _id, listId } = item;
-              const { speaker, connected } = userSpeaker;
+            listItemsMapped.push({
+              baseInfo: {
+                id: _id,
+                name: itemName,
+                image: logo,
+                category: contactCategories.speaker,
+                pitched: !!(connected && speaker.email),
+                listId,
+                email: speaker.email,
+              },
+              details: {
+                id: userSpeaker._id,
+                businessName: speaker.businessname,
+                website: speaker.website,
+                socialMediaLink1: speaker.socialMediaLink1,
+                socialMediaLink2: speaker.socialMediaLink2,
+                socialMediaLink3: speaker.socialMediaLink3,
+                equipment: speaker.Equipment,
+                additionalInfo: speaker.additionalinfo,
+                optionalContactMethod: speaker.optionalcontactmethod,
+                categories: speaker.searchGenres,
+                subCategories: speaker.subcategories,
+                shortBio: speaker.shortbio,
+                topics: speaker.topics,
+                detailedProfile: speaker.detailedprofile,
+                qualification: speaker.qualification,
+                audience: speaker.audience,
+                promotionPlan: speaker.promotionPlan,
+                sampleQuestion: speaker.sampleQuestion,
+                ownPodcast: speaker.ownpodcast,
+                pastAppereance1: speaker.past_appereance1?.title,
+                pastAppereance2: speaker.past_appereance2?.title,
+                pastAppereance3: speaker.past_appereance3?.title,
+              },
+            });
+          } else if (item.userMediaOutlet) {
+            const { userMediaOutlet, _id, listId } = item;
+            const { mediaOutlet, connected } = userMediaOutlet;
 
-              const itemName = speaker.name ?? speaker.email;
-              const logo = speaker.image ?? '';
+            listItemsMapped.push({
+              baseInfo: {
+                id: _id,
+                name: mediaOutlet.companyName ?? '',
+                image: null,
+                category: contactCategories.mediaOutlet,
+                pitched: !!(connected && mediaOutlet.email),
+                listId,
+                position: mediaOutlet.position,
+              },
+              details: {
+                id: userMediaOutlet._id,
+                connected,
+                email: mediaOutlet.hasEmail,
+                magazineGenre: mediaOutlet.magazineGenre,
+                contactName: {
+                  firstName: mediaOutlet.firstName,
+                  lastName: mediaOutlet.lastName,
+                },
+                phoneNumber: mediaOutlet.phone,
+                location: {
+                  city: mediaOutlet.city,
+                  state: mediaOutlet.state,
+                },
+              },
+            });
+          } else if (item.userConference) {
+            const { userConference, _id, listId } = item;
+            const { conference, connected } = userConference;
 
-              dispatch(
-                storeContactListItem({
-                  baseInfo: {
-                    id: _id,
-                    name: itemName,
-                    image: logo,
-                    category: contactCategories.speaker,
-                    pitched: !!(connected && speaker.email),
-                    tag: { listId, listName: list.name },
-                    email: speaker.email,
-                  },
-                  details: {
-                    id: userSpeaker._id,
-                    businessName: speaker.businessname,
-                    website: speaker.website,
-                    socialMediaLink1: speaker.socialMediaLink1,
-                    socialMediaLink2: speaker.socialMediaLink2,
-                    socialMediaLink3: speaker.socialMediaLink3,
-                    equipment: speaker.Equipment,
-                    additionalInfo: speaker.additionalinfo,
-                    optionalContactMethod: speaker.optionalcontactmethod,
-                    categories: speaker.searchGenres,
-                    subCategories: speaker.subcategories,
-                    shortBio: speaker.shortbio,
-                    topics: speaker.topics,
-                    detailedProfile: speaker.detailedprofile,
-                    qualification: speaker.qualification,
-                    audience: speaker.audience,
-                    promotionPlan: speaker.promotionPlan,
-                    sampleQuestion: speaker.sampleQuestion,
-                    ownPodcast: speaker.ownpodcast,
-                    pastAppereance1: speaker.past_appereance1?.title,
-                    pastAppereance2: speaker.past_appereance2?.title,
-                    pastAppereance3: speaker.past_appereance3?.title,
-                  },
-                }),
-              );
-            } else if (item.userMediaOutlet) {
-              const { userMediaOutlet, _id, listId } = item;
-              const { mediaOutlet, connected } = userMediaOutlet;
+            const logo =
+              conference.enrichment?.logo ?? `https://logo.clearbit.com/${conference.website}`;
 
-              dispatch(
-                storeContactListItem({
-                  baseInfo: {
-                    id: _id,
-                    name: mediaOutlet.companyName ?? '',
-                    image: null,
-                    category: contactCategories.mediaOutlet,
-                    pitched: !!(connected && mediaOutlet.email),
-                    tag: { listId, listName: list.name },
-                    position: mediaOutlet.position,
-                  },
-                  details: {
-                    id: userMediaOutlet._id,
-                    connected,
-                    email: mediaOutlet.hasEmail,
-                    magazineGenre: mediaOutlet.magazineGenre,
-                    contactName: {
-                      firstName: mediaOutlet.firstName,
-                      lastName: mediaOutlet.lastName,
-                    },
-                    phoneNumber: mediaOutlet.phone,
-                    location: {
-                      city: mediaOutlet.city,
-                      state: mediaOutlet.state,
-                    },
-                  },
-                }),
-              );
-            } else if (item.userConference) {
-              const { userConference, _id, listId } = item;
-              const { conference, connected } = userConference;
+            listItemsMapped.push({
+              baseInfo: {
+                id: _id,
+                name: conference.eventName,
+                image: logo,
+                category: contactCategories.conference,
+                pitched: !!(connected && conference.hasEmail),
+                listId,
+              },
+              details: {
+                id: userConference._id,
+                connected,
+                email: conference.hasEmail,
+                description: conference.eventDescription,
+                contactName: {
+                  firstName: conference.contactName,
+                },
+                location: {
+                  city: conference.location,
+                },
+                conferenceCategory: conference.category,
+                estimatedAudience: conference.estAudience,
+                date: conference.date,
+              },
+            });
+          }
+        });
 
-              const logo =
-                conference.enrichment?.logo ?? `https://logo.clearbit.com/${conference.website}`;
-
-              dispatch(
-                storeContactListItem({
-                  baseInfo: {
-                    id: _id,
-                    name: conference.eventName,
-                    image: logo,
-                    category: contactCategories.conference,
-                    pitched: !!(connected && conference.hasEmail),
-                    tag: { listId, listName: list.name },
-                  },
-                  details: {
-                    id: userConference._id,
-                    connected,
-                    email: conference.hasEmail,
-                    description: conference.eventDescription,
-                    contactName: {
-                      firstName: conference.contactName,
-                    },
-                    location: {
-                      city: conference.location,
-                    },
-                    conferenceCategory: conference.category,
-                    estimatedAudience: conference.estAudience,
-                    date: conference.date,
-                  },
-                }),
-              );
-            }
-          });
-        }
-      });
+        thunkApi.dispatch(storeContactListItems(listItemsMapped));
+      }
       //
 
       return lists;
     } catch (error) {
-      dispatch(errorSideAlert('Error getting the user lists. Please, try again later.'));
+      thunkApi.dispatch(errorSideAlert('Error getting the user lists. Please, try again later.'));
     }
   },
 );
@@ -387,24 +380,6 @@ export const deleteUserContactList = createAsyncThunk(
   },
 );
 
-export const getContactListItems = createAsyncThunk(
-  `${contactListStoreKey}/getContactListItems`,
-  async (params: IGetContactListItems, thunkApi) => {
-    const { listId, itemType, page } = params;
-    try {
-      const response = await axios.get(
-        `${contactListsPath}/${listId}/items?type=${itemType}&page=${page}`,
-      );
-
-      return response.data;
-    } catch (error) {
-      thunkApi.dispatch(
-        errorAlert('Error getting the items in the list specified. Please, try again later.'),
-      );
-    }
-  },
-);
-
 export const getContactListItemsCount = createAsyncThunk(
   `${contactListStoreKey}/getContactListItemsCount`,
   async (params: IGetContactListItemsCount, thunkApi) => {
@@ -438,7 +413,7 @@ export const addUserContactListItems = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert('Error adding the contact to the list specified. Please, try again later.'),
+        errorSideAlert('Error adding the contacts to the list specified. Please, try again later.'),
       );
     }
   },
@@ -538,11 +513,29 @@ export const connectContactsNew = createAsyncThunk(
   },
 );
 
-export const getListContactItems = createAsyncThunk(
-  `${contactListStoreKey}/getContactListsItems`,
-  async (listId: string, thunkApi) => {
+export const getContactListItems = createAsyncThunk(
+  `${contactListStoreKey}/getContactListItems`,
+  async (params: IGetContactListItems, thunkApi) => {
+    const { listId, itemType, page } = params;
     try {
-      const response = await axios.get(`${contactListsPath}/${listId}/contactitems`);
+      const response = await axios.get(
+        `${contactListsPath}/${listId}/items?type=${itemType}&page=${page}`,
+      );
+
+      return response.data;
+    } catch (error) {
+      thunkApi.dispatch(
+        errorAlert('Error getting the items in the list specified. Please, try again later.'),
+      );
+    }
+  },
+);
+
+export const getListContactItems = createAsyncThunk(
+  `${contactListStoreKey}/getListContactItems`,
+  async (listIdsAsString: string, thunkApi) => {
+    try {
+      const response = await axios.get(`${contactListsPath}/${listIdsAsString}/contactitems`);
 
       return response.data;
     } catch (error) {

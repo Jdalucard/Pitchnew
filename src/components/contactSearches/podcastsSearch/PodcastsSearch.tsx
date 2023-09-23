@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
+import { Button, IconButton, Pagination, Tooltip, Typography } from '@mui/material';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   IFilterPodcastsSearchsOptions,
   PodcastsSearchFiltering,
@@ -7,15 +9,19 @@ import {
 import { contactCategories } from '../../../constants';
 import { formatQueryParameters } from '../../../utils';
 import { podcastsSocket } from '../../../sockets/podcastsSocket';
-import { IContactListItemDetail, contactListSelectors } from '../../../redux/contactList';
-import { SearchResultsWrapper } from '../common';
-import { Dayjs } from 'dayjs';
-import { LoadingDisplay } from '../../../common';
-import { loadingDisplayTypes } from '../../../types';
+import {
+  IContactListItemDetail,
+  addUserContactListItems,
+  contactListSelectors,
+  getUserContactLists,
+} from '../../../redux/contactList';
+import { AddToContactsModal, SearchResultsWrapper } from '../common';
+import { LoadingDisplay, LoadingIcon } from '../../../common';
+import { ISelectInputOption, ISelectInputOptionNumeric, loadingDisplayTypes } from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { errorSideAlert } from '../../../redux/alerts';
+import { errorSideAlert, successSideAlert } from '../../../redux/alerts';
+import { PodcastDetail, PodcastItem } from './components';
 import styles from '../ContactSearches.module.css';
-import { PodcastItem } from './components';
 
 interface IReview {
   rating: number;
@@ -23,19 +29,6 @@ interface IReview {
   title: string;
   author: string;
   comment: string;
-}
-
-export interface IPodcastsCategory {
-  _id?: string;
-  label: string;
-  value: string;
-}
-
-export interface IPodcastsGenre {
-  _id?: string;
-  label: string;
-  value: number;
-  parentId?: number;
 }
 
 interface IListTag {
@@ -48,7 +41,7 @@ export interface IPodcastResult {
   done?: boolean;
   failed?: boolean;
   feedUrl: string;
-  genres: IPodcastsGenre[];
+  genres: ISelectInputOption[];
   iTunesId: number;
   image: string;
   listenNotesId: string;
@@ -59,7 +52,6 @@ export interface IPodcastResult {
   title: string;
   type: string;
   // filling fields post getting result:
-  connected?: boolean;
   tags?: IListTag[];
 }
 
@@ -67,16 +59,15 @@ interface ISearchResults {
   results: IPodcastResult[];
   totalInDB: number;
   offset: number;
-  page: number;
 }
 
 interface ISearchTransformedParameters {
   type: string;
-  genresId?: string[];
+  genreIds?: string;
   language?: string;
   keywords?: string;
-  publishedBefore?: Dayjs | null;
-  publishedAfter?: Dayjs | null;
+  publishedBefore?: number | null;
+  publishedAfter?: number | null;
   resultsPerPage?: number;
   offset?: number;
   pagination?: string;
@@ -84,9 +75,11 @@ interface ISearchTransformedParameters {
 
 const totalForPodcasts = 3131282;
 const totalForEpisodes = 168863851;
+const resultsPerPage = 10;
 
 export function PodcastsSearch() {
   const dispatch = useAppDispatch();
+  const contactLists = useAppSelector(contactListSelectors.contactLists);
   const contactListsItems = useAppSelector(contactListSelectors.contactListsItems);
 
   const [loadingView, setLoadingView] = useState<'loadMore' | 'pagination'>('loadMore');
@@ -94,69 +87,75 @@ export function PodcastsSearch() {
     results: [],
     totalInDB: 0,
     offset: 0,
-    page: 0,
   });
   const [selectedItems, setSelectedItems] = useState<IPodcastResult[]>([]);
-  const [mainCategorySelected, setMainCategorySelected] = useState<string>(
-    contactCategories.podcast,
-  );
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingResults, setIsLoadingResults] = useState(false);
+  const [isLoadingAddingContacts, setIsLoadingAddingContacts] = useState(false);
+  const [displayingItemDetails, setDisplayingItemDetails] = useState<IPodcastResult | null>(null);
+  const [displayingAddToContacts, setDisplayingAddToContacts] = useState(false);
+  const [displayinScrollTop, setDisplayingScrollTop] = useState(false);
+  const [storingFilters, setStoringFilters] = useState<IFilterPodcastsSearchsOptions | null>(null);
+  const [resultsMatchShouldUpdate, setResultsMatchShouldUpdate] = useState(false);
 
-  const getContactListInfoIfExists = useCallback((results: IPodcastResult[]) => {
-    const itemsThatMatch: IPodcastResult[] = [];
-    const itemsThatDontMatch: IPodcastResult[] = [];
+  console.log(currentResults);
+  const getContactListInfoIfExists = useCallback(
+    (results: IPodcastResult[]) => {
+      const itemsThatMatch: IPodcastResult[] = [];
+      const itemsThatDontMatch: IPodcastResult[] = [];
 
-    results.map((result) => {
-      let matched = false;
-      const listsPerResult: IListTag[] = [];
+      results.map((result) => {
+        let matched = false;
+        const listsPerResult: IListTag[] = [];
 
-      contactListsItems.items.map((item) => {
-        if (result.listenNotesId === item.details?.listenNotesId) {
-          console.log('tag found!');
-          listsPerResult.push(item.baseInfo.tag);
-          matched = true;
+        contactListsItems.map((item) => {
+          if (result.listenNotesId === item.details?.listenNotesId) {
+            const foundList = contactLists.find((list) => list._id === item.baseInfo.listId);
+            if (foundList) {
+              listsPerResult.push({ listId: foundList._id, listName: foundList.name });
+              matched = true;
+            }
+          }
+        });
+
+        if (!matched) {
+          itemsThatDontMatch.push(result);
+        } else {
+          itemsThatMatch.push({
+            ...result,
+            tags: listsPerResult,
+          });
         }
       });
 
-      if (!matched) {
-        itemsThatDontMatch.push(result);
-      } else {
-        itemsThatMatch.push({
-          ...result,
-          connected: true,
-          tags: listsPerResult,
-        });
-      }
-    });
-
-    return [...itemsThatMatch, ...itemsThatDontMatch];
-  }, []);
+      return [...itemsThatMatch, ...itemsThatDontMatch];
+    },
+    [contactLists, contactListsItems],
+  );
 
   const getPodcasts = useCallback(
-    (offset: number, filters?: IFilterPodcastsSearchsOptions) => {
-      setIsLoading(true);
+    (offset: number, isResettingValue: boolean, filters?: IFilterPodcastsSearchsOptions) => {
+      setIsLoadingResults(true);
+      const transformedMainCategory =
+        filters?.mainCategory.value === contactCategories.podcastEpisode
+          ? 'episode'
+          : contactCategories.podcast;
       const searchParameters: ISearchTransformedParameters = {
-        type: contactCategories.podcast,
-        resultsPerPage: 10, // useless. The socket brings 10 regardless
+        type: transformedMainCategory,
+        resultsPerPage: resultsPerPage, // useless. The socket brings 10 regardless
         keywords: 'business',
+        offset,
       };
 
-      if (loadingView === 'pagination') {
-        searchParameters.pagination = 'true';
-        searchParameters.offset = offset + 20;
-      } else {
-        searchParameters.pagination = 'false';
-        searchParameters.offset = offset;
-      }
-
       if (filters) {
-        const { keywords, genre, language, publishedBefore, publishedAfter } = filters;
+        const { keywords, genres, language, publishedBefore, publishedAfter } = filters;
 
         if (keywords) searchParameters.keywords = keywords;
-        if (genre._id && genre.value !== 0) searchParameters.genresId = [genre._id];
+        if (genres.length) {
+          searchParameters.genreIds = genres.map((genre) => genre.value).join('_');
+        }
         if (language && language.value !== 'all') searchParameters.language = language.value;
-        if (publishedBefore) searchParameters.publishedBefore = publishedBefore;
-        if (publishedAfter) searchParameters.publishedAfter = publishedAfter;
+        if (publishedBefore) searchParameters.publishedBefore = publishedBefore.valueOf();
+        if (publishedAfter) searchParameters.publishedAfter = publishedAfter.valueOf();
       }
 
       const formattedSearchParameters = formatQueryParameters(searchParameters);
@@ -166,68 +165,96 @@ export function PodcastsSearch() {
       searchSocket.on(podcastsSocket.events.RESULTS_FIRST, (response: any) => {
         if (response?.results) {
           setCurrentResults((prev) => {
+            let newResults: IPodcastResult[];
+            if (isResettingValue) {
+              newResults = response.results;
+              setSelectedItems([]);
+            } else {
+              newResults = [...prev.results, ...response.results];
+            }
+
             return {
-              results: [...prev.results, ...response.results],
+              results: newResults,
               totalInDB: response.total,
               offset: response.offset,
-              page: response.page ?? 0,
             };
           });
+
+          setResultsMatchShouldUpdate(true);
         }
-        setIsLoading(false);
+        setIsLoadingResults(false);
       });
       searchSocket.on(podcastsSocket.events.RESULTS_COMPLETE, () => {
-        setIsLoading(false);
+        setIsLoadingResults(false);
       });
       searchSocket.on(podcastsSocket.events.SEARCH_ERROR, () => {
-        setIsLoading(false);
+        setIsLoadingResults(false);
         dispatch(errorSideAlert('Error performing the search. Please, try again later.'));
       });
     },
-    [dispatch, loadingView],
+    [dispatch],
   );
 
   useEffect(() => {
-    getPodcasts(0);
+    getPodcasts(0, false);
   }, [getPodcasts]);
 
   useEffect(() => {
-    if (currentResults.results.length) {
-      const resultsMatchedWithContacts = getContactListInfoIfExists(currentResults.results);
-      setCurrentResults((prev) => {
-        return {
-          ...prev,
-          results: resultsMatchedWithContacts,
-        };
-      });
+    if (resultsMatchShouldUpdate) {
+      setTimeout(() => {
+        const resultsMatchedWithContacts = getContactListInfoIfExists(currentResults.results);
+
+        setCurrentResults((prev) => {
+          return {
+            ...prev,
+            results: resultsMatchedWithContacts,
+          };
+        });
+
+        setResultsMatchShouldUpdate(false);
+      }, 1000);
     }
-  }, [currentResults.offset]);
+  }, [resultsMatchShouldUpdate, getContactListInfoIfExists, currentResults.results]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        if (!displayinScrollTop) setDisplayingScrollTop(true);
+      } else {
+        if (displayinScrollTop) setDisplayingScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [displayinScrollTop]);
 
   const handleProcessFiltering = (filters: IFilterPodcastsSearchsOptions) => {
-    getPodcasts(0, filters);
-    setCurrentResults((prev) => {
-      return {
-        ...prev,
-        offset: 0,
-      };
-    });
-    setMainCategorySelected(filters.mainCategory.value);
+    setStoringFilters(filters);
+    getPodcasts(0, true, filters);
   };
 
   const totalItemsForMainCategory = () => {
-    if (mainCategorySelected === contactCategories.podcast) {
+    if (storingFilters?.mainCategory.value === contactCategories.podcast) {
       return totalForPodcasts;
     } else {
       return totalForEpisodes;
     }
   };
 
-  const handleOpenAddContactsModal = () => {
-    console.log('add to contacts!');
-  };
-
   const handleToggleLoadingView = (view: 'loadMore' | 'pagination') => {
     setLoadingView(view);
+
+    if (view === 'pagination') {
+      if (currentResults.offset !== resultsPerPage * 1) {
+        getPodcasts(0, true);
+      }
+    } else {
+      if (currentResults.offset !== resultsPerPage * 1) {
+        getPodcasts(0, true);
+      }
+    }
   };
 
   const handleToggleSelectAll = () => {
@@ -252,52 +279,219 @@ export function PodcastsSearch() {
     }
   };
 
+  const handleShowItemDetail = (item: IPodcastResult) => {
+    setDisplayingItemDetails(item);
+  };
+
+  const handleLoadMore = () => {
+    getPodcasts(currentResults.offset, false);
+  };
+
+  const handlePaginationChange = (_e: React.ChangeEvent<unknown>, page: number) => {
+    getPodcasts(page * resultsPerPage - resultsPerPage * 1, true);
+
+    window.scroll({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleGoTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleAddItemsToLists = (listsSelected: ISelectInputOptionNumeric[]) => {
+    setIsLoadingAddingContacts(true);
+
+    const itemsExistingInListsSelected: IContactListItemDetail[] = [];
+
+    listsSelected.map((list) => {
+      contactListsItems.map((item) => {
+        if (item.baseInfo.listId === list._id) {
+          itemsExistingInListsSelected.push(item);
+        }
+      });
+    });
+
+    let existingItem: string | null = null;
+    let existingInList: string | null = null;
+
+    let itemsToAdd: IPodcastResult[];
+
+    if (displayingItemDetails) {
+      itemsToAdd = [displayingItemDetails];
+    } else {
+      itemsToAdd = selectedItems;
+    }
+
+    itemsToAdd.map((selectedItem) => {
+      if (existingItem && existingInList) return;
+
+      itemsExistingInListsSelected.find((item) => {
+        if (item.baseInfo.name === selectedItem.title) {
+          const foundList = contactLists.find((list) => list._id === item.baseInfo.listId);
+          existingItem = item.baseInfo.name;
+          existingInList = foundList?.name ?? '';
+        }
+      });
+    });
+
+    if (existingItem && existingInList) {
+      setIsLoadingAddingContacts(false);
+      dispatch(
+        errorSideAlert(
+          `The contact item named "${existingItem}" is already stored in the ${existingInList} contact lists.`,
+        ),
+      );
+
+      return;
+    }
+
+    listsSelected.map((list) => {
+      if (list._id) {
+        dispatch(
+          addUserContactListItems({
+            listId: list._id,
+            itemType: itemsToAdd[0].type,
+            items: itemsToAdd,
+          }),
+        );
+      }
+    });
+
+    dispatch(getUserContactLists({ page: 0, noLimit: true }));
+    setResultsMatchShouldUpdate(true);
+
+    dispatch(successSideAlert('Contacts successfully added to lists'));
+    setIsLoadingAddingContacts(false);
+    setDisplayingAddToContacts(false);
+  };
+
   return (
-    <div className={styles.contactSearchesWrapper}>
-      <Typography variant="h3" color="primary.main" sx={{ m: '2rem 0' }}>
-        Podcasts search
-      </Typography>
-      <PodcastsSearchFiltering handleProcessFiltering={handleProcessFiltering} />
-      {currentResults.results.length ? (
-        <SearchResultsWrapper
-          itemsTypeLabel={mainCategorySelected}
-          totalItems={totalItemsForMainCategory()}
-          selectedItemsTotal={selectedItems.length}
-          totalResultsInDB={currentResults.totalInDB}
-          loadingView={loadingView}
-          allItemsAreSelected={currentResults.results.length === selectedItems.length}
-          handleOpenAddContactsModal={handleOpenAddContactsModal}
-          handleToggleLoadingView={handleToggleLoadingView}
-          handleToggleSelectAll={handleToggleSelectAll}
-        >
+    <>
+      <div className={styles.contactSearchesWrapper}>
+        <Typography variant="h3" color="primary.main" sx={{ m: '2rem 0' }}>
+          Podcasts search
+        </Typography>
+        {displayingItemDetails ? (
+          <PodcastDetail
+            itemInfo={displayingItemDetails}
+            handleCloseDetails={() => setDisplayingItemDetails(null)}
+            handleAddItemToContactLists={() => setDisplayingAddToContacts(true)}
+          />
+        ) : (
           <>
-            {currentResults.results.map((result, index) => {
-              return (
-                <PodcastItem
-                  key={index}
-                  selectedItems={selectedItems}
-                  itemInfo={result}
-                  handleItemSelection={handleItemSelection}
-                />
-              );
-            })}
+            <PodcastsSearchFiltering handleProcessFiltering={handleProcessFiltering} />
+            {currentResults.results.length ? (
+              <>
+                {isLoadingResults && (
+                  <div style={{ marginTop: '1rem' }}>
+                    <LoadingIcon />
+                  </div>
+                )}
+                <SearchResultsWrapper
+                  itemsTypeLabel={
+                    storingFilters?.mainCategory.value === contactCategories.podcastEpisode
+                      ? 'episode'
+                      : contactCategories.podcast
+                  }
+                  totalItems={totalItemsForMainCategory()}
+                  selectedItemsTotal={selectedItems.length}
+                  totalResultsInDB={currentResults.totalInDB}
+                  loadingView={loadingView}
+                  allItemsAreSelected={currentResults.results.length === selectedItems.length}
+                  handleOpenAddContactsModal={() => setDisplayingAddToContacts(true)}
+                  handleToggleLoadingView={handleToggleLoadingView}
+                  handleToggleSelectAll={handleToggleSelectAll}
+                >
+                  <>
+                    {currentResults.results.map((result, index) => {
+                      return (
+                        <PodcastItem
+                          key={index}
+                          selectedItems={selectedItems}
+                          itemInfo={result}
+                          handleItemSelection={handleItemSelection}
+                          handleShowItemDetail={handleShowItemDetail}
+                        />
+                      );
+                    })}
+                  </>
+                </SearchResultsWrapper>
+                <div className={styles.loadingViewControlls}>
+                  {isLoadingResults ? (
+                    <LoadingIcon />
+                  ) : (
+                    <>
+                      {loadingView === 'loadMore' ? (
+                        <Button variant="contained" color="primary" onClick={handleLoadMore}>
+                          Load more
+                        </Button>
+                      ) : (
+                        <Pagination
+                          variant="outlined"
+                          shape="rounded"
+                          color="primary"
+                          count={30} // Fixed max of results comming for podcasts.
+                          page={Math.floor(currentResults.offset / resultsPerPage)}
+                          onChange={handlePaginationChange}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {isLoadingResults ? (
+                  <div className={styles.isLoadingWrapper}>
+                    <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
+                  </div>
+                ) : (
+                  <div className={styles.isLoadingWrapper}>
+                    <Typography variant="body1" color="text.secondary">
+                      No results to show.
+                    </Typography>
+                  </div>
+                )}
+              </>
+            )}
+            <AnimatePresence>
+              {displayinScrollTop && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className={styles.goTopWrapper}
+                >
+                  <Tooltip title="Scroll top" placement="top">
+                    <IconButton
+                      sx={(theme) => ({
+                        border: '1px solid #f1f2f3',
+                        boxShadow: theme.palette.primary.generalBoxShadow,
+                      })}
+                      onClick={handleGoTop}
+                    >
+                      <ArrowUpwardIcon sx={(theme) => ({ color: theme.palette.text.secondary })} />
+                    </IconButton>
+                  </Tooltip>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </>
-        </SearchResultsWrapper>
-      ) : (
-        <>
-          {isLoading ? (
-            <div className={styles.isLoadingWrapper}>
-              <LoadingDisplay type={loadingDisplayTypes.entireComponent} />
-            </div>
-          ) : (
-            <div className={styles.isLoadingWrapper}>
-              <Typography variant="body1" color="text.secondary">
-                No results to show.
-              </Typography>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+        )}
+      </div>
+      <AddToContactsModal
+        isOpen={displayingAddToContacts}
+        selectedItemsAmount={selectedItems.length}
+        handleClose={() => setDisplayingAddToContacts(false)}
+        handleAddItemsToLists={handleAddItemsToLists}
+        isLoading={isLoadingAddingContacts}
+      />
+    </>
   );
 }

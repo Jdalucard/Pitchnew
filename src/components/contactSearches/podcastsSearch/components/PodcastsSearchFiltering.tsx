@@ -11,13 +11,14 @@ import {
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useAppDispatch } from '../../../../redux/hooks';
-import { contactCategories, mediaOutletCategories } from '../../../../constants';
+import { contactCategories } from '../../../../constants';
 import type { Dayjs } from 'dayjs';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { getGenres, getLanguages } from '../../../../redux/searchParameters';
 import styles from '../../ContactSearches.module.css';
-import { IPodcastsCategory, IPodcastsGenre } from '../PodcastsSearch';
+import { ISelectInputOption, ISelectInputOptionNumeric } from '../../../../types';
+import { MultiSelectInput } from '../../../../common';
 
 // const mainCategoriesForMediaOutlets: ICategorySelect[] = [
 //   { label: 'Magazines', value: mediaOutletCategories.magazine },
@@ -28,10 +29,10 @@ import { IPodcastsCategory, IPodcastsGenre } from '../PodcastsSearch';
 // ];
 
 export interface IFilterPodcastsSearchsOptions {
-  mainCategory: IPodcastsCategory;
+  mainCategory: ISelectInputOption;
   keywords: string;
-  genre: IPodcastsGenre;
-  language: IPodcastsCategory;
+  genres: ISelectInputOptionNumeric[];
+  language: ISelectInputOption;
   publishedBefore: Dayjs | null;
   publishedAfter: Dayjs | null;
 }
@@ -45,13 +46,13 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
 
   const [filtersEvaluated, setFiltersEvaluated] = useState(true);
   const [displayingMoreFilters, setDisplayingMoreFilter] = useState(false);
-  const [genresList, setGenresList] = useState<IPodcastsGenre[]>([]);
-  const [languagesList, setLanguagesList] = useState<IPodcastsCategory[]>([]);
+  const [genresList, setGenresList] = useState<ISelectInputOptionNumeric[]>([]);
+  const [languagesList, setLanguagesList] = useState<ISelectInputOption[]>([]);
   const [filterOptions, setFilerOptions] = useState<IFilterPodcastsSearchsOptions>({
     mainCategory: { label: 'Podcasts', value: contactCategories.podcast },
     keywords: '',
-    genre: { label: 'All genres', value: 0 },
-    language: { label: 'All languages', value: 'all' },
+    genres: [],
+    language: { label: 'Any language', value: 'Any language' },
     publishedBefore: null,
     publishedAfter: null,
   });
@@ -73,7 +74,7 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
   }, [fetchParameters]);
 
   const handleFiltersChange = (
-    event: SelectChangeEvent<string> | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.target;
     setFilerOptions((prev) => {
@@ -82,6 +83,21 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
         [name]: value,
       };
     });
+
+    setFiltersEvaluated(false);
+  };
+
+  const handleLanguagesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const valueSelected = languagesList.find((language) => language.value === event.target.value);
+
+    if (valueSelected) {
+      setFilerOptions((prev) => {
+        return {
+          ...prev,
+          language: valueSelected,
+        };
+      });
+    }
 
     setFiltersEvaluated(false);
   };
@@ -97,11 +113,22 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
     setFiltersEvaluated(false);
   };
 
-  const handleFiltersMainCategoryChange = (selected: IPodcastsCategory) => {
+  const handleFiltersMainCategoryChange = (selected: ISelectInputOption) => {
     setFilerOptions((prev) => {
       return {
         ...prev,
         mainCategory: selected,
+      };
+    });
+
+    setFiltersEvaluated(false);
+  };
+
+  const handleGenresChange = (genres: ISelectInputOptionNumeric[]) => {
+    setFilerOptions((prev) => {
+      return {
+        ...prev,
+        genres,
       };
     });
 
@@ -189,44 +216,45 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
           >
             {displayingMoreFilters && (
               <>
-                {!!genresList?.length && (
-                  <TextField
-                    name="genre"
-                    label="Genres"
-                    value={filterOptions.genre}
-                    onChange={handleFiltersChange}
-                    className={styles.filterInputSelectWrapper}
-                    select
-                  >
-                    <MenuItem value="all">All genres</MenuItem>
-                    {genresList.map((genre, index) => {
-                      return (
-                        <MenuItem key={index} value={genre.label}>
-                          {genre.label}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
-                )}
-                {!!languagesList?.length && (
-                  <TextField
-                    name="language"
-                    label="Languages"
-                    value={filterOptions.language}
-                    onChange={handleFiltersChange}
-                    className={styles.filterInputSelectWrapper}
-                    select
-                  >
-                    <MenuItem value="all">All locations</MenuItem>
-                    {languagesList.map((language, index) => {
-                      return (
-                        <MenuItem key={index} value={language.label}>
-                          {language.value}
-                        </MenuItem>
-                      );
-                    })}
-                  </TextField>
-                )}
+                <div
+                  className={styles.multiSelectInputWrapper}
+                  style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {!!genresList?.length && (
+                    <MultiSelectInput
+                      inputLabel="Genres"
+                      inputWidth="29rem"
+                      options={genresList}
+                      selectedOptions={filterOptions.genres}
+                      handleChange={handleGenresChange}
+                    />
+                  )}
+                  {!!languagesList?.length && (
+                    <TextField
+                      name="language"
+                      label="Language"
+                      value={filterOptions.language.value}
+                      onChange={handleLanguagesChange}
+                      className={styles.filterInputSelectWrapper}
+                      fullWidth
+                      select
+                    >
+                      {languagesList.map((language, index) => {
+                        return (
+                          <MenuItem key={index} value={language.label}>
+                            {language.value}
+                          </MenuItem>
+                        );
+                      })}
+                    </TextField>
+                  )}
+                </div>
                 <div className={styles.filterInputSelectWrapper}>
                   <DemoContainer components={['DatePicker']}>
                     <DatePicker
@@ -251,7 +279,7 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
           <TextField
             type="text"
             label="Keyword search"
-            name="keyword"
+            name="keywords"
             value={filterOptions.keywords}
             onChange={handleFiltersChange}
             fullWidth

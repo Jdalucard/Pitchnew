@@ -1,12 +1,10 @@
-import { Dayjs } from 'dayjs';
-
 export interface ISearchParameters {
   type: string;
   genre?: string;
   language?: string;
   keywords?: string;
-  publishedBefore?: Dayjs | null;
-  publishedAfter?: Dayjs | null;
+  publishedBefore?: number | null;
+  publishedAfter?: number | null;
   resultsPerPage?: number;
   offset?: number;
   pagination?: string;

@@ -1,3 +1,3 @@
 export * from './PodcastsSearchFiltering';
 export * from './PodcastItem';
-export * from './PodcastEpisodeItem';
+export * from './PodcastDetail';

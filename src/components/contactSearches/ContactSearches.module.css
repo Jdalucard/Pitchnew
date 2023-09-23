@@ -41,7 +41,7 @@
 
 .searchResultsWrapper {
   margin-top: 1rem;
-  width: 90%;
+  width: 80%;
 }
 
 .resultsHeaderCorrector {
@@ -54,7 +54,7 @@
 }
 
 .searchResultsHeader {
-  margin-top: 1.1rem;
+  margin-top: 1rem;
   border: 1px solid #fff;
   width: 100%;
   background-color: #f1f2f3;
@@ -113,7 +113,7 @@
 }
 
 .itemImageWrapper {
-  width: 6rem;
+  width: 8rem;
 }
 
 .itemImageWrapper img {
@@ -121,12 +121,12 @@
 }
 
 .textDescriptionWrapper {
-  width: 60%;
+  width: 90%;
 }
 
 .ratingsWrapper {
   display: flex;
-  gap: 1rem;
+  gap: 0.25rem;
   margin-bottom: 1rem;
   align-items: center;
 }
@@ -138,9 +138,10 @@
 }
 
 .listTag {
-  background-color: rgba(91, 190, 85, 1);
+  background-color: rgba(88, 86, 214, 0.1);
   border-radius: 4px;
-  padding: 0.25rem;
+  border: 1px solid #fff;
+  padding: 0 0.25rem;
 }
 
 .searchItem {
@@ -160,4 +161,118 @@
 
 .searchItem.itemSelected:nth-of-type(even) {
   background-color: rgba(88, 86, 214, 0.1);
+}
+
+.descriptionAndSeeMore {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.visibilityButton {
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.loadingViewControlls {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  height: 2rem;
+}
+
+.goTopWrapper {
+  position: fixed;
+  bottom: 2rem;
+  right: 1rem;
+}
+
+.modalWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addContactsModalWrapper {
+  background-color: #f1f2f3;
+  border-radius: 4px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30rem;
+}
+
+.contactListsWrapper {
+  max-height: 10rem;
+  overflow-y: scroll;
+  margin-bottom: 2rem;
+}
+
+.multiSelectInputWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.detailItemsControlsWrapper {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.detailsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: #f1f2f3;
+  margin-top: 1rem;
+  width: 80%;
+}
+
+.twoColumnsDetailsWrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.detailsImageWrapper {
+  width: 9rem;
+  height: 9rem;
+}
+
+.detailsImageWrapper img {
+  border-radius: 4px;
+}
+
+.detailsDescriptionWrapper {
+  width: 85%;
+  border-left: 1px solid #fff;
+  padding-left: 1rem;
+}
+
+.reviewsListsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  background-color: #fff;
+  padding: 1rem;
+  max-height: 70%;
+  overflow-y: scroll;
+  border-radius: 4px;
+  gap: 0.25rem;
+}
+
+.reviewWrapper {
+  border: 1px solid #f1f2f3;
+  padding: 1rem;
+  width: 90%;
 }

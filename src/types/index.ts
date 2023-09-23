@@ -6,3 +6,4 @@ export * from './contactListItem';
 export * from './contactSequence';
 export * from './email';
 export * from './outreachSequenceTypes';
+export * from './selectInputOption';

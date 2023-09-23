@@ -4,7 +4,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { userSelectors } from '../../redux/user';
 import { LoadingDisplay } from '../../common';
 import { loadingDisplayTypes } from '../../types';
-import { useFetchUser, useGetUserContactItems } from '../../hooks';
+import { useFetchUser } from '../../hooks';
 import Templates from '../templates';
 import Header from '../header';
 import Navigation from '../navigation';

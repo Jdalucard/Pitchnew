@@ -24,10 +24,7 @@ export interface IContactListItemDetailBaseInfo {
   image: string | null;
   category: contactCategories;
   pitched: boolean;
-  tag: {
-    listName: string;
-    listId: string;
-  };
+  listId: string;
   email?: string; // podcasts
   position?: string; // medias && events
   eventType?: string; // events
@@ -108,58 +105,36 @@ export interface IContactListItemDetail {
   details?: IContactListItemDetailDetails;
 }
 
-export interface IContactListsItems {
-  evaluated: boolean;
-  items: IContactListItemDetail[];
-}
-
 interface IState {
   isLoading: boolean;
   userContactLists: IUserContactList[];
-  contactListsItems: IContactListsItems;
+  contactListsItems: IContactListItemDetail[];
 }
 
 const initialState: IState = {
   isLoading: false,
   userContactLists: [],
-  contactListsItems: {
-    evaluated: false,
-    items: [],
-  },
+  contactListsItems: [],
 };
 
 export const contactListSlice = createSlice({
   name: contactListStoreKey,
   initialState,
   reducers: {
-    storeContactListItem: (state, action) => {
-      const item = action.payload;
-
-      state.contactListsItems = {
-        ...state.contactListsItems,
-        items: [...state.contactListsItems.items, item],
-      };
-    },
-    setItemsEvaluated: (state) => {
-      state.contactListsItems = {
-        ...state.contactListsItems,
-        evaluated: true,
-      };
+    storeContactListItems: (state, action) => {
+      state.contactListsItems = action.payload;
     },
     updateItemsPostRemoval: (state, action) => {
       const newItems: IContactListItemDetail[] = [];
       const deletedItemIds = action.payload;
 
-      state.contactListsItems.items.map((existingItem) => {
+      state.contactListsItems.map((existingItem) => {
         if (!deletedItemIds.includes(existingItem.baseInfo.id)) {
           newItems.push(existingItem);
         }
       });
 
-      state.contactListsItems = {
-        ...state.contactListsItems,
-        items: newItems,
-      };
+      state.contactListsItems = newItems;
     },
   },
   extraReducers(builder) {
@@ -300,5 +275,4 @@ export const contactListSlice = createSlice({
   },
 });
 
-export const { storeContactListItem, setItemsEvaluated, updateItemsPostRemoval } =
-  contactListSlice.actions;
+export const { storeContactListItems, updateItemsPostRemoval } = contactListSlice.actions;

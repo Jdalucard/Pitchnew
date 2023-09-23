@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useGetUserContactItems } from '../../hooks';
 import { IContactListItemDetail, contactListSelectors } from '../../redux/contactList';
 import { useAppSelector } from '../../redux/hooks';
 import {
@@ -14,23 +13,22 @@ import { contactCategories } from '../../constants';
 import styles from './Contacts.module.css';
 
 export function Contacts() {
+  const userContactLists = useAppSelector(contactListSelectors.contactLists);
   const userContactItems = useAppSelector(contactListSelectors.contactListsItems);
 
-  const [displayingItems, setDisplayingItems] = useState<IContactListItemDetail[]>(
-    userContactItems.items,
-  );
+  const [displayingItems, setDisplayingItems] = useState<IContactListItemDetail[]>([]);
   const [displayingDetailItem, setDisplayingDetailItem] = useState<IContactListItemDetail | null>(
     null,
   );
 
   useEffect(() => {
-    setDisplayingItems(userContactItems.items);
+    setDisplayingItems(userContactItems);
   }, [userContactItems]);
 
   const handleProcessFiltering = (filters: IFilterContactsOptions) => {
     const { category, pitchState, contactList, keyword } = filters;
 
-    let newItemsDisplaying = userContactItems.items;
+    let newItemsDisplaying = userContactItems;
     if (category !== 'all') {
       newItemsDisplaying = newItemsDisplaying.filter((item) => {
         if (
@@ -56,8 +54,10 @@ export function Contacts() {
     }
 
     if (contactList !== 'all') {
+      const selectedContactList = userContactLists.find((list) => list.name === contactList);
+
       newItemsDisplaying = newItemsDisplaying.filter(
-        (item) => item.baseInfo.tag.listId === contactList,
+        (item) => item.baseInfo.listId === selectedContactList?._id,
       );
     }
 
@@ -86,7 +86,7 @@ export function Contacts() {
               </Tooltip>
             </div>
           </div>
-          <DetailedItem info={displayingDetailItem} />
+          <DetailedItem info={displayingDetailItem} userContactLists={userContactLists} />
         </>
       ) : (
         <>

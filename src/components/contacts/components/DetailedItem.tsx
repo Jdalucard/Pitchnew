@@ -19,7 +19,7 @@ import defaultImage from '../../../assets/logos/pitchdb-logo-short.png';
 import { formatToTitleCase, convertToMarkdown, formatDate } from '../../../utils';
 import { PodcastEpisodes } from '.';
 import { contactCategories, outreachSequenceStates, socialNetworks } from '../../../constants';
-import { ILocation, IOutreachSequence } from '../../../types';
+import { ILocation, IOutreachSequence, IUserContactList } from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getSequenceByContactId } from '../../../redux/outreachSequence';
 import { getSequenceIcon } from './utils';
@@ -30,9 +30,10 @@ import { useNavigate } from 'react-router-dom';
 
 interface IProps {
   info: IContactListItemDetail;
+  userContactLists: IUserContactList[];
 }
 
-export function DetailedItem({ info }: IProps) {
+export function DetailedItem({ info, userContactLists }: IProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const userPrimaryEmailAccount = useAppSelector(emailSelectors.primaryEmailAccount);
@@ -41,6 +42,8 @@ export function DetailedItem({ info }: IProps) {
     info.baseInfo.category === contactCategories.podcastEpisode;
   const isConnectedButInactive =
     info.baseInfo.pitched && !info.details?.connected && !info.details?.email;
+
+  const listFound = userContactLists.find((list) => list._id === info.baseInfo.listId);
 
   const [socialLinks, setSocialLinks] = useState({
     facebook: '',
@@ -121,19 +124,19 @@ export function DetailedItem({ info }: IProps) {
   };
 
   const handleDeleteItem = async (item: IContactListItemDetailBaseInfo) => {
-    const { tag, id, name } = item;
+    const { listId, id, name } = item;
 
     const isConfirmed = await dispatch(
       openDeleteConfirmation({
         item: 'contact',
-        message: `Are you sure you want to remove ${name}'s contact from the ${tag.listName} list?`,
+        message: `Are you sure you want to remove ${name}'s contact from the ${listFound?.name} list?`,
       }),
     ).unwrap();
 
     if (isConfirmed) {
       const result = await dispatch(
         deleteUserContactListItems({
-          listId: tag.listId,
+          listId: listId,
           listItemIds: [id],
         }),
       ).unwrap();
@@ -149,7 +152,7 @@ export function DetailedItem({ info }: IProps) {
 
     const newSequence = {
       itemSelector: info.details?.id ?? '',
-      listId: item.baseInfo.tag.listId,
+      listId: item.baseInfo.listId,
       listItemId: item.baseInfo.id,
     };
   };
@@ -193,7 +196,7 @@ export function DetailedItem({ info }: IProps) {
               </Typography>
               <div className={styles.itemTag}>
                 <Typography variant="caption" color="text.primaryInverted" fontWeight="bold">
-                  {info.baseInfo.tag.listName}
+                  {listFound?.name}
                 </Typography>
               </div>
             </div>
@@ -236,7 +239,7 @@ export function DetailedItem({ info }: IProps) {
               <div className={styles.ratingWrapper}>
                 <StarRateIcon
                   fontSize="small"
-                  sx={(theme) => ({ color: theme.palette.text.secondary })}
+                  sx={(theme) => ({ color: theme.palette.primary.starYellow })}
                 />
                 <Typography variant="body2" color="text.secondary">
                   {info.details.rating.value.toFixed(2)} | {info.details.rating.reviewsAmount}{' '}
