@@ -4,14 +4,14 @@ import FormControl from '@mui/material/FormControl';
 import Chip from '@mui/material/Chip';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { Box, Select, SelectChangeEvent } from '@mui/material';
-import { ISelectInputOptionNumeric } from '../types';
+import { ISelectInputOption } from '../types';
 
 interface IProps {
   inputLabel: string;
   inputWidth: string;
-  options: ISelectInputOptionNumeric[];
-  selectedOptions: ISelectInputOptionNumeric[];
-  handleChange: (options: ISelectInputOptionNumeric[]) => void;
+  options: ISelectInputOption[];
+  selectedOptions: ISelectInputOption[];
+  handleChange: (options: ISelectInputOption[]) => void;
 }
 
 export const MultiSelectInput: React.FC<IProps> = ({
@@ -36,18 +36,18 @@ export const MultiSelectInput: React.FC<IProps> = ({
     if (values) {
       let selectedValues: string[];
       if (typeof values == 'string' || typeof values == 'number') {
-        selectedValues = [values.toString()];
+        selectedValues = [values];
       } else {
-        selectedValues = values.map((value) => value.toString());
+        selectedValues = values;
       }
 
       // Convert string to proper IOption
-      const selectedOptions: ISelectInputOptionNumeric[] = [];
+      const selectedOptions: ISelectInputOption[] = [];
 
       if (options.length) {
         options.map((option) => {
           selectedValues.map((selected) => {
-            if (option.value.toString() == selected) {
+            if (option.value === selected) {
               selectedOptions.push(option);
             }
           });
@@ -58,7 +58,7 @@ export const MultiSelectInput: React.FC<IProps> = ({
     }
   };
 
-  const handleDelete = (erasingItemValue: number) => {
+  const handleDelete = (erasingItemValue: string) => {
     const newSelectedOnesAfterDelete = selectedOptions.filter(
       (option) => option.value !== erasingItemValue,
     );
@@ -71,7 +71,7 @@ export const MultiSelectInput: React.FC<IProps> = ({
       <InputLabel>{inputLabel}</InputLabel>
       <Select
         multiple
-        value={selectedOptions.map((option) => option.value.toString())}
+        value={selectedOptions.map((option) => option.value)}
         onChange={handleInputChange}
         input={<OutlinedInput label={inputLabel} sx={{ width: inputWidth }} />}
         MenuProps={menuProps}
@@ -89,7 +89,7 @@ export const MultiSelectInput: React.FC<IProps> = ({
         )}
       >
         {options.map((option, index) => (
-          <MenuItem key={index} value={option.value.toString()}>
+          <MenuItem key={index} value={option.value}>
             {option.label}
           </MenuItem>
         ))}

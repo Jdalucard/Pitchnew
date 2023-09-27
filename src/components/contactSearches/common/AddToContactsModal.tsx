@@ -3,12 +3,7 @@ import { Button, Modal, Typography } from '@mui/material';
 import { useAppSelector } from '../../../redux/hooks';
 import { contactListSelectors } from '../../../redux/contactList';
 import { LoadingDisplay, MultiSelectInput } from '../../../common';
-import {
-  IContactListItem,
-  ISelectInputOptionNumeric,
-  IUserContactList,
-  loadingDisplayTypes,
-} from '../../../types';
+import { ISelectInputOption, IUserContactList, loadingDisplayTypes } from '../../../types';
 import styles from '../ContactSearches.module.css';
 
 interface IProps {
@@ -16,7 +11,7 @@ interface IProps {
   selectedItemsAmount: number;
   isLoading: boolean;
   handleClose: () => void;
-  handleAddItemsToLists: (listsSelected: ISelectInputOptionNumeric[]) => void;
+  handleAddItemsToLists: (listsSelected: ISelectInputOption[]) => void;
 }
 
 export function AddToContactsModal({
@@ -28,16 +23,16 @@ export function AddToContactsModal({
 }: IProps) {
   const contactLists = useAppSelector(contactListSelectors.contactLists);
 
-  const [selectedLists, setSelectedLists] = useState<ISelectInputOptionNumeric[]>([]);
+  const [selectedLists, setSelectedLists] = useState<ISelectInputOption[]>([]);
 
   const convertContactListsToSelectOptions = (listToEvaluate: IUserContactList[]) => {
-    const options: ISelectInputOptionNumeric[] = [];
+    const options: ISelectInputOption[] = [];
 
-    listToEvaluate.map((list, index) => {
+    listToEvaluate.map((list) => {
       options.push({
         _id: list._id,
         label: list.name,
-        value: index,
+        value: list.name,
       });
     });
 

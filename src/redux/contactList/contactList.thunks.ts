@@ -6,6 +6,10 @@ import { IUserContactList, IContactSequence } from '../../types';
 import { IContactListItemDetail, storeContactListItems } from '.';
 import { contactCategories } from '../../constants';
 import { IPodcastResult } from '../../components/contactSearches/podcastsSearch/PodcastsSearch';
+import { IEventResult } from '../../components/contactSearches/eventsSearch/EventsSearch';
+import { IMediaOutletResult } from '../../components/contactSearches/mediaOutletsSearch/MediaOutletsSearch';
+import { IConferenceResult } from '../../components/contactSearches/conferencesSearch/ConferencesSearch';
+import { ISpeakerResult } from '../../components/contactSearches/speakersSearch/SpeakersSearch';
 
 const contactListsPath = `${import.meta.env.VITE_API_BASE_URL}/lists`;
 
@@ -23,7 +27,12 @@ interface ICreateUserContactList {
 interface IAddItemsToUserContactList {
   listId: string;
   itemType: string;
-  items: IPodcastResult[];
+  items:
+    | IPodcastResult[]
+    | IEventResult[]
+    | IMediaOutletResult[]
+    | IConferenceResult[]
+    | ISpeakerResult[];
 }
 
 interface IGetContactListItems {
@@ -142,7 +151,6 @@ export const getUserContactLists = createAsyncThunk(
               organization,
               schoolName,
               enrichment,
-              website,
               position,
               description,
               firstName,
@@ -159,8 +167,8 @@ export const getUserContactLists = createAsyncThunk(
               places,
             } = eventOrganization;
 
-            const itemName = dataFileType === 2 ? organization : schoolName;
-            const logo = enrichment ? enrichment.logo : `https://logo.clearbit.com/${website}`;
+            const itemName = dataFileType === 1 ? schoolName : organization;
+            const logo = enrichment ? enrichment.logo : '';
 
             listItemsMapped.push({
               baseInfo: {

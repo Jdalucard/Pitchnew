@@ -39,3 +39,8 @@ export interface IUserContactList {
   sponsors?: ISponsorsObject[] | null;
   guests?: IGuestsObject[] | null;
 }
+
+export interface IListTag {
+  listId: string;
+  listName: string;
+}

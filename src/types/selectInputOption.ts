@@ -1,6 +1,7 @@
 export interface ISelectInputOption {
   _id?: string;
   parentId?: string;
+  refId?: string;
   label: string;
   value: string;
 }

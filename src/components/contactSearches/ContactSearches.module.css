@@ -240,7 +240,6 @@
 .twoColumnsDetailsWrapper {
   display: flex;
   gap: 1rem;
-  align-items: center;
 }
 
 .detailsImageWrapper {
@@ -256,6 +255,9 @@
   width: 85%;
   border-left: 1px solid #fff;
   padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .reviewsListsWrapper {
@@ -275,4 +277,36 @@
   border: 1px solid #f1f2f3;
   padding: 1rem;
   width: 90%;
+}
+
+.itemWebsite {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.itemWebsite {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.itemWebsite a {
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: rgba(13 13, 13, 0.7);
+}
+
+.itemWebsite a:hover {
+  text-decoration: underline;
+  color: rgb(13 13, 13);
+}
+
+.detailFieldWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  align-items: center;
 }

@@ -4,6 +4,7 @@ import { Button, InputAdornment, MenuItem, SelectChangeEvent, TextField } from '
 import { useAppSelector } from '../../../redux/hooks';
 import { contactListSelectors } from '../../../redux/contactList';
 import styles from '../Contacts.module.css';
+import { contactCategories } from '../../../constants';
 
 export interface IFilterContactsOptions {
   category: string;
@@ -54,11 +55,11 @@ export function ContactsFiltering({ handleProcessFiltering }: IProps) {
             className={styles.filterInputSelectWrapper}
           >
             <MenuItem value="all">All categories</MenuItem>
-            <MenuItem value="podcast">Podcasts</MenuItem>
-            <MenuItem value="eventOrganization">Local associations</MenuItem>
-            <MenuItem value="speaker">Speakers</MenuItem>
-            <MenuItem value="mediaOutlet">Media outlets</MenuItem>
-            <MenuItem value="conference">Conferences</MenuItem>
+            <MenuItem value={contactCategories.podcast}>Podcasts</MenuItem>
+            <MenuItem value={contactCategories.eventOrganization}>Local associations</MenuItem>
+            <MenuItem value={contactCategories.speaker}>Speakers</MenuItem>
+            <MenuItem value={contactCategories.mediaOutlet}>Media outlets</MenuItem>
+            <MenuItem value={contactCategories.conference}>Conferences</MenuItem>
           </TextField>
           {userLists?.length && (
             <TextField

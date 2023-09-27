@@ -17,11 +17,19 @@ import {
 } from '../../../redux/contactList';
 import { AddToContactsModal, SearchResultsWrapper } from '../common';
 import { LoadingDisplay, LoadingIcon } from '../../../common';
-import { ISelectInputOption, ISelectInputOptionNumeric, loadingDisplayTypes } from '../../../types';
+import {
+  IListTag,
+  ISearchTransformedParameters,
+  ISelectInputOption,
+  ISelectInputOptionNumeric,
+  contactSearchTypes,
+  loadingDisplayTypes,
+} from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { errorSideAlert, successSideAlert } from '../../../redux/alerts';
 import { PodcastDetail, PodcastItem } from './components';
 import styles from '../ContactSearches.module.css';
+import { saveUserSearch } from '../../../redux/searches/userSavedSearches';
 
 interface IReview {
   rating: number;
@@ -29,11 +37,6 @@ interface IReview {
   title: string;
   author: string;
   comment: string;
-}
-
-interface IListTag {
-  listName: string;
-  listId: string;
 }
 
 export interface IPodcastResult {
@@ -61,18 +64,6 @@ interface ISearchResults {
   offset: number;
 }
 
-interface ISearchTransformedParameters {
-  type: string;
-  genreIds?: string;
-  language?: string;
-  keywords?: string;
-  publishedBefore?: number | null;
-  publishedAfter?: number | null;
-  resultsPerPage?: number;
-  offset?: number;
-  pagination?: string;
-}
-
 const totalForPodcasts = 3131282;
 const totalForEpisodes = 168863851;
 const resultsPerPage = 10;
@@ -97,7 +88,6 @@ export function PodcastsSearch() {
   const [storingFilters, setStoringFilters] = useState<IFilterPodcastsSearchsOptions | null>(null);
   const [resultsMatchShouldUpdate, setResultsMatchShouldUpdate] = useState(false);
 
-  console.log(currentResults);
   const getContactListInfoIfExists = useCallback(
     (results: IPodcastResult[]) => {
       const itemsThatMatch: IPodcastResult[] = [];
@@ -150,7 +140,7 @@ export function PodcastsSearch() {
         const { keywords, genres, language, publishedBefore, publishedAfter } = filters;
 
         if (keywords) searchParameters.keywords = keywords;
-        if (genres.length) {
+        if (genres.length && genres[0].value !== 'all') {
           searchParameters.genreIds = genres.map((genre) => genre.value).join('_');
         }
         if (language && language.value !== 'all') searchParameters.language = language.value;
@@ -176,11 +166,22 @@ export function PodcastsSearch() {
             return {
               results: newResults,
               totalInDB: response.total,
-              offset: response.offset,
+              offset: response.offset ?? newResults.length,
             };
           });
 
           setResultsMatchShouldUpdate(true);
+
+          if (isResettingValue) {
+            dispatch(
+              saveUserSearch({
+                type: contactSearchTypes.podcastSearch,
+                keyword: filters?.keywords ?? '',
+                results: response.total,
+                filters: searchParameters,
+              }),
+            );
+          }
         }
         setIsLoadingResults(false);
       });
@@ -246,14 +247,8 @@ export function PodcastsSearch() {
   const handleToggleLoadingView = (view: 'loadMore' | 'pagination') => {
     setLoadingView(view);
 
-    if (view === 'pagination') {
-      if (currentResults.offset !== resultsPerPage * 1) {
-        getPodcasts(0, true);
-      }
-    } else {
-      if (currentResults.offset !== resultsPerPage * 1) {
-        getPodcasts(0, true);
-      }
+    if (currentResults.offset > resultsPerPage * 1) {
+      getPodcasts(0, true);
     }
   };
 
@@ -303,7 +298,7 @@ export function PodcastsSearch() {
     });
   };
 
-  const handleAddItemsToLists = (listsSelected: ISelectInputOptionNumeric[]) => {
+  const handleAddItemsToLists = (listsSelected: ISelectInputOption[]) => {
     setIsLoadingAddingContacts(true);
 
     const itemsExistingInListsSelected: IContactListItemDetail[] = [];
@@ -473,6 +468,7 @@ export function PodcastsSearch() {
                       sx={(theme) => ({
                         border: '1px solid #f1f2f3',
                         boxShadow: theme.palette.primary.generalBoxShadow,
+                        backgroundColor: theme.palette.text.secondaryInverted,
                       })}
                       onClick={handleGoTop}
                     >

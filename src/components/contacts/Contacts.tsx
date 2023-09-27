@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IconButton, Tooltip, Typography } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { AnimatePresence, motion } from 'framer-motion';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { IContactListItemDetail, contactListSelectors } from '../../redux/contactList';
 import { useAppSelector } from '../../redux/hooks';
 import {
@@ -16,10 +17,25 @@ export function Contacts() {
   const userContactLists = useAppSelector(contactListSelectors.contactLists);
   const userContactItems = useAppSelector(contactListSelectors.contactListsItems);
 
+  const [displayinScrollTop, setDisplayingScrollTop] = useState(false);
   const [displayingItems, setDisplayingItems] = useState<IContactListItemDetail[]>([]);
   const [displayingDetailItem, setDisplayingDetailItem] = useState<IContactListItemDetail | null>(
     null,
   );
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        if (!displayinScrollTop) setDisplayingScrollTop(true);
+      } else {
+        if (displayinScrollTop) setDisplayingScrollTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [displayinScrollTop]);
 
   useEffect(() => {
     setDisplayingItems(userContactItems);
@@ -73,21 +89,21 @@ export function Contacts() {
     setDisplayingItems(newItemsDisplaying);
   };
 
+  const handleGoTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <div className={styles.mainWrapper}>
       {displayingDetailItem ? (
-        <>
-          <div className={styles.goBackAndTitle}>
-            <div>
-              <Tooltip title="Go back" placement="right">
-                <IconButton onClick={() => setDisplayingDetailItem(null)}>
-                  <ArrowBackIcon color="primary" fontSize="large" />
-                </IconButton>
-              </Tooltip>
-            </div>
-          </div>
-          <DetailedItem info={displayingDetailItem} userContactLists={userContactLists} />
-        </>
+        <DetailedItem
+          info={displayingDetailItem}
+          userContactLists={userContactLists}
+          handleCloseDetails={() => setDisplayingDetailItem(null)}
+        />
       ) : (
         <>
           <Typography variant="h3" color="text.primary" m="2rem 0">
@@ -100,6 +116,30 @@ export function Contacts() {
           />
         </>
       )}
+      <AnimatePresence>
+        {displayinScrollTop && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className={styles.goTopWrapper}
+          >
+            <Tooltip title="Scroll top" placement="top">
+              <IconButton
+                sx={(theme) => ({
+                  border: '1px solid #f1f2f3',
+                  boxShadow: theme.palette.primary.generalBoxShadow,
+                  backgroundColor: theme.palette.text.secondaryInverted,
+                })}
+                onClick={handleGoTop}
+              >
+                <ArrowUpwardIcon sx={(theme) => ({ color: theme.palette.text.secondary })} />
+              </IconButton>
+            </Tooltip>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

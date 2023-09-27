@@ -1,13 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import SavedSearchIcon from '@mui/icons-material/SavedSearch';
-import {
-  Button,
-  ButtonGroup,
-  InputAdornment,
-  MenuItem,
-  SelectChangeEvent,
-  TextField,
-} from '@mui/material';
+import { Button, ButtonGroup, InputAdornment, MenuItem, TextField } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useAppDispatch } from '../../../../redux/hooks';
@@ -16,22 +9,14 @@ import type { Dayjs } from 'dayjs';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { getGenres, getLanguages } from '../../../../redux/searchParameters';
-import styles from '../../ContactSearches.module.css';
-import { ISelectInputOption, ISelectInputOptionNumeric } from '../../../../types';
+import { ISelectInputOption } from '../../../../types';
 import { MultiSelectInput } from '../../../../common';
-
-// const mainCategoriesForMediaOutlets: ICategorySelect[] = [
-//   { label: 'Magazines', value: mediaOutletCategories.magazine },
-//   { label: 'Newspapers', value: mediaOutletCategories.newspaper },
-//   { label: 'Radio stations', value: mediaOutletCategories.radio },
-//   { label: 'TV stations', value: mediaOutletCategories.tv },
-//   { label: 'Newspapers', value: mediaOutletCategories.newspaper },
-// ];
+import styles from '../../ContactSearches.module.css';
 
 export interface IFilterPodcastsSearchsOptions {
   mainCategory: ISelectInputOption;
   keywords: string;
-  genres: ISelectInputOptionNumeric[];
+  genres: ISelectInputOption[];
   language: ISelectInputOption;
   publishedBefore: Dayjs | null;
   publishedAfter: Dayjs | null;
@@ -46,12 +31,12 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
 
   const [filtersEvaluated, setFiltersEvaluated] = useState(true);
   const [displayingMoreFilters, setDisplayingMoreFilter] = useState(false);
-  const [genresList, setGenresList] = useState<ISelectInputOptionNumeric[]>([]);
+  const [genresList, setGenresList] = useState<ISelectInputOption[]>([]);
   const [languagesList, setLanguagesList] = useState<ISelectInputOption[]>([]);
   const [filterOptions, setFilerOptions] = useState<IFilterPodcastsSearchsOptions>({
     mainCategory: { label: 'Podcasts', value: contactCategories.podcast },
     keywords: '',
-    genres: [],
+    genres: [{ label: 'All genres', value: 'all' }],
     language: { label: 'Any language', value: 'Any language' },
     publishedBefore: null,
     publishedAfter: null,
@@ -62,8 +47,19 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
     const languagesResponse = await dispatch(getLanguages()).unwrap();
 
     if (genresResponse?.length) {
-      setGenresList(genresResponse);
+      const transformedGenres: ISelectInputOption[] = [];
+
+      genresResponse.map((genre: ISelectInputOption) => {
+        transformedGenres.push({
+          _id: genre._id,
+          label: genre.label,
+          value: genre.value.toString(),
+          refId: genre.refId,
+        });
+      });
+      setGenresList(transformedGenres);
     }
+
     if (languagesResponse?.length) {
       setLanguagesList(languagesResponse);
     }
@@ -124,7 +120,7 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
     setFiltersEvaluated(false);
   };
 
-  const handleGenresChange = (genres: ISelectInputOptionNumeric[]) => {
+  const handleGenresChange = (genres: ISelectInputOption[]) => {
     setFilerOptions((prev) => {
       return {
         ...prev,
@@ -154,6 +150,8 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
               filterOptions.mainCategory?.value === contactCategories.podcast
                 ? theme.palette.text.primaryInverted
                 : theme.palette.text.primary,
+            fontWeight: 'bold',
+            padding: '0 1rem',
             ':hover': {
               backgroundColor:
                 filterOptions.mainCategory?.value === contactCategories.podcast
@@ -181,6 +179,8 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
               filterOptions.mainCategory?.value === contactCategories.podcastEpisode
                 ? theme.palette.text.primaryInverted
                 : theme.palette.text.primary,
+            fontWeight: 'bold',
+
             ':hover': {
               backgroundColor:
                 filterOptions.mainCategory?.value === contactCategories.podcastEpisode

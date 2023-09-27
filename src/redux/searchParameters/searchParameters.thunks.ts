@@ -109,9 +109,9 @@ export const getCountries = createAsyncThunk(
 
 export const getStates = createAsyncThunk(
   `${searchParametersStoreKey}/getStates`,
-  async (countryId: string, thunkApi) => {
+  async (countryRefId: string, thunkApi) => {
     try {
-      const response = await axios.get(`${searchParametersPath}/states?countryId=${countryId}`);
+      const response = await axios.get(`${searchParametersPath}/states?countryId=${countryRefId}`);
 
       return response.data;
     } catch (error) {

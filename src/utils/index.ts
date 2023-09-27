@@ -10,3 +10,4 @@ export * from './formatEpisodeDuration';
 export * from './formatToDate';
 export * from './formatQueryParameters';
 export * from './trimString';
+export * from './formatExternalLinkCorrently';

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { podcastsSearchStoreKey } from '.';
-import { errorSideAlert } from '../alerts';
+import { errorSideAlert } from '../../alerts';
 
 const podcastsSearchPath = `${import.meta.env.VITE_API_BASE_URL}/podcasts`;
 

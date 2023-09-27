@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Divider, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { getAllEpisodesById, getDetailByListenNotesId } from '../../../redux/podcastsSearch';
+import {
+  getAllEpisodesById,
+  getDetailByListenNotesId,
+} from '../../../redux/searches/podcastsSearch';
 import { formatDate } from '../../../utils';
 import styles from '../Contacts.module.css';
-import { podcastsSearchSelectors } from '../../../redux/podcastsSearch/podcastSearch.selectors';
+import { podcastsSearchSelectors } from '../../../redux/searches/podcastsSearch/podcastSearch.selectors';
 import { LoadingIcon } from '../../../common';
 
 interface IPodcastEpisode {
