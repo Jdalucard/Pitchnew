@@ -11,9 +11,9 @@ import Navigation from '../navigation';
 import BuyCredits from '../buyCredits';
 import Contacts from '../contacts';
 import Reports from '../reports';
+import Dashboard from '../dashboard';
 import ContactSearches from '../contactSearches';
 import styles from './Main.module.css';
-import Dashboard from '../dashboard';
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
@@ -45,17 +45,8 @@ export function Main() {
         className={`${styles.mainContentWrapper} ${navigationIsMinimized ? styles.minimized : ''}`}
       >
         <Routes>
-<<<<<<< HEAD
-          <Route path={'dashboard'} element={<></>} />
-          <Route path={'searches/*'} element={<ContactSearches />} />
-=======
           <Route path={'dashboard'} element={<Dashboard />} />
-          <Route path={'podcast-search'} element={<></>} />
-          <Route path={'live-events'} element={<></>} />
-          <Route path={'experts-search'} element={<></>} />
-          <Route path={'media-search'} element={<></>} />
-          <Route path={'conference-search'} element={<></>} />
->>>>>>> feature/dashboard-module-refactoring
+          <Route path={'searches/*'} element={<ContactSearches />} />
           <Route path={'contacts'} element={<Contacts />} />
           <Route path={'account'} element={<></>} />
           <Route path={'reports'} element={<Reports />} />

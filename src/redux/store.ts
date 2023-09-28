@@ -10,17 +10,13 @@ import { subscriptionSlice, subscriptionStoreKey } from './subscription';
 import { teamsSlice, teamsStoreKey } from './teams';
 import { reportsSlice, reportsStoreKey } from './reports';
 import { searchParametersSlice, searchParametersStoreKey } from './searchParameters';
-<<<<<<< HEAD
 import { podcastsSearchSlice, podcastsSearchStoreKey } from './searches/podcastsSearch';
 import { eventsSearchSlice, eventsSearchStoreKey } from './searches/eventsSearch';
 import { mediaOutletsSearchSlice, mediaOutletsSearchStoreKey } from './searches/mediaOutletsSearch';
 import { conferencesSearchSlice, conferencesSearchStoreKey } from './searches/conferencesSearch';
 import { userSavedSearchesSlice, userSavedSearchesStoreKey } from './searches/userSavedSearches';
 import { speakersSearchSlice, speakersSearchStoreKey } from './searches/speakersSearch';
-=======
-import { podcastsSearchSlice, podcastsSearchStoreKey } from './podcastsSearch';
 import { dashboardStoreKey, dashboardSlice } from './dashboard';
->>>>>>> feature/dashboard-module-refactoring
 
 export const store = configureStore({
   reducer: {
@@ -36,18 +32,16 @@ export const store = configureStore({
     [teamsStoreKey]: teamsSlice.reducer,
     [reportsStoreKey]: reportsSlice.reducer,
     [podcastsSearchStoreKey]: podcastsSearchSlice.reducer,
-<<<<<<< HEAD
     [eventsSearchStoreKey]: eventsSearchSlice.reducer,
     [mediaOutletsSearchStoreKey]: mediaOutletsSearchSlice.reducer,
     [conferencesSearchStoreKey]: conferencesSearchSlice.reducer,
     [userSavedSearchesStoreKey]: userSavedSearchesSlice.reducer,
     [speakersSearchStoreKey]: speakersSearchSlice.reducer,
-=======
     [dashboardStoreKey]: dashboardSlice.reducer,
->>>>>>> feature/dashboard-module-refactoring
   },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
