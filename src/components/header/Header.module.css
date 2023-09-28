@@ -12,6 +12,9 @@
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   border: 1px solid white;
 
+  @media only screen and (max-width: 600px) {
+    padding: 1rem 0;
+  }
 }
 
 .logoAndMobileToggleWrapper {
@@ -31,15 +34,6 @@
     width: 7.5rem;
     min-height: auto;
   }
-
-  @media only screen and (max-width: 480px) {
-    width: 6.5rem;
-    padding: 0.5rem;
-  }
-
-  @media only screen and (max-width: 420px) {
-    width: 6rem;
-  }
 }
 
 .profileOptionsWrapper {
@@ -56,24 +50,17 @@
     position: unset;
     padding: 0 0.5rem;
     min-width: auto;
-    width: 3.5rem;
-      padding: 0 1.5rem;
+    padding: 0 1.5rem;
   }
 }
 
 .mobileNavigationToggle {
   display: flex;
   align-items: center;
+  justify-content: center;
   border-right: 1px solid white;
   padding: 0rem 1.25rem;
   cursor: pointer;
-
-  @media only screen and (max-width: 600px) {
-    min-width: 3.4rem;
-  }
-@media only screen and (max-width: 400px) {
-  min-width: 2.3rem;
-}
 }
 
 .profileToggleWrapper {
@@ -91,7 +78,6 @@
     width: 25px !important;
     height: 25px !important;
   }
-
 }
 
 .menuOpen {
@@ -99,10 +85,9 @@
     width: 25px !important;
     height: 25px !important;
   }
-
 }
 
-.name {
+.mobileHiddenAccountWrapper {
   @media only screen and (max-width: 600px) {
     display: none;
   }

@@ -11,21 +11,23 @@ import Navigation from '../navigation';
 import BuyCredits from '../buyCredits';
 import Contacts from '../contacts';
 import Reports from '../reports';
+import ContactSearches from '../contactSearches';
 import styles from './Main.module.css';
 import Dashboard from '../dashboard';
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
+  const userData = useAppSelector(userSelectors.userData);
 
   useFetchUser();
 
-  const [navigationIsMinimized, setNavigationIsMinimized] = useState(false);
+  const [navigationIsMinimized, setNavigationIsMinimized] = useState(true);
 
   const toggleNavigationIsMinimized = () => {
     setNavigationIsMinimized((prev) => !prev);
   };
 
-  if (userIsLoading) {
+  if (userIsLoading || !userData) {
     return <LoadingDisplay type={loadingDisplayTypes.entireScreen} />;
   }
 
@@ -50,7 +52,6 @@ export function Main() {
           <Route path={'media-search'} element={<></>} />
           <Route path={'conference-search'} element={<></>} />
           <Route path={'contacts'} element={<Contacts />} />
-          <Route path={'outreach-sequences-mail'} element={<></>} />
           <Route path={'account'} element={<></>} />
           <Route path={'reports'} element={<Reports />} />
           <Route path={'payment/credits'} element={<BuyCredits />} />

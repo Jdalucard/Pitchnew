@@ -11,9 +11,9 @@
   gap: 1rem;
   cursor: pointer;
   border-left: 3px solid rgb(255, 255, 255);
-  
+
   @media only screen and (max-width: 600px) {
-    padding: 0.8rem
+    padding: 0.8rem 1.2rem;
   }
 }
 
@@ -25,7 +25,6 @@
   background-color: rgba(88, 86, 214, 0.1);
   border-left: 3px solid rgb(0, 26, 183);
   color: rgb(0, 26, 183);
-  
 }
 
 .navIconWrapper {

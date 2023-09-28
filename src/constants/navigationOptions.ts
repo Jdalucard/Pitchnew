@@ -5,7 +5,6 @@ import NewspaperIcon from '@mui/icons-material/Newspaper';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
-import EmailIcon from '@mui/icons-material/Email';
 import ArticleIcon from '@mui/icons-material/Article';
 import SchoolIcon from '@mui/icons-material/School';
 
@@ -16,27 +15,27 @@ export const navigationOptions = [
     icon: SpaceDashboardIcon,
   },
   {
-    option: 'podcast-search',
+    option: 'searches/podcast-search',
     title: 'Podcasts',
     icon: PodcastsIcon,
   },
   {
-    option: 'live-events',
+    option: 'searches/events-search',
     title: 'Local Associations',
     icon: EventIcon,
   },
   {
-    option: 'media-search',
+    option: 'searches/media-search',
     title: 'Media Outlets',
     icon: NewspaperIcon,
   },
   {
-    option: 'conference-search',
+    option: 'searches/conference-search',
     title: 'Conferences',
     icon: CampaignIcon,
   },
   {
-    option: 'experts-search',
+    option: 'searches/experts-search',
     title: 'Experts',
     icon: AccessibilityNewIcon,
   },
@@ -44,11 +43,6 @@ export const navigationOptions = [
     option: 'contacts',
     title: 'Contacts',
     icon: RecentActorsIcon,
-  },
-  {
-    option: 'outreach-sequences-mail',
-    title: 'Mailbox',
-    icon: EmailIcon,
   },
   {
     option: 'templates',

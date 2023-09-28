@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Token, loadStripe } from '@stripe/stripe-js';
+import { Button, IconButton, Typography } from '@mui/material';
+import { Elements } from '@stripe/react-stripe-js';
+import AdsClickIcon from '@mui/icons-material/AdsClick';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import {
   getBundlePlans,
@@ -8,10 +11,7 @@ import {
   subscriptionSelectors,
 } from '../../../redux/subscription';
 import { IBuyingItem } from '../BuyCredits';
-import { Button, Typography } from '@mui/material';
-import { Elements } from '@stripe/react-stripe-js';
 import { PaymentForm } from '.';
-import { userSelectors } from '../../../redux/user';
 import styles from '../BuyCredits.module.css';
 import { LoadingDisplay } from '../../../common';
 import { loadingDisplayTypes } from '../../../types';
@@ -36,7 +36,6 @@ export function Bundles({ beginTransaction, toggleBeginTransaction, toggleSucces
 
   const isLoading = useAppSelector(subscriptionSelectors.isLoading);
   const userPlan = useAppSelector(subscriptionSelectors.userSubscription);
-  const userData = useAppSelector(userSelectors.userData);
 
   const [plans, setPlans] = useState<IBundle[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<IBundle | null>(null);
@@ -50,10 +49,8 @@ export function Bundles({ beginTransaction, toggleBeginTransaction, toggleSucces
   }, [dispatch]);
 
   useEffect(() => {
-    if (userData) {
-      fetchPlans();
-    }
-  }, [fetchPlans, userData]);
+    fetchPlans();
+  }, [fetchPlans]);
 
   const handleSelectPlan = (selectedPlan: IBundle) => {
     toggleBeginTransaction(true);
@@ -82,7 +79,7 @@ export function Bundles({ beginTransaction, toggleBeginTransaction, toggleSucces
     <>
       {!beginTransaction && (
         <div className={styles.planOptions}>
-          <Typography variant="h3" color="text.primary" m="2rem 0">
+          <Typography variant="h3" color="primary" m="2rem 0">
             Pitch refills
           </Typography>
           <div className={styles.itemsMappedWrapper}>
@@ -92,24 +89,20 @@ export function Bundles({ beginTransaction, toggleBeginTransaction, toggleSucces
                 return (
                   <div className={styles.bundleItem} key={index}>
                     <div className={styles.header}>
-                      <Typography variant="h5" color="text.primary">
+                      <Typography variant="h5" color="text.secondary" fontWeight="bold">
                         {plan.type}
                       </Typography>
                     </div>
                     <div className={styles.body}>
-                      <Typography variant="body1" color="text.primary" gutterBottom>
+                      <Typography variant="body1" color="text.secondary" gutterBottom>
                         {plan.amount} pitch{plan.amount > 1 ? 'es' : ''}
                       </Typography>
-                      <Typography variant="body1" color="text.primary" gutterBottom>
+                      <Typography variant="body1" color="text.secondary" gutterBottom>
                         {`$${plan.price}`}
                       </Typography>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => handleSelectPlan(plan)}
-                      >
-                        Purchase bundle
-                      </Button>
+                      <IconButton color="primary" onClick={() => handleSelectPlan(plan)}>
+                        <AdsClickIcon />
+                      </IconButton>
                     </div>
                   </div>
                 );

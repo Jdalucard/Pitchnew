@@ -4,7 +4,6 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUserData, getUserProfileImage, userSelectors } from '../redux/user';
-import { socketsCommon } from '../sockets';
 import { getUserCreditCounter, getUserSubscriptionPlan } from '../redux/subscription';
 import { getUserContactLists } from '../redux/contactList/contactList.thunks';
 import { getPrimaryEmailAccount } from '../redux/email';
@@ -18,8 +17,6 @@ export function useFetchUser() {
     const cookies = new Cookies();
     const token = cookies.get('jwt');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-    socketsCommon.setJWT(token);
 
     const response = await dispatch(getUserData()).unwrap();
 

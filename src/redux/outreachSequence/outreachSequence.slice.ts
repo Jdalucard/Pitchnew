@@ -15,7 +15,7 @@ export const outreachSequenceSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    // getUserContactLists
+    // getSequenceByContactId
     builder.addCase(getSequenceByContactId.pending, (state) => {
       state.isLoading = true;
     });

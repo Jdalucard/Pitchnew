@@ -17,9 +17,17 @@ body {
   min-height: 100vh;
 }
 
+div {
+  font-family: 'Open sans';
+}
+
 p {
   font-family: 'Open sans';
   margin: 0 0 1rem 0;
+}
+
+a {
+  font-family: 'Open sans';
 }
 
 @media (prefers-color-scheme: light) {

@@ -5,8 +5,8 @@
   width: 100svw;
   height: 100svh;
   @media (max-width: 600px) {
-      align-items: unset;
-    }
+    align-items: unset;
+  }
 }
 
 .panel {
@@ -19,8 +19,8 @@
   padding: 2rem;
   width: 22rem;
   @media (max-width: 600px) {
-      width: 100%;
-    }
+    width: 100%;
+  }
 }
 
 .logoWrapper img {
