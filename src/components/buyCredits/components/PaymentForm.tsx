@@ -89,7 +89,7 @@ export function PaymentForm({
         </Typography>
       )}
       <form onSubmit={handleSubmit}>
-        <Typography variant="h5" color="text.primary" mt="2rem">
+        <Typography variant="h5" color="text.primary" mt="2rem" textAlign="center">
           Enter your payment information
         </Typography>
         <div className={styles.security}>
@@ -111,7 +111,6 @@ export function PaymentForm({
                 base: {
                   iconColor: 'rgba(0, 26, 183, 1)',
                   color: 'rgb(13 13, 13)',
-                  fontSize: '20px',
                 },
                 invalid: {
                   iconColor: 'rgb(211, 47, 47)',

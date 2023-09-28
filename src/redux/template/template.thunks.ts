@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { templateStoreKey } from '.';
-import { errorAlert, successAlert } from '../alerts';
+import { errorAlert, successAlert, successSideAlert } from '../alerts';
 import { IAddEmailTemplate, IEditEmailTemplate } from '../../types';
 
 interface IRemoveEmailTemplate {
@@ -62,7 +62,7 @@ export const addEmailTemplate = createAsyncThunk(
       const response = await axios.put(requestPath, template);
 
       if (response.status === 200) {
-        thunkApi.dispatch(successAlert(`Successfully added new Email Template.`));
+        thunkApi.dispatch(successSideAlert(`Successfully added a new email template.`));
         //recover all the templates again
         thunkApi.dispatch(getAllTemplates());
       }

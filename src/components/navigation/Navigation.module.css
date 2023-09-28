@@ -14,14 +14,14 @@
   border: 1px solid white;
 
   @media only screen and (max-width: 600px) {
-    left: 0;
-    right: 0;
-    margin-top: 3.5rem;
-    height: 95svh;
+    top: 4rem;
+    display: block;
+    min-height: 100%;
+    width: 100%;
   }
 }
 
-.NavigationPanel.minimized {
+.navigationPanel.minimized {
   @media only screen and (max-width: 600px) {
     display: none;
   }

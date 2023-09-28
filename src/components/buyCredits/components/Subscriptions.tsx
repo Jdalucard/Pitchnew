@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { Token, loadStripe } from '@stripe/stripe-js';
-import { Button, Typography } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
+import AdsClickIcon from '@mui/icons-material/AdsClick';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import {
   cancelUserSubscriptionPlan,
@@ -13,10 +14,10 @@ import {
 } from '../../../redux/subscription';
 import { IBuyingItem } from '../BuyCredits';
 import { openConfirmation } from '../../../redux/alerts/alerts.thunks';
-import styles from '../BuyCredits.module.css';
 import { PaymentForm } from '.';
 import { LoadingDisplay } from '../../../common';
 import { loadingDisplayTypes } from '../../../types';
+import styles from '../BuyCredits.module.css';
 
 export interface ISubscription {
   id: string;
@@ -149,7 +150,7 @@ export function Subscriptions({
               </div>
             </>
           )}
-          <Typography variant="h3" color="text.primary" m="2rem 0">
+          <Typography variant="h3" color="primary" m="2rem 0">
             Subscription plans
           </Typography>
           <div className={styles.itemsMappedWrapper}>
@@ -159,31 +160,27 @@ export function Subscriptions({
                 return (
                   <div className={styles.planItem} key={index}>
                     <div className={styles.header}>
-                      <Typography variant="h5" color="text.primaryInverted">
+                      <Typography variant="h5" color="text.secondary" fontWeight="bold">
                         {plan.name ?? `Plan #${index}`}
                       </Typography>
                     </div>
                     <div className={styles.body}>
                       {plan.description && (
-                        <Typography variant="body1" color="text.primary" gutterBottom>
+                        <Typography variant="body1" color="text.secondary" gutterBottom>
                           {plan.description}
                         </Typography>
                       )}
-                      <Typography variant="body1" color="text.primary" gutterBottom>
+                      <Typography variant="body1" color="text.secondary" gutterBottom>
                         {`$${plan.price} / ${plan.interval}`}
                       </Typography>
                       {userPlan?.planId === plan.id ? (
-                        <Typography variant="body2" color="text.primary">
+                        <Typography variant="body2" color="text.secondary" fontWeight="bold">
                           Selected
                         </Typography>
                       ) : (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => handleSelectPlan(plan)}
-                        >
-                          Purchase plan
-                        </Button>
+                        <IconButton color="primary" onClick={() => handleSelectPlan(plan)}>
+                          <AdsClickIcon />
+                        </IconButton>
                       )}
                     </div>
                   </div>

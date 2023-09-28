@@ -23,7 +23,7 @@ export function Navigation({ navigationIsMinimized, toggleNavigationDisplay }: I
   };
 
   return (
-    <div className={`${styles.navigationPanel} ${navigationIsMinimized ? 'minimized' : ''}`}>
+    <div className={`${styles.navigationPanel} ${navigationIsMinimized ? styles.minimized : ''}`}>
       <div style={{ position: 'relative' }}>
         {navigationOptions.map((navigationObject, index) => {
           const { icon, option, title } = navigationObject;

@@ -20,22 +20,44 @@
 .filtersWrapper {
   display: flex;
   gap: 1rem;
+
+  @media only screen and (max-width: 600px) {
+    width: 90%;
+    flex-direction: column;
+  }
 }
 
 .filterInputSelectWrapper {
   width: 10.8rem;
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+  }
 }
 
 .selectWrappers {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 }
 
 .contactItemsWrapper {
   border: 1px solid #d1d2d3;
   border-radius: 4px;
   margin: 1rem 0;
+
+  @media only screen and (max-width: 850px) {
+    width: 100%;
+  }
+
+  @media only screen and (max-width: 850px) {
+    width: 90%;
+  }
 }
 
 .totalWrapper {
@@ -47,6 +69,10 @@
 
 .listBody {
   padding: 0 1rem;
+
+  @media only screen and (max-width: 600px) {
+    padding: 0 0.25rem;
+  }
 }
 
 .contactItemsWrapper ul {
@@ -62,6 +88,19 @@
   border-bottom: 1px solid #f1f2f3;
   border-radius: 4px;
   align-items: start;
+
+  @media only screen and (max-width: 850px) {
+    flex-direction: column;
+  }
+}
+
+.imageAndTextMobileWrapper {
+  display: flex;
+  gap: 1rem;
+
+  @media only screen and (max-width: 850px) {
+    width: 100%;
+  }
 }
 
 .itemImageWrapper {
@@ -73,7 +112,20 @@
 }
 
 .itemText {
-  width: 20.5rem;
+  width: 21.5rem;
+
+  @media only screen and (max-width: 1000px) {
+    width: 15rem;
+  }
+
+  @media only screen and (max-width: 850px) {
+    width: 12rem;
+  }
+}
+
+.tagAndVisibilityMobileWrapper {
+  display: flex;
+  align-items: center;
 }
 
 .tagWrapper {

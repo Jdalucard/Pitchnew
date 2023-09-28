@@ -1,31 +1,15 @@
-import React from 'react';
-import Typography from '@mui/material/Typography';
 import styles from '../Templates.module.css';
 
 interface TabPanelProps {
-  children?: React.ReactNode;
+  children?: React.ReactElement;
   index: number;
   value: number;
 }
 
 const CustomTabPanel = (props: TabPanelProps) => {
-  const { children, value, index, ...other } = props;
+  const { children, value, index } = props;
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <div className={`${styles.CustomTabPanel}`}>
-          <Typography>{children}</Typography>
-        </div>
-      )}
-    </div>
-  );
+  return <>{value === index && <div className={`${styles.customTabPanel}`}>{children}</div>}</>;
 };
 
 export default CustomTabPanel;

@@ -17,6 +17,12 @@
   border-radius: 4px;
   background-color: rgba(241, 242, 243, 1);
   max-width: 25rem;
+
+  @media only screen and (max-width: 480px) {
+    max-width: unset;
+    width: 80%;
+    text-align: center;
+  }
 }
 
 .cancelPlanWrapper {
@@ -24,29 +30,46 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
+  @media only screen and (max-width: 425px) {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
 }
 
 .itemsMappedWrapper {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 3rem;
+
+  @media only screen and (max-width: 1000px) {
+    gap: 2rem;
+  }
 }
 
 .planItem {
   display: flex;
   flex-direction: column;
-  background-color: rgba(241, 242, 243, 1);
   border-radius: 4px;
-  width: 14rem;
+  width: 20rem;
   overflow: clip;
+  border: 1px solid #f1f2f3;
+
+  @media only screen and (max-width: 1000px) {
+    width: 15rem;
+  }
+
+  @media only screen and (max-width: 480px) {
+    width: 90%;
+  }
 }
 
 .planItem .header {
   display: flex;
   justify-content: center;
   padding: 0.5rem 0;
-  background-color: rgba(0, 26, 183, 1);
+  background-color: rgba(88, 86, 214, 0.1);
 }
 
 .planItem .body {
@@ -62,18 +85,25 @@
   display: flex;
   flex-direction: column;
   border-radius: 4px;
-  width: 14rem;
+  width: 20rem;
   overflow: clip;
-  background-color: rgba(241, 242, 243, 1);
+  border: 1px solid #f1f2f3;
+
+  @media only screen and (max-width: 1000px) {
+    width: 15rem;
+  }
+
+  @media only screen and (max-width: 480px) {
+    width: 90%;
+  }
 }
 
 .bundleItem .header {
   display: flex;
   justify-content: center;
   padding: 0.5rem 0;
-  border: 1px solid rgba(0, 26, 183, 1);
   border-radius: 4px 4px 0 0;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(88, 86, 214, 0.1);
 }
 
 .bundleItem .body {
@@ -94,6 +124,11 @@
   border: 1px solid rgba(241, 242, 243, 1);
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  @media only screen and (max-width: 480px) {
+    width: auto;
+    padding: 1rem;
+    margin: 0 1rem;
+  }
 }
 
 .paymentForm form {

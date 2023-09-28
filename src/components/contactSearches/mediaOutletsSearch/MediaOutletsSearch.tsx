@@ -14,7 +14,7 @@ import { LoadingDisplay, LoadingIcon } from '../../../common';
 import {
   IListTag,
   ISearchTransformedParameters,
-  ISelectInputOptionNumeric,
+  ISelectInputOption,
   contactSearchTypes,
   loadingDisplayTypes,
 } from '../../../types';
@@ -271,7 +271,7 @@ export function MediaOutletsSearch() {
     });
   };
 
-  const handleAddItemsToLists = (listsSelected: ISelectInputOptionNumeric[]) => {
+  const handleAddItemsToLists = (listsSelected: ISelectInputOption[]) => {
     setIsLoadingAddingContacts(true);
 
     const itemsExistingInListsSelected: IContactListItemDetail[] = [];

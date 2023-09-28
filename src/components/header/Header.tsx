@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
@@ -24,26 +24,52 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
   const remainingCredits = useAppSelector(subscriptionSelectors.credits)?.remaining;
 
   const [profileMenuIsOpen, setProfileMenuIsOpen] = useState(false);
+  const [generalMenuIsOpen, setgeneralMenuIsOpen] = useState(false);
   const [errorInProfileImage, setErrorInProfileImage] = useState(false);
+
+  const toggleProfileMenu = useCallback(() => {
+    setProfileMenuIsOpen((prev) => !prev);
+    if (!navigationIsMinimized) {
+      toggleNavigationIsMinimized();
+    }
+  }, [navigationIsMinimized, toggleNavigationIsMinimized, setProfileMenuIsOpen]);
 
   useEffect(() => {
     if (window.innerWidth <= 600 && !navigationIsMinimized && profileMenuIsOpen) {
       toggleProfileMenu();
     }
-  }, [navigationIsMinimized, profileMenuIsOpen]);
+  }, [navigationIsMinimized, profileMenuIsOpen, toggleProfileMenu]);
 
-  const toggleProfileMenu = () => {
-    setProfileMenuIsOpen((prev) => !prev);
-  };
+  const toggleGeneralMenu = useCallback(() => {
+    setgeneralMenuIsOpen((prev) => !prev);
+    setProfileMenuIsOpen(false);
+    toggleNavigationIsMinimized();
+  }, [toggleNavigationIsMinimized]);
+
+  useEffect(() => {
+    if (
+      window.innerWidth <= 600 &&
+      !navigationIsMinimized &&
+      profileMenuIsOpen &&
+      !generalMenuIsOpen
+    ) {
+      toggleProfileMenu();
+    }
+  }, [navigationIsMinimized, profileMenuIsOpen, toggleProfileMenu, generalMenuIsOpen]);
 
   return (
     <div className={styles.headerWrapper}>
       <div className={styles.logoAndMobileToggleWrapper}>
-        <div className={styles.mobileNavigationToggle} onClick={toggleNavigationIsMinimized}>
+        <div className={styles.mobileNavigationToggle} onClick={toggleGeneralMenu}>
           {navigationIsMinimized ? (
-            <MenuIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="large" />
+            <MenuIcon
+              className={styles.menuOpen}
+              sx={(theme) => ({ color: theme.palette.text.primary })}
+              fontSize="large"
+            />
           ) : (
             <MenuOpenIcon
+              className={styles.menuOpen}
               sx={(theme) => ({ color: theme.palette.text.primary })}
               fontSize="large"
             />
@@ -62,11 +88,12 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
           />
         ) : (
           <AccountCircleRoundedIcon
+            className={styles.profileIcon}
             sx={(theme) => ({ color: theme.palette.text.primary })}
             fontSize="large"
           />
         )}
-        <div>
+        <div className={styles.mobileHiddenAccountWrapper}>
           <div className={styles.nameAndArrowDownWrapper}>
             <Typography variant="body1" color="text.primary" fontWeight="bold">
               {userData?.name ?? ''}

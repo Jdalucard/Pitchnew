@@ -8,7 +8,6 @@ import { ISelectInputOption } from '../types';
 
 interface IProps {
   inputLabel: string;
-  inputWidth: string;
   options: ISelectInputOption[];
   selectedOptions: ISelectInputOption[];
   handleChange: (options: ISelectInputOption[]) => void;
@@ -16,7 +15,6 @@ interface IProps {
 
 export const MultiSelectInput: React.FC<IProps> = ({
   inputLabel,
-  inputWidth,
   options,
   selectedOptions,
   handleChange,
@@ -73,7 +71,7 @@ export const MultiSelectInput: React.FC<IProps> = ({
         multiple
         value={selectedOptions.map((option) => option.value)}
         onChange={handleInputChange}
-        input={<OutlinedInput label={inputLabel} sx={{ width: inputWidth }} />}
+        input={<OutlinedInput label={inputLabel} sx={{ width: '100%' }} />}
         MenuProps={menuProps}
         renderValue={() => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>

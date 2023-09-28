@@ -180,7 +180,7 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
                 ? theme.palette.text.primaryInverted
                 : theme.palette.text.primary,
             fontWeight: 'bold',
-
+            padding: '0 1rem',
             ':hover': {
               backgroundColor:
                 filterOptions.mainCategory?.value === contactCategories.podcastEpisode
@@ -229,7 +229,6 @@ export function PodcastsSearchFiltering({ handleProcessFiltering }: IProps) {
                   {!!genresList?.length && (
                     <MultiSelectInput
                       inputLabel="Genres"
-                      inputWidth="29rem"
                       options={genresList}
                       selectedOptions={filterOptions.genres}
                       handleChange={handleGenresChange}

@@ -21,7 +21,6 @@ import {
   IListTag,
   ISearchTransformedParameters,
   ISelectInputOption,
-  ISelectInputOptionNumeric,
   contactSearchTypes,
   loadingDisplayTypes,
 } from '../../../types';

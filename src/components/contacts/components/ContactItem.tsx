@@ -45,74 +45,77 @@ export function ContactItem({ info, userContactLists, handleShowItemDetail }: IP
         p: '0.5rem',
       }}
     >
-      <div className={styles.itemImageWrapper}>
-        <img
-          src={image ?? defaultImage}
-          alt="Contact profile"
-          onError={(e: any) => {
-            e.target.onerror = null;
-            e.target.src = defaultImage;
-          }}
-          width="100%"
-          height="100%"
-        />
-      </div>
-      <div className={styles.itemText}>
-        <Typography variant="body1" color="text.primary">
-          {formatToTitleCase(name)}
-        </Typography>
-        {email && (
-          <Typography variant="body2" color="text.secondary">
-            {email}
+      <div className={styles.imageAndTextMobileWrapper}>
+        <div className={styles.itemImageWrapper}>
+          <img
+            src={image ?? defaultImage}
+            alt="Contact profile"
+            onError={(e: any) => {
+              e.target.onerror = null;
+              e.target.src = defaultImage;
+            }}
+            width="100%"
+            height="100%"
+          />
+        </div>
+        <div className={styles.itemText}>
+          <Typography variant="body1" color="text.primary">
+            {formatToTitleCase(name)}
           </Typography>
-        )}
-        {isPodcasts && (
-          <Typography variant="body2" color="text.secondary">
-            {category === contactCategories.podcastEpisode ? 'Episode' : 'Podcast'}
-          </Typography>
-        )}
-        {position && (
-          <Typography variant="body2" color="text.secondary">
-            {formatToTitleCase(position)}
-          </Typography>
-        )}
-        {eventType && (
-          <Typography variant="body2" color="text.secondary">
-            <b>{formatToTitleCase(eventType)}</b>
-          </Typography>
-        )}
-      </div>
-      <div className={styles.tagWrapper}>
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          maxWidth="7rem"
-          overflow="hidden"
-          whiteSpace="nowrap"
-          textOverflow="ellipsis"
-          display="block"
-          fontWeight="bold"
-        >
-          {getTag().listName}
-        </Typography>
-      </div>
-
-      <div className={styles.visibilityButton}>
-        <AnimatePresence>
-          {displayActionButtons && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              style={{ backgroundColor: '#fff', borderRadius: '50%' }}
-            >
-              <IconButton aria-label="Details" onClick={() => handleShowItemDetail(id)}>
-                <VisibilityIcon color="primary" />
-              </IconButton>
-            </motion.div>
+          {email && (
+            <Typography variant="body2" color="text.secondary">
+              {email}
+            </Typography>
           )}
-        </AnimatePresence>
+          {isPodcasts && (
+            <Typography variant="body2" color="text.secondary">
+              {category === contactCategories.podcastEpisode ? 'Episode' : 'Podcast'}
+            </Typography>
+          )}
+          {position && (
+            <Typography variant="body2" color="text.secondary">
+              {formatToTitleCase(position)}
+            </Typography>
+          )}
+          {eventType && (
+            <Typography variant="body2" color="text.secondary">
+              <b>{formatToTitleCase(eventType)}</b>
+            </Typography>
+          )}
+        </div>
+      </div>
+      <div className={styles.tagAndVisibilityMobileWrapper}>
+        <div className={styles.tagWrapper}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            maxWidth="7rem"
+            overflow="hidden"
+            whiteSpace="nowrap"
+            textOverflow="ellipsis"
+            display="block"
+            fontWeight="bold"
+          >
+            {getTag().listName}
+          </Typography>
+        </div>
+        <div className={styles.visibilityButton}>
+          <AnimatePresence>
+            {displayActionButtons && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{ backgroundColor: '#fff', borderRadius: '50%' }}
+              >
+                <IconButton aria-label="Details" onClick={() => handleShowItemDetail(id)}>
+                  <VisibilityIcon color="primary" />
+                </IconButton>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </ListItem>
   );

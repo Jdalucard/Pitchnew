@@ -20,7 +20,7 @@ export function Main() {
 
   useFetchUser();
 
-  const [navigationIsMinimized, setNavigationIsMinimized] = useState(false);
+  const [navigationIsMinimized, setNavigationIsMinimized] = useState(true);
 
   const toggleNavigationIsMinimized = () => {
     setNavigationIsMinimized((prev) => !prev);
