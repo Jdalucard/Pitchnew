@@ -8,6 +8,7 @@ import { RootState } from '../store';
 import { formatAmountsData } from './utils/formatAmountsData';
 import { formatToDate } from '../../utils';
 import { formatSummaryData } from './utils';
+import { commonDataParsing } from '../../utils/dataParsing';
 
 const CHARTS_ENDPOINT = '/charts/';
 const ACTIVITY_ENDPOINT = '/activity/';
@@ -30,11 +31,32 @@ export const typeChart: Chart = {
 
 export const getOutreachActivity = createAsyncThunk(
   `${reportsStoreKey}activity/outreachActivity`,
-  async (_, thunkApi) => {
+  async (selectedDate: string, thunkApi) => {
     try {
+      let dates = '';
+      if (selectedDate === '7') {
+        dates = commonDataParsing.parseDate(new Date().setDate(new Date().getDate() - 7));
+      } else if (selectedDate === '30') {
+        dates = commonDataParsing.parseDate(new Date().setDate(new Date().getDate() - 30));
+      } else if (selectedDate === '90') {
+        dates = commonDataParsing.parseDate(new Date().setDate(new Date().getDate() - 90));
+      }
       const response = await axios.get(basePath + ACTIVITY_ENDPOINT);
 
-      return response.data;
+      const dates_new = new Date(dates).getTime();
+
+      const data = response.data.filter((item: any) => {
+        const get_date = commonDataParsing.parseDate(item.date);
+        const final_date = new Date(get_date).getTime();
+        const current_date = new Date().getTime();
+        if (!isNaN(dates_new) && !isNaN(final_date) && !isNaN(current_date)) {
+          return final_date > dates_new && final_date < current_date;
+        } else {
+          return false;
+        }
+      });
+      /* console.log(data); */
+      return data;
     } catch (error) {
       thunkApi.dispatch(
         errorSideAlert('Error getting outreach activity, Please, try again later.'),

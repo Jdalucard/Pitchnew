@@ -17,7 +17,7 @@ export function OutreachSummary({ summarySubtitle, summaryData }: IProps) {
   return (
     <div className={styles.reportsModuleWrapper}>
       <div className={styles.reportsModuleHeader}>
-        <Typography variant="body1" color="text.secondary" fontWeight="bold">
+        <Typography variant="h6" color="text.secondary" fontWeight="bold">
           Outreach sequences summary
         </Typography>
       </div>

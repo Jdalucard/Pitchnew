@@ -19,10 +19,19 @@ export const Reports = () => {
   // const updatedAmountData = useAppSelector(reportsSelectors.updatedAmountData);
 
   useEffect(() => {
+<<<<<<< HEAD
     dispatch(getOutreachActivity());
     dispatch(fetchStageSummary({ updated: false }));
     dispatch(fetchStageAmounts({ updated: false }));
   }, [dispatch]);
+=======
+    if (userData) {
+      dispatch(getOutreachActivity(userData._id));
+      dispatch(fetchStageSummary({ updated: false }));
+      dispatch(fetchStageAmounts({ updated: false }));
+    }
+  }, [dispatch, userData]);
+>>>>>>> feature/dashboard-module-refactoring
 
   return (
     <div className={styles.reportsWrapper}>
