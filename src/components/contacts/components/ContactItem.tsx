@@ -5,19 +5,32 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import defaultImage from '../../../assets/logos/pitchdb-logo-short.png';
 import { IContactListItemDetailBaseInfo } from '../../../redux/contactList';
 import { formatToTitleCase } from '../../../utils';
+import { contactCategories } from '../../../constants';
 import styles from '../Contacts.module.css';
+import { IUserContactList } from '../../../types';
 
 interface IProps {
   info: IContactListItemDetailBaseInfo;
+  userContactLists: IUserContactList[];
   handleShowItemDetail: (itemId: string) => void;
 }
 
-export function ContactItem({ info, handleShowItemDetail }: IProps) {
-  const { id, image, name, tag, email, category, position, eventType } = info;
+export function ContactItem({ info, userContactLists, handleShowItemDetail }: IProps) {
+  const { id, image, name, listId, email, category, position, eventType } = info;
+
+  const getTag = () => {
+    const foundList = userContactLists.find((list) => list._id === listId);
+
+    return {
+      listId,
+      listName: foundList?.name ?? '',
+    };
+  };
 
   const [displayActionButtons, setDisplayActionButtons] = useState(false);
 
-  const isPodcasts = category === 'podcast' || category === 'podcastEpisode';
+  const isPodcasts =
+    category === contactCategories.podcast || category === contactCategories.podcastEpisode;
 
   return (
     <ListItem
@@ -55,7 +68,7 @@ export function ContactItem({ info, handleShowItemDetail }: IProps) {
         )}
         {isPodcasts && (
           <Typography variant="body2" color="text.secondary">
-            {category === 'podcastEpisode' ? 'Episode' : 'Podcast'}
+            {category === contactCategories.podcastEpisode ? 'Episode' : 'Podcast'}
           </Typography>
         )}
         {position && (
@@ -80,7 +93,7 @@ export function ContactItem({ info, handleShowItemDetail }: IProps) {
           display="block"
           fontWeight="bold"
         >
-          {tag.listName}
+          {getTag().listName}
         </Typography>
       </div>
 

@@ -4,13 +4,11 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { fetchStageAmounts, fetchStageSummary, getOutreachActivity } from '../../redux/reports';
 import { LatestActivity, DailyReports, OutreachSummary } from './components';
 import { reportsSelectors } from '../../redux/reports';
-import { userSelectors } from '../../redux/user';
 import styles from './Reports.module.css';
 
 export const Reports = () => {
   const dispatch = useAppDispatch();
 
-  const userData = useAppSelector(userSelectors.userData);
   const activityData = useAppSelector(reportsSelectors.activityData);
   const summaryData = useAppSelector(reportsSelectors.summaryData);
   const summarySubtitle = useAppSelector(reportsSelectors.getSummarySubtitle);
@@ -21,12 +19,10 @@ export const Reports = () => {
   // const updatedAmountData = useAppSelector(reportsSelectors.updatedAmountData);
 
   useEffect(() => {
-    if (userData) {
-      dispatch(getOutreachActivity());
-      dispatch(fetchStageSummary({ updated: false }));
-      dispatch(fetchStageAmounts({ updated: false }));
-    }
-  }, [dispatch, userData]);
+    dispatch(getOutreachActivity());
+    dispatch(fetchStageSummary({ updated: false }));
+    dispatch(fetchStageAmounts({ updated: false }));
+  }, [dispatch]);
 
   return (
     <div className={styles.reportsWrapper}>

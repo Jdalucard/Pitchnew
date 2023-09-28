@@ -15,7 +15,6 @@ import { IBuyingItem } from '../BuyCredits';
 import { openConfirmation } from '../../../redux/alerts/alerts.thunks';
 import styles from '../BuyCredits.module.css';
 import { PaymentForm } from '.';
-import { userSelectors } from '../../../redux/user';
 import { LoadingDisplay } from '../../../common';
 import { loadingDisplayTypes } from '../../../types';
 
@@ -43,7 +42,6 @@ export function Subscriptions({
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(subscriptionSelectors.isLoading);
   const userPlan = useAppSelector(subscriptionSelectors.userSubscription);
-  const userData = useAppSelector(userSelectors.userData);
 
   const [plans, setPlans] = useState<ISubscription[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<ISubscription | null>(null);
@@ -57,10 +55,8 @@ export function Subscriptions({
   }, [dispatch]);
 
   useEffect(() => {
-    if (userData) {
-      fetchPlans();
-    }
-  }, [fetchPlans, userData]);
+    fetchPlans();
+  }, [fetchPlans]);
 
   const handleSelectPlan = (selectedPlan: ISubscription) => {
     toggleBeginTransaction(true);

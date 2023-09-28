@@ -24,17 +24,14 @@ export interface IContactListItemDetailBaseInfo {
   image: string | null;
   category: contactCategories;
   pitched: boolean;
-  tag: {
-    listName: string;
-    listId: string;
-  };
+  listId: string;
   email?: string; // podcasts
   position?: string; // medias && events
   eventType?: string; // events
 }
 
 interface IContactListItemDetailDetails {
-  id: string;
+  id?: string;
   connected?: boolean;
   email?: boolean;
   businessName?: string; // speakers
@@ -68,7 +65,7 @@ interface IContactListItemDetailDetails {
     reviewsAmount: number;
   }; // podcasts
   description?: string; // podcasts && conferences && events
-  publishDate?: Date; // podcastEpisodes
+  publishDate?: string; // podcastEpisodes
   magazineGenre?: string; // medias
   contactName?: {
     firstName: string;
@@ -82,7 +79,7 @@ interface IContactListItemDetailDetails {
   }; // medias && conferences && events
   conferenceCategory?: string; // conferences
   estimatedAudience?: number; // conferences
-  date?: Date; // conferences
+  date?: string; // conferences
   eventAddress?: {
     value: string;
     zipCode?: string;
@@ -108,58 +105,36 @@ export interface IContactListItemDetail {
   details?: IContactListItemDetailDetails;
 }
 
-export interface IContactListsWithItems {
-  evaluated: boolean;
-  items: IContactListItemDetail[];
-}
-
 interface IState {
   isLoading: boolean;
   userContactLists: IUserContactList[];
-  contactListsWithItems: IContactListsWithItems;
+  contactListsItems: IContactListItemDetail[];
 }
 
 const initialState: IState = {
   isLoading: false,
   userContactLists: [],
-  contactListsWithItems: {
-    evaluated: false,
-    items: [],
-  },
+  contactListsItems: [],
 };
 
 export const contactListSlice = createSlice({
   name: contactListStoreKey,
   initialState,
   reducers: {
-    storeContactListItem: (state, action) => {
-      const item = action.payload;
-
-      state.contactListsWithItems = {
-        ...state.contactListsWithItems,
-        items: [...state.contactListsWithItems.items, item],
-      };
-    },
-    setItemsEvaluated: (state) => {
-      state.contactListsWithItems = {
-        ...state.contactListsWithItems,
-        evaluated: true,
-      };
+    storeContactListItems: (state, action) => {
+      state.contactListsItems = action.payload;
     },
     updateItemsPostRemoval: (state, action) => {
       const newItems: IContactListItemDetail[] = [];
       const deletedItemIds = action.payload;
 
-      state.contactListsWithItems.items.map((existingItem) => {
+      state.contactListsItems.map((existingItem) => {
         if (!deletedItemIds.includes(existingItem.baseInfo.id)) {
           newItems.push(existingItem);
         }
       });
 
-      state.contactListsWithItems = {
-        ...state.contactListsWithItems,
-        items: newItems,
-      };
+      state.contactListsItems = newItems;
     },
   },
   extraReducers(builder) {
@@ -300,5 +275,4 @@ export const contactListSlice = createSlice({
   },
 });
 
-export const { storeContactListItem, setItemsEvaluated, updateItemsPostRemoval } =
-  contactListSlice.actions;
+export const { storeContactListItems, updateItemsPostRemoval } = contactListSlice.actions;

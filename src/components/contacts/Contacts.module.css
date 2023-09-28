@@ -144,6 +144,16 @@
   align-items: center;
 }
 
+.itemWebsite a {
+  text-decoration: none;
+  color: rgba(13 13, 13, 0.7);
+}
+
+.itemWebsite a:hover {
+  text-decoration: underline;
+  color: rgb(13 13, 13);
+}
+
 .detailBodyWrapper {
   display: flex;
   flex-wrap: wrap;
@@ -235,6 +245,12 @@
   background-color: #5bbe55;
   border-radius: 4px;
   padding: 0 1rem;
+}
+
+.goTopWrapper {
+  position: fixed;
+  bottom: 2rem;
+  right: 1rem;
 }
 
 .sequenceWrapper {

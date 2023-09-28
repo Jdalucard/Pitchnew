@@ -10,7 +10,12 @@ import { subscriptionSlice, subscriptionStoreKey } from './subscription';
 import { teamsSlice, teamsStoreKey } from './teams';
 import { reportsSlice, reportsStoreKey } from './reports';
 import { searchParametersSlice, searchParametersStoreKey } from './searchParameters';
-import { podcastsSearchSlice, podcastsSearchStoreKey } from './podcastsSearch';
+import { podcastsSearchSlice, podcastsSearchStoreKey } from './searches/podcastsSearch';
+import { eventsSearchSlice, eventsSearchStoreKey } from './searches/eventsSearch';
+import { mediaOutletsSearchSlice, mediaOutletsSearchStoreKey } from './searches/mediaOutletsSearch';
+import { conferencesSearchSlice, conferencesSearchStoreKey } from './searches/conferencesSearch';
+import { userSavedSearchesSlice, userSavedSearchesStoreKey } from './searches/userSavedSearches';
+import { speakersSearchSlice, speakersSearchStoreKey } from './searches/speakersSearch';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +31,11 @@ export const store = configureStore({
     [teamsStoreKey]: teamsSlice.reducer,
     [reportsStoreKey]: reportsSlice.reducer,
     [podcastsSearchStoreKey]: podcastsSearchSlice.reducer,
+    [eventsSearchStoreKey]: eventsSearchSlice.reducer,
+    [mediaOutletsSearchStoreKey]: mediaOutletsSearchSlice.reducer,
+    [conferencesSearchStoreKey]: conferencesSearchSlice.reducer,
+    [userSavedSearchesStoreKey]: userSavedSearchesSlice.reducer,
+    [speakersSearchStoreKey]: speakersSearchSlice.reducer,
   },
 });
 
