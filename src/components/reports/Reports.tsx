@@ -22,7 +22,7 @@ export const Reports = () => {
 
   useEffect(() => {
     if (userData) {
-      dispatch(getOutreachActivity());
+      dispatch(getOutreachActivity(userData._id));
       dispatch(fetchStageSummary({ updated: false }));
       dispatch(fetchStageAmounts({ updated: false }));
     }

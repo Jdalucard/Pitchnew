@@ -23,7 +23,7 @@ export const DailyReports: React.FC<IProps> = ({ amountData, maxAmountValue }) =
           return (
             <div key={index} className={styles.reportsModuleWrapper}>
               <div className={styles.reportsModuleHeader}>
-                <Typography variant="body1" color="text.secondary" fontWeight="bold">
+                <Typography variant="h6" color="text.secondary" fontWeight="bold">
                   Pitches {state}
                 </Typography>
               </div>

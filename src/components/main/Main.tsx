@@ -12,6 +12,7 @@ import BuyCredits from '../buyCredits';
 import Contacts from '../contacts';
 import Reports from '../reports';
 import styles from './Main.module.css';
+import Dashboard from '../dashboard';
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
@@ -42,7 +43,7 @@ export function Main() {
         className={`${styles.mainContentWrapper} ${navigationIsMinimized ? styles.minimized : ''}`}
       >
         <Routes>
-          <Route path={'dashboard'} element={<></>} />
+          <Route path={'dashboard'} element={<Dashboard />} />
           <Route path={'podcast-search'} element={<></>} />
           <Route path={'live-events'} element={<></>} />
           <Route path={'experts-search'} element={<></>} />

@@ -11,6 +11,7 @@ import { teamsSlice, teamsStoreKey } from './teams';
 import { reportsSlice, reportsStoreKey } from './reports';
 import { searchParametersSlice, searchParametersStoreKey } from './searchParameters';
 import { podcastsSearchSlice, podcastsSearchStoreKey } from './podcastsSearch';
+import { dashboardStoreKey, dashboardSlice } from './dashboard';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     [teamsStoreKey]: teamsSlice.reducer,
     [reportsStoreKey]: reportsSlice.reducer,
     [podcastsSearchStoreKey]: podcastsSearchSlice.reducer,
+    [dashboardStoreKey]: dashboardSlice.reducer,
   },
 });
 
