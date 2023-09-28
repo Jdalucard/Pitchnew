@@ -149,7 +149,7 @@ export function MediaOutletsSearchFiltering({ handleProcessFiltering }: IProps) 
 
   return (
     <div className={styles.filtersWrapper}>
-      <ButtonGroup variant="text" sx={{ border: '1px solid #f1f2f3' }}>
+      <ButtonGroup variant="text" className={styles.mainCategoriesWrapper}>
         <Button
           onClick={() => handleFiltersTypeChange(mainCategoriesForMediaOutlets.magazine)}
           sx={(theme) => ({

@@ -26,7 +26,7 @@ export const Reports = () => {
 
   return (
     <div className={styles.reportsWrapper}>
-      <Typography variant="h3" color="text.primary" m="1rem 0">
+      <Typography variant="h3" color="primary" m="2rem 0">
         Reports
       </Typography>
       <div className={styles.reportsModulesWrapper}>

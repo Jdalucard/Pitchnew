@@ -93,7 +93,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
             fontSize="large"
           />
         )}
-        <div>
+        <div className={styles.mobileHiddenAccountWrapper}>
           <div className={styles.nameAndArrowDownWrapper}>
             <Typography variant="body1" color="text.primary" fontWeight="bold">
               {userData?.name ?? ''}
@@ -107,7 +107,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
             </div>
           </div>
           {subscriptionPlan && (
-            <Typography className={styles.name} variant="caption" color="text.secondary">
+            <Typography variant="caption" color="text.secondary">
               {`${remainingCredits ? remainingCredits + ' pitches - ' : ''} ${
                 subscriptionPlan.type
               }`}

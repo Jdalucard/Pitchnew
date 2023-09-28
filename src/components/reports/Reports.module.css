@@ -26,7 +26,6 @@
   gap: 1rem;
   flex-wrap: wrap;
   width: 100%;
-
 }
 
 .reportsModuleWrapper {
@@ -36,9 +35,9 @@
   border: 1px solid #f1f2f3;
   width: 48%;
   @media only screen and (max-width: 600px) {
-      width: 100%;
-      margin: 0 2rem;
-    }
+    width: 100%;
+    margin: 0 2rem;
+  }
 }
 
 .reportsModuleHeader {

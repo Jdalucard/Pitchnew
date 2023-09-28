@@ -5,7 +5,6 @@ import NewspaperIcon from '@mui/icons-material/Newspaper';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import RecentActorsIcon from '@mui/icons-material/RecentActors';
-import EmailIcon from '@mui/icons-material/Email';
 import ArticleIcon from '@mui/icons-material/Article';
 import SchoolIcon from '@mui/icons-material/School';
 
@@ -44,11 +43,6 @@ export const navigationOptions = [
     option: 'contacts',
     title: 'Contacts',
     icon: RecentActorsIcon,
-  },
-  {
-    option: 'outreach-sequences-mail',
-    title: 'Mailbox',
-    icon: EmailIcon,
   },
   {
     option: 'templates',

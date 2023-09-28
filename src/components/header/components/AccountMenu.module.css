@@ -13,7 +13,7 @@
   border: 1px solid white;
 
   @media only screen and (max-width: 600px) {
-    top: 3.5rem;
+    top: 4rem;
   }
 }
 

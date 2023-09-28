@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import swal from 'sweetalert';
 import ReactQuill from 'react-quill';
@@ -14,7 +14,17 @@ import {
 import { userSelectors } from '../../redux/user';
 import { sendEmail } from '../../redux/email';
 import { warningAlert, openConfirmation } from '../../redux/alerts';
-import { Box, Card, CardContent, Typography, Tabs, Tab, Button, Fab } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Tabs,
+  Tab,
+  Button,
+  Fab,
+  IconButton,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
@@ -23,9 +33,9 @@ import CustomTabPanel from './components/CustomTabPanel';
 import { emailValidation } from '../../utils';
 import { crud } from '../../constants/crud';
 import { ITemplate, IAddEmailTemplate, IEditEmailTemplate, ISendEmail } from '../../types';
+import { convertToMarkdown } from '../../utils';
 import 'react-quill/dist/quill.snow.css'; // Importa los estilos CSS de react-quill
 import styles from './Templates.module.css';
-import { convertToMarkdown } from '../../utils';
 
 export function Templates() {
   const dispatch = useAppDispatch();
@@ -119,6 +129,8 @@ export function Templates() {
       });
 
       ReactDOM.render(reactQuillElement, contentNode);
+      // const editorRoot = createRoot(contentNode);
+      // editorRoot.render(reactQuillElement)
 
       inputElement.id = 'subject';
       inputElement.name = 'subject';
@@ -135,15 +147,15 @@ export function Templates() {
     swal({
       title:
         actionType === crud.ADD.toString()
-          ? 'Add Email Template'
+          ? 'Add email template'
           : actionType === crud.EDIT.toString()
-          ? 'Edit Email Template'
-          : 'Send Email',
+          ? 'Edit email template'
+          : 'Send email',
       text:
         actionType === crud.ADD.toString()
-          ? 'You can add email template for use it when you send mail'
+          ? 'You can add an email template for your pitching'
           : actionType === crud.EDIT.toString()
-          ? 'You can edit this email template for use it when you send mail'
+          ? 'You can edit this email template for your pitching'
           : '',
       content: { element: contentNode },
       buttons:
@@ -188,8 +200,8 @@ export function Templates() {
           if (subjectInput?.trim() === '' || !emailValidation(emailDestination)) {
             dispatch(
               warningAlert({
-                title: 'Wrong Email',
-                message: 'Insert an Email Valid',
+                title: 'Wrong email',
+                message: 'Insert an email valid',
               }),
             );
           } else {
@@ -243,114 +255,90 @@ export function Templates() {
   };
 
   return (
-    <div className={`${styles.row}`}>
-      <div className={`${styles.notes} ${styles.title}`}>
-        <div className={`${styles.displayTitle}`}>
-          <Typography variant="h2" m="0rem 1.2rem">
-            {' '}
-            Email Templates{' '}
+    <div className={`${styles.emailTemplatesWrapper}`}>
+      <Typography variant="h3" color="primary" m="2rem 0">
+        Pitch templates
+      </Typography>
+      <div className={styles.contentWrapper}>
+        <Tabs value={activeTab} onChange={handleChange} variant="fullWidth">
+          <Tab label="Default Templates" sx={{ fontWeight: 'bold' }} />
+          <Tab label="My Templates" sx={{ fontWeight: 'bold' }} />
+        </Tabs>
+        <CustomTabPanel value={activeTab} index={0}>
+          <Typography variant="body1" color="text.secondary" fontWeight="bold">
+            Work in progress
           </Typography>
-        </div>
-      </div>
-
-      <div className={`${styles.row}`}>
-        <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={activeTab} onChange={handleChange} aria-label="basic tabs example">
-              <Tab className={styles.tab} label="Default Templates" />
-              <Tab className={styles.tab} label="My Templates" />
-            </Tabs>
-          </Box>
-
-          <CustomTabPanel value={activeTab} index={0}>
-            <Typography className={`${styles.h2Sub}`}>Default Templates</Typography>
-          </CustomTabPanel>
-          <CustomTabPanel value={activeTab} index={1}>
-            {emailTemplates.length === 0 ? (
-              <div className={`${styles.panel}`}>
-                <Card className={`${styles.card}`}>
-                  <CardContent className={`${styles.cardContent}`}>
-                    <Typography variant="h3">You don't have templates yet</Typography>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="medium"
-                      endIcon={<AddIcon />}
-                      sx={{ float: 'right' }}
-                      onClick={() => {
-                        handleOpenEditor(crud.ADD.toString());
-                      }}
-                      className={`action-button ${styles.actionButton} `}
-                    >
-                      Add New Template
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
+        </CustomTabPanel>
+        <CustomTabPanel value={activeTab} index={1}>
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              endIcon={<AddIcon />}
+              onClick={() => {
+                handleOpenEditor(crud.ADD.toString());
+              }}
+              sx={{ mb: '1rem' }}
+            >
+              Add template
+            </Button>
+            {!emailTemplates.length ? (
+              <Typography variant="body1" color="text.secondary" fontWeight="bold">
+                No templates to show
+              </Typography>
             ) : (
               <>
-                <Box className={`${styles.buttonCard}`}>
-                  <Fab
-                    className={`${styles.addButton}`}
-                    onClick={() => {
-                      handleOpenEditor(crud.ADD.toString());
-                    }}
-                  >
-                    <AddIcon className={styles.addIcon} />
-                  </Fab>
-                </Box>
                 {emailTemplates.map((item, index) => {
-                  if (item.userId && item.emailtemplate.length > 0) {
+                  if (item.userId && !!item.emailtemplate.length) {
                     return (
-                      <div key={index} className={`${styles.panel}`}>
-                        <Card className={`${styles.card}`} key={index}>
-                          <CardContent>
-                            <Typography className={`${styles.displaySubtitle}`}>
-                              {item.emailtemplate[0].subject || ''}
-                            </Typography>
-                            <ReactMarkdown>
-                              {convertToMarkdown(item.emailtemplate[0].content || '')}
-                            </ReactMarkdown>
-                          </CardContent>
-
-                          <Box className={`${styles.buttonCard}`}>
-                            <Fab
-                              className={`${styles.deleteIconback}`}
-                              type="button"
-                              onClick={() => {
-                                handleDeleteTemplate(item);
-                              }}
-                            >
-                              <DeleteIcon className={styles.deleteIcon} />
-                            </Fab>
-                            <Fab
-                              className={`${styles.addButton}`}
-                              type="button"
-                              onClick={() => {
-                                handleOpenEditor(crud.EDIT.toString(), item);
-                              }}
-                            >
-                              <EditIcon className={styles.editandSendIcon} />
-                            </Fab>
-                            <Fab
-                              className={`${styles.addButton}`}
-                              type="button"
-                              onClick={() => {
-                                handleOpenEditor(crud.SEND.toString(), item);
-                              }}
-                            >
-                              <SendIcon className={styles.editandSendIcon} />
-                            </Fab>
-                          </Box>
-                        </Card>
+                      <div key={index} className={`${styles.emailTemplateItem}`}>
+                        <div>
+                          <Typography variant="body2" color="text.secondary">
+                            <b>Subject</b>
+                            <br />
+                            {item.emailtemplate[0].subject || ''}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            <b>Message</b>
+                          </Typography>
+                          <ReactMarkdown>
+                            {convertToMarkdown(item.emailtemplate[0].content || '')}
+                          </ReactMarkdown>
+                        </div>
+                        <div className={styles.buttonsWrapper}>
+                          <IconButton
+                            color="error"
+                            onClick={() => {
+                              handleDeleteTemplate(item);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                          <IconButton
+                            color="primary"
+                            onClick={() => {
+                              handleOpenEditor(crud.EDIT.toString(), item);
+                            }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            color="primary"
+                            onClick={() => {
+                              handleOpenEditor(crud.SEND.toString(), item);
+                            }}
+                          >
+                            <SendIcon />
+                          </IconButton>
+                        </div>
                       </div>
                     );
                   }
                 })}
               </>
             )}
-          </CustomTabPanel>
-        </Box>
+          </>
+        </CustomTabPanel>
       </div>
     </div>
   );

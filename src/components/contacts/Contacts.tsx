@@ -106,7 +106,7 @@ export function Contacts() {
         />
       ) : (
         <>
-          <Typography variant="h3" color="text.primary" m="2rem 0">
+          <Typography variant="h3" color="primary" m="2rem 0">
             Contacts
           </Typography>
           <ContactsFiltering handleProcessFiltering={handleProcessFiltering} />
