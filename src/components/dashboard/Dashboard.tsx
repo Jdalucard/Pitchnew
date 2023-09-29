@@ -7,12 +7,12 @@ import { LatestActivity, DailyReports } from '../reports/components';
 import { reportsSelectors } from '../../redux/reports';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import SendIcon from '@mui/icons-material/Send';
-import styles from './Dashboard.module.css';
 import { getOutreachActivity } from '../../redux/reports/index';
 import { dashboardSelectors } from '../../redux/dashboard/dashboard.selectors';
 import { OutreachSummary } from '../reports/components/OutreachSummary';
+import styles from './Dashboard.module.css';
 
-export const Dashboard: React.FC = () => {
+export const Dashboard = () => {
   const summarySubtitle = useAppSelector(reportsSelectors.getSummarySubtitle);
   const summaryData = useAppSelector(reportsSelectors.summaryData);
   const Credist = useAppSelector(subscriptionSelectors.credits);
@@ -26,11 +26,11 @@ export const Dashboard: React.FC = () => {
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedDate = event.target.value;
     setSelectedDate(selectedDate);
-    dispatch<any>(getOutreachActivity(selectedDate));
+    dispatch(getOutreachActivity(selectedDate));
   };
 
   useEffect(() => {
-    dispatch<any>(getOutreachActivity(selectedDate));
+    dispatch(getOutreachActivity(selectedDate));
   }, [dispatch, selectedDate]);
 
   /*   const setCategoryNameInRedux = useCallback(() => {
@@ -67,24 +67,21 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className={styles.containerDashboard}>
-      <Typography variant="h2" color="text.primary" m="1rem 2rem">
+      <Typography variant="h3" color="primary" m="2rem 0">
         Dashboard
       </Typography>
-
-      <div className={styles.containerPiches}>
-        <div className={styles.PichesUsed}>
-          <MailOutlineIcon />
-          <Typography variant="h4" color="text.primary" m="0.8rem 0">
-            {Credist ? JSON.stringify(Credist.used) : null}
-            Piches Used
+      <div className={styles.containerPitches}>
+        <div className={styles.pitchesCount}>
+          <MailOutlineIcon color="primary" />
+          <Typography variant="h4" color="text.primary" fontWeight="bold">
+            {Credist ? JSON.stringify(Credist.used) : null} piches used
           </Typography>
         </div>
 
-        <div className={styles.PichesSent}>
-          <SendIcon />
-          <Typography variant="h4" color="text.primary" m="0.8rem 0">
-            {Credist ? JSON.stringify(Credist.remaining) : null}
-            Piches Sent
+        <div className={styles.pitchesCount}>
+          <SendIcon color="primary" />
+          <Typography variant="h4" color="text.primary" fontWeight="bold">
+            {Credist ? JSON.stringify(Credist.remaining) : null} piches sent
           </Typography>
         </div>
       </div>
