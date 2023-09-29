@@ -49,15 +49,37 @@ export const buildAppTheme = () => ({
     },
     h4: {
       fontSize: '1.4rem',
+      '@media (max-width: 768px)': {
+        fontSize: '0.875rem',
+      },
     },
     h5: {
       fontSize: '1.2rem',
     },
     h6: {
       fontSize: '1rem',
+      '@media (max-width: 660px)': {
+        fontSize: '0.75rem',
+        marginLeft: '-0.5rem',
+      },
+      '@media (max-width: 420px)': {
+        marginLeft: '-1.7rem',
+      },
     },
     caption: {
       fontSize: '0.82rem',
+    },
+  },
+
+  MailOutlineIcon: {
+    '@media (max-width: 768px)': {
+      fontSize: '1.375rem',
+    },
+  },
+
+  SendIcon: {
+    '@media (max-width: 768px)': {
+      fontSize: '1.375rem',
     },
   },
   // Here we can override MUI styles in their components

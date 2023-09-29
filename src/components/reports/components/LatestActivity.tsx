@@ -21,7 +21,7 @@ export const LatestActivity: React.FC<IProps> = ({ activityData }) => {
   return (
     <div className={styles.reportsModuleWrapper}>
       <div className={styles.reportsModuleHeader}>
-        <Typography variant="body1" color="text.secondary" fontWeight="bold">
+        <Typography variant="h6" color="text.secondary" fontWeight="bold" m="0rem 0.2rem">
           Latest activity
         </Typography>
       </div>

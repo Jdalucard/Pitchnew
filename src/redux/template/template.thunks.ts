@@ -128,3 +128,22 @@ export const removeEmailTemplate = createAsyncThunk(
     }
   },
 );
+
+/* 
+export const getEmailReport = createAsyncThunk(
+  `${templateStoreKey}/emailvalidity"`,
+  async (params: IGetEmailById, thunkApi) => {
+    const { userId } = params;
+
+    try {
+      const requestPath = basePath + ADD_TEMPLATE_ENDPOINT + userId + '/email-validity';
+
+      const response = await axios.get(requestPath);
+
+      return response.data;
+    } catch (error) {
+      thunkApi.dispatch(errorAlert('Error, please try again later.'));
+    }
+  },
+);
+ */

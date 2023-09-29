@@ -11,6 +11,7 @@ import Navigation from '../navigation';
 import BuyCredits from '../buyCredits';
 import Contacts from '../contacts';
 import Reports from '../reports';
+import Dashboard from '../dashboard';
 import ContactSearches from '../contactSearches';
 import styles from './Main.module.css';
 
@@ -44,7 +45,7 @@ export function Main() {
         className={`${styles.mainContentWrapper} ${navigationIsMinimized ? styles.minimized : ''}`}
       >
         <Routes>
-          <Route path={'dashboard'} element={<></>} />
+          <Route path={'dashboard'} element={<Dashboard />} />
           <Route path={'searches/*'} element={<ContactSearches />} />
           <Route path={'contacts'} element={<Contacts />} />
           <Route path={'account'} element={<></>} />

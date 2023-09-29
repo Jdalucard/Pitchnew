@@ -16,6 +16,7 @@ import { mediaOutletsSearchSlice, mediaOutletsSearchStoreKey } from './searches/
 import { conferencesSearchSlice, conferencesSearchStoreKey } from './searches/conferencesSearch';
 import { userSavedSearchesSlice, userSavedSearchesStoreKey } from './searches/userSavedSearches';
 import { speakersSearchSlice, speakersSearchStoreKey } from './searches/speakersSearch';
+import { dashboardStoreKey, dashboardSlice } from './dashboard';
 
 export const store = configureStore({
   reducer: {
@@ -36,9 +37,11 @@ export const store = configureStore({
     [conferencesSearchStoreKey]: conferencesSearchSlice.reducer,
     [userSavedSearchesStoreKey]: userSavedSearchesSlice.reducer,
     [speakersSearchStoreKey]: speakersSearchSlice.reducer,
+    [dashboardStoreKey]: dashboardSlice.reducer,
   },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
