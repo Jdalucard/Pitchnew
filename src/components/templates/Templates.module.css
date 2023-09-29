@@ -77,3 +77,9 @@
 .custom-input {
   width: 100% !important;
 }
+
+.templatesExistingWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}

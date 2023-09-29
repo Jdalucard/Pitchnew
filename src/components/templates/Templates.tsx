@@ -287,7 +287,7 @@ export function Templates() {
                 No templates to show
               </Typography>
             ) : (
-              <>
+              <div className={styles.templatesExistingWrapper}>
                 {emailTemplates.map((item, index) => {
                   if (item.userId && !!item.emailtemplate.length) {
                     return (
@@ -335,7 +335,7 @@ export function Templates() {
                     );
                   }
                 })}
-              </>
+              </div>
             )}
           </>
         </CustomTabPanel>
