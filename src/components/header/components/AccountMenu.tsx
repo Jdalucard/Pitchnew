@@ -1,24 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
+import Cookies from 'universal-cookie';
 import SettingsIcon from '@mui/icons-material/Settings';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import GroupIcon from '@mui/icons-material/Group';
 import PaidIcon from '@mui/icons-material/Paid';
 import LogoutIcon from '@mui/icons-material/Logout';
-import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
-import styles from './AccountMenu.module.css';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { removeCookies, setUserJWT } from '../../../redux/cookies';
-import Cookies from 'universal-cookie';
-import { userHasAllAccess } from '../../../utils';
 import { userSelectors } from '../../../redux/user';
+import styles from './AccountMenu.module.css';
 
-interface IProps {
-  userPrivileges: string[] | undefined;
-}
-
-export function AccountMenu({ userPrivileges }: IProps) {
+export function AccountMenu() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -40,16 +32,8 @@ export function AccountMenu({ userPrivileges }: IProps) {
   return (
     <div className={styles.headerDropMenu}>
       <div style={{ position: 'relative' }}>
-        <div className={styles.headerMenuItem} onClick={() => navigate('account/profile')}>
-          <div className={styles.profileIconWrapper}>
-            <PersonIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="small" />
-          </div>
-          <Typography variant="body1" color="text.primary">
-            Profile
-          </Typography>
-        </div>
         <div className={styles.verticalDivider} />
-        <div className={styles.headerMenuItem} onClick={() => navigate('account/configuration')}>
+        <div className={styles.headerMenuItem} onClick={() => navigate('account')}>
           <div className={styles.profileIconWrapper}>
             <SettingsIcon
               sx={(theme) => ({ color: theme.palette.text.primary })}
@@ -73,15 +57,6 @@ export function AccountMenu({ userPrivileges }: IProps) {
           </Typography>
         </div>
         <div className={styles.verticalDivider} />
-        <div className={styles.headerMenuItem} onClick={() => navigate('account/team')}>
-          <div className={styles.profileIconWrapper}>
-            <GroupIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="small" />
-          </div>
-          <Typography variant="body1" color="text.primary">
-            Team
-          </Typography>
-        </div>
-        <div className={styles.verticalDivider} />
         <div className={styles.headerMenuItem} onClick={() => navigate('payment/credits')}>
           <div className={styles.profileIconWrapper}>
             <PaidIcon sx={(theme) => ({ color: theme.palette.text.primary })} fontSize="small" />
@@ -99,40 +74,6 @@ export function AccountMenu({ userPrivileges }: IProps) {
             Sign out
           </Typography>
         </div>
-        {userHasAllAccess(userPrivileges) && (
-          <>
-            <div className={styles.verticalDivider} />
-            <div
-              className={styles.headerMenuItem}
-              onClick={() => navigate('account/super-admin-searches')}
-            >
-              <div className={styles.profileIconWrapper}>
-                <ContentPasteSearchIcon
-                  sx={(theme) => ({ color: theme.palette.text.primary })}
-                  fontSize="small"
-                />
-              </div>
-              <Typography variant="body1" color="text.primary">
-                Admin: Searches
-              </Typography>
-            </div>
-            <div className={styles.verticalDivider} />
-            <div
-              className={styles.headerMenuItem}
-              onClick={() => navigate('account/super-admin-users')}
-            >
-              <div className={styles.profileIconWrapper}>
-                <SettingsIcon
-                  sx={(theme) => ({ color: theme.palette.text.primary })}
-                  fontSize="small"
-                />
-              </div>
-              <Typography variant="body1" color="text.primary">
-                Admin: Users
-              </Typography>
-            </div>
-          </>
-        )}
         {isAdminMode && (
           <>
             <div className={styles.verticalDivider} />

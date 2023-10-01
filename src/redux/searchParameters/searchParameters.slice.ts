@@ -15,13 +15,16 @@ import {
   getSponsorMarkets,
   getStates,
 } from '.';
+import { Genre } from '../../types';
 
 interface IState {
   isLoading: boolean;
+  genres?: Genre[] | null;
 }
 
 const initialState: IState = {
   isLoading: false,
+  genres: null,
 };
 
 export const searchParametersSlice = createSlice({
@@ -36,8 +39,9 @@ export const searchParametersSlice = createSlice({
     builder.addCase(getGenres.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(getGenres.fulfilled, (state) => {
+    builder.addCase(getGenres.fulfilled, (state, action) => {
       state.isLoading = false;
+      state.genres = action.payload;
     });
     // getLanguages
     builder.addCase(getLanguages.pending, (state) => {

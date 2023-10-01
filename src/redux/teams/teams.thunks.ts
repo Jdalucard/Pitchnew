@@ -1,88 +1,93 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { teamsStoreKey } from './teams.const';
-import { errorAlert } from '../alerts';
-import { RootState } from '../store';
-import type { Team } from './teams.slice';
+import { errorAlert, successAlert } from '../alerts';
+import { ITeam } from '../../types';
+import { getUserData } from '../user';
+
+interface ISendInvitationProps {
+  team: ITeam;
+  invEmail: string;
+}
+
+interface IRemoveUserTeamProps {
+  userId: string;
+  teamId: string;
+}
 
 const basePath = import.meta.env.VITE_API_BASE_URL;
-const TEAMS_ENDPOINT = '/teams/';
+const teamsPath = `${basePath}/teams`;
 
 export const createTeam = createAsyncThunk(`${teamsStoreKey}/createTeam`, async (_, thunkApi) => {
   try {
-    const response = await axios.post(basePath + TEAMS_ENDPOINT);
+    const requestPath = `${teamsPath}/`;
+    const response = await axios.post(requestPath, {});
 
-    const { teamId, team } = response.data;
-    const newTeam = {
-      teamId,
-      team,
-      emails: [],
-    };
+    if (response.status === 200 && response.data.user) {
+      const { teamId } = response.data.user;
 
-    return newTeam;
+      await thunkApi.dispatch(getUserData());
+
+      await thunkApi.dispatch(getTeam(teamId));
+
+      thunkApi.dispatch(successAlert('Tteam created successfully'));
+    }
+    return response.data;
   } catch (error) {
     thunkApi.dispatch(errorAlert('Error creating the team. Please, try again later.'));
   }
 });
 
-export const issueInvitation = createAsyncThunk(
+export const sendInvitation = createAsyncThunk(
   `${teamsStoreKey}/issueInvitation`,
-  async (params: Team, thunkApi) => {
+  async (params: ISendInvitationProps, thunkApi) => {
+    const { team, invEmail } = params;
+
     try {
-      const response = await axios.post(`${basePath}${TEAMS_ENDPOINT}/invitation`, params);
+      const requestPath = `${teamsPath}/invitation`;
+      const response = await axios.post(requestPath, { team: team, email: invEmail });
 
-      const { teamId, emails } = response.data;
-      const updateEmails: string[] = [];
-      let updatedTeam: Team;
-      const state = thunkApi.getState() as RootState;
-
-      if (state.teams.team && state.teams.team.teamId === teamId) {
-        state.teams.team.emails.map((existingEmail) => {
-          if (existingEmail !== emails) {
-            updateEmails.push(emails);
-          }
-        });
+      if (response.status === 200) {
+        thunkApi.dispatch(successAlert('Invitation sent successfully'));
       }
 
-      if (state.teams.team) {
-        updatedTeam = {
-          ...state.teams.team,
-          emails: updateEmails,
-        };
-      } else {
-        updatedTeam = {
-          teamId: null,
-          team: null,
-          emails: updateEmails,
-        };
-      }
-
-      return updatedTeam;
+      return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error issuing an invitation. Please, try again later.'));
+      thunkApi.dispatch(errorAlert('Error sending the invitation. Please, try again later.'));
     }
   },
 );
 
-export const getTeam = createAsyncThunk(`${teamsStoreKey}/getTeam`, async (id, thunkApi) => {
-  try {
-    const response = await axios.get(basePath + TEAMS_ENDPOINT + id);
+export const getTeam = createAsyncThunk(
+  `${teamsStoreKey}/getTeam`,
+  async (id: string, thunkApi) => {
+    try {
+      const requestPath = `${teamsPath}/${id}`;
+      const response = await axios.get(requestPath);
 
-    return response.data;
-  } catch (error) {
-    thunkApi.dispatch(errorAlert('Error retrieving the specified team. Please, try again later.'));
-  }
-});
+      return response.data;
+    } catch (error) {
+      thunkApi.dispatch(
+        errorAlert('Error retrieving the specified team. Please, try again later.'),
+      );
+    }
+  },
+);
 
 export const removeUserTeam = createAsyncThunk(
   `${teamsStoreKey}/removeUserTeam`,
-  async (params: Team, thunkApi) => {
+  async (params: IRemoveUserTeamProps, thunkApi) => {
     try {
-      const { team, emails } = params;
-      const url = `${basePath}${TEAMS_ENDPOINT}/${team}/users/${emails}`;
-      await axios.delete(url);
+      const { userId, teamId } = params;
 
-      return { team, emails };
+      const requestPath = `${teamsPath}/users/${userId}`;
+      const response = await axios.delete(requestPath);
+
+      if (response.status === 200) {
+        thunkApi.dispatch(getTeam(teamId));
+      }
+
+      return response.data;
     } catch (error) {
       thunkApi.dispatch(errorAlert('Error deleting the specified team. Please, try again later.'));
     }

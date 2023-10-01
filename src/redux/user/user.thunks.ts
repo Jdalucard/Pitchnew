@@ -2,14 +2,20 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { userStoreKey } from '.';
 import { removeCookies } from '../cookies';
-import { errorAlert, errorSideAlert, successAlert } from '../alerts';
 import Cookies from 'universal-cookie';
+import { errorAlert, successAlert } from '../alerts';
+import { IEmailAccountConfiguration } from '../../types';
 
 const basePath = import.meta.env.VITE_API_BASE_URL;
 const userPath = `${basePath}/users`;
-const userProfileImagePath = `${basePath}/userimage`;
+const emailConfigPath = `${basePath}/email-notification`;
 
 const cookies = new Cookies();
+
+interface IChangePassword {
+  password: string;
+  newPassword: string;
+}
 
 export const getUserData = createAsyncThunk(`${userStoreKey}/getUserData`, async (_, thunkApi) => {
   try {
@@ -26,50 +32,65 @@ export const getUserData = createAsyncThunk(`${userStoreKey}/getUserData`, async
   }
 });
 
-export const getUserProfileImage = createAsyncThunk(
-  `${userStoreKey}/getUserProfileImage`,
-  async (_, thunkApi) => {
+export const changePassword = createAsyncThunk(
+  `${userStoreKey}/changePassword`,
+  async (params: IChangePassword, thunkApi) => {
     try {
-      const response = await axios.get(`${userProfileImagePath}`);
+      const response = await axios.put(`${userPath}/me/password`, params);
+
+      if (response.status === 200) {
+        thunkApi.dispatch(successAlert('Password changed sucessfully'));
+      } else {
+        thunkApi.dispatch(
+          errorAlert('An error occured while changing your password, please try again later'),
+        );
+      }
 
       return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorSideAlert('Error getting the user profile image. Please, try again later.'),
+        errorAlert('An error occured while changing your password, please try again later'),
       );
     }
   },
 );
 
-export const addUserProfileImage = createAsyncThunk(
-  `${userStoreKey}/addUserProfileImage`,
-  async (data: FormData, thunkApi) => {
+export const addEmailConfig = createAsyncThunk(
+  `${userStoreKey}/addemailconfig`,
+  async (data: IEmailAccountConfiguration, thunkApi) => {
     try {
-      await axios.post(`${userProfileImagePath}/add-userimage`, data);
+      const response = await axios.post(`${emailConfigPath}/addemailconfigration`, { data });
 
-      thunkApi.dispatch(getUserProfileImage());
-      thunkApi.dispatch(successAlert('Profile image added successfully'));
-      return { success: true };
+      if (response.status === 200) {
+        thunkApi.dispatch(getEmailConfig(data.userId));
+        thunkApi.dispatch(successAlert('Your email configuration was saved successfully'));
+      } else {
+        thunkApi.dispatch(
+          errorAlert('An error occured saving your email configuration, please try again later'),
+        );
+      }
+
+      return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert('Error adding the user profile image. Please, try again later.'),
+        errorAlert('An error occured saving your email configuration, please try again later'),
       );
     }
   },
 );
 
-export const deleteUserProfileImage = createAsyncThunk(
-  `${userStoreKey}/deleteUserProfileImage`,
+export const getEmailConfig = createAsyncThunk(
+  `${userStoreKey}/getemailconfig`,
   async (userId: string, thunkApi) => {
     try {
-      await axios.post(`${userProfileImagePath}/delete-userimage`, userId);
+      const response = await axios.get(`${emailConfigPath}/${userId}/getemailconfigration`);
 
-      thunkApi.dispatch(getUserProfileImage());
-      thunkApi.dispatch(successAlert('Profile image removed successfully'));
-      return { success: true };
+      return response.data;
     } catch (error) {
       thunkApi.dispatch(
-        errorAlert('Error removing the user profile image. Please, try again later.'),
+        errorAlert(
+          'An error occured while getting your email configuration details, please try again later',
+        ),
       );
     }
   },

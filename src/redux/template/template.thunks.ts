@@ -45,7 +45,7 @@ export const getAllTemplates = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      thunkApi.dispatch(errorAlert('Error, please try again later.'));
+      thunkApi.dispatch(errorAlert('Error getting the templates, please try again later.'));
     }
   },
 );

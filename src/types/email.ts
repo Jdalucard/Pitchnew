@@ -36,3 +36,31 @@ export interface IEmailData {
 export interface ISendEmail {
   emailData: IEmailData;
 }
+
+export interface IEmailAccount {
+  _id: string;
+  activationDate: string;
+  date: string;
+  email: string;
+  network: string;
+  userId: string;
+}
+
+export interface ICheckboxesDays {
+  monday: boolean;
+  tuesday: boolean;
+  wednesday: boolean;
+  thursday: boolean;
+  friday: boolean;
+  saturday: boolean;
+  sunday: boolean;
+}
+
+export interface IEmailAccountConfiguration {
+  id?: string;
+  userId: string;
+  selectedDays: ICheckboxesDays;
+  startTime: Date;
+  endTime: Date;
+  timeZone: string;
+}

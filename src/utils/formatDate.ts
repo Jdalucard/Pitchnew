@@ -21,3 +21,10 @@ export function formatDate(date: string | Date | null, widthSeconds?: boolean) {
   const momentDate = momentTz(newDate);
   return momentDate.tz(browserTz).format(format);
 }
+
+export function parseDate(dateInMs: string) {
+  const d = new Date(dateInMs);
+  const momentDate = momentTz(d);
+
+  return momentDate.tz(browserTz).format('MM/DD/YYYY');
+}

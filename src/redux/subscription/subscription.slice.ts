@@ -13,15 +13,7 @@ import {
   paySubscription,
   updateUserSubscriptionPlan,
 } from '.';
-
-export interface IUserSubscription {
-  _id?: string;
-  planId?: string;
-  dateEnd?: Date;
-  credits?: number;
-  type: string;
-  scheduledToCancel: boolean;
-}
+import { ISubscriptionPlan, IUserSubscription } from '../../types';
 
 interface ICredits {
   _id: string;
@@ -33,12 +25,14 @@ interface IState {
   isLoading: boolean;
   userSubscription: IUserSubscription | null;
   credits: ICredits | null;
+  subscriptionPlans: ISubscriptionPlan[] | null;
 }
 
 const initialState: IState = {
   isLoading: false,
   userSubscription: null,
   credits: null,
+  subscriptionPlans: null,
 };
 
 export const subscriptionSlice = createSlice({
@@ -53,8 +47,9 @@ export const subscriptionSlice = createSlice({
     builder.addCase(getSubscriptionPlans.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(getSubscriptionPlans.fulfilled, (state) => {
+    builder.addCase(getSubscriptionPlans.fulfilled, (state, action) => {
       state.isLoading = false;
+      state.subscriptionPlans = action.payload;
     });
     // paySubscription
     builder.addCase(paySubscription.pending, (state) => {
@@ -157,8 +152,9 @@ export const subscriptionSlice = createSlice({
     builder.addCase(getStripeSubscriptionPlansData.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(getStripeSubscriptionPlansData.fulfilled, (state) => {
+    builder.addCase(getStripeSubscriptionPlansData.fulfilled, (state, action) => {
       state.isLoading = false;
+      state.subscriptionPlans = action.payload;
     });
   },
 });
