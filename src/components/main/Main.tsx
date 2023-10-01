@@ -14,6 +14,7 @@ import Reports from '../reports';
 import Dashboard from '../dashboard';
 import ContactSearches from '../contactSearches';
 import styles from './Main.module.css';
+import Account from '../account';
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
@@ -48,7 +49,7 @@ export function Main() {
           <Route path={'dashboard'} element={<Dashboard />} />
           <Route path={'searches/*'} element={<ContactSearches />} />
           <Route path={'contacts'} element={<Contacts />} />
-          <Route path={'account'} element={<></>} />
+          <Route path={'account'} element={<Account />} />
           <Route path={'reports'} element={<Reports />} />
           <Route path={'payment/credits'} element={<BuyCredits />} />
           <Route path={'templates'} element={<Templates />} />

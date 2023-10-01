@@ -12,6 +12,8 @@ export interface IUserData {
   onboard: boolean | null;
   disabled: boolean | null;
   addedPrivileges: string[] | null;
+  dateLastLogin: string | null;
+  stripeCustomerId: string | null;
   detail: {
     _id: string | null;
     firstName: string | null;

@@ -1,17 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { emailStoreKey } from './email.const';
-import { getEmailSignature, sendEmail, getEmailReport, getPrimaryEmailAccount } from '.';
+import {
+  getEmailSignature,
+  sendEmail,
+  getEmailReport,
+  getPrimaryEmailAccount,
+  getEmailAccounts,
+} from '.';
+import { IEmailAccount } from '../../types';
 
 interface IState {
   isLoading: boolean;
   emailSignatureData: string;
   primaryEmailAccount: string | null;
+  emailAccounts: IEmailAccount[] | null;
 }
 
 const initialState: IState = {
   isLoading: false,
   emailSignatureData: '',
   primaryEmailAccount: null,
+  emailAccounts: null,
 };
 
 export const emailSlice = createSlice({
@@ -28,7 +37,7 @@ export const emailSlice = createSlice({
     });
     builder.addCase(getEmailSignature.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.emailSignatureData = action.payload;
+      state.emailSignatureData = action.payload[0]?.emailsignature ?? '';
     });
     // getPrimaryEmailAccount
     builder.addCase(getPrimaryEmailAccount.pending, (state) => {
@@ -60,6 +69,17 @@ export const emailSlice = createSlice({
     });
     builder.addCase(getEmailReport.fulfilled, (state) => {
       state.isLoading = false;
+    });
+    //getEmailAccounts
+    builder.addCase(getEmailAccounts.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getEmailAccounts.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getEmailAccounts.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.emailAccounts = action.payload;
     });
   },
 });

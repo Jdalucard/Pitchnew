@@ -1,21 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { teamsStoreKey } from './teams.const';
-import { createTeam, getTeam, removeUserTeam, issueInvitation } from './teams.thunks';
-
-export interface Team {
-  team: string | null;
-  teamId: string | null;
-  emails: string[];
-}
+import { createTeam, getTeam, removeUserTeam, sendInvitation } from './teams.thunks';
+import { IUserData } from '../../types';
+import { ITeam } from '../../types';
 
 interface TeamState {
   isLoading: boolean;
-  team: Team | null;
+  team: ITeam | null;
+  users: IUserData[] | null;
 }
 
 export const initialState: TeamState = {
   isLoading: false,
   team: null,
+  users: null,
 };
 
 export const teamsSlice = createSlice({
@@ -32,18 +30,17 @@ export const teamsSlice = createSlice({
     });
     builder.addCase(createTeam.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.team = action.payload ?? null;
+      state.team = action.payload;
     });
     /* ISSUEINVITATION */
-    builder.addCase(issueInvitation.pending, (state) => {
+    builder.addCase(sendInvitation.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(issueInvitation.rejected, (state) => {
+    builder.addCase(sendInvitation.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(issueInvitation.fulfilled, (state, action) => {
+    builder.addCase(sendInvitation.fulfilled, (state) => {
       state.isLoading = false;
-      state.team = action.payload ?? null;
     });
     /* GETTEAM */
     builder.addCase(getTeam.pending, (state) => {
@@ -54,7 +51,9 @@ export const teamsSlice = createSlice({
     });
     builder.addCase(getTeam.fulfilled, (state, action) => {
       state.isLoading = false;
+
       state.team = action.payload;
+      if (action.payload.users) state.users = action.payload.users;
     });
     /* REMOVE USERTEAM*/
     builder.addCase(removeUserTeam.pending, (state) => {

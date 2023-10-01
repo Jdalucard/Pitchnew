@@ -5,4 +5,5 @@ export enum authMessages {
   COOKIES_AUTH_ERROR = 'authError',
   POST_EMAIL_ERROR = 'email-auth-error',
   COOKIES_EMAIL_ERROR = 'emailError',
+  PITCHDB_CREDENTIALS = 'PitchDB credentials',
 }

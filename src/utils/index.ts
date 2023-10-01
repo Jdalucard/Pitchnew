@@ -7,6 +7,8 @@ export * from './userHasAllAccess';
 export * from './formatDate';
 export * from './emailValidation';
 export * from './formatEpisodeDuration';
+export * from './signInOrUpWithSocial';
+export * from './passwordValidation';
 export * from './formatToDate';
 export * from './formatQueryParameters';
 export * from './trimString';

@@ -11,6 +11,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { userSelectors } from '../../redux/user';
 import { subscriptionSelectors } from '../../redux/subscription';
 import styles from './Header.module.css';
+import { profileSelectors } from '../../redux/profile';
 
 interface IProps {
   navigationIsMinimized: boolean;
@@ -19,7 +20,7 @@ interface IProps {
 
 export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: IProps) {
   const userData = useAppSelector(userSelectors.userData);
-  const profileImage = useAppSelector(userSelectors.userProfileImage);
+  const profileImagePath = useAppSelector(profileSelectors.userImagePath);
   const subscriptionPlan = useAppSelector(subscriptionSelectors.userSubscription);
   const remainingCredits = useAppSelector(subscriptionSelectors.credits)?.remaining;
 
@@ -80,9 +81,9 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
         </div>
       </div>
       <div className={styles.profileOptionsWrapper} onClick={toggleProfileMenu}>
-        {profileImage && !errorInProfileImage ? (
+        {profileImagePath && !errorInProfileImage ? (
           <img
-            src={import.meta.env.VITE_PROFILE_ENDPOINT_URL + profileImage}
+            src={import.meta.env.VITE_PROFILE_ENDPOINT_URL + profileImagePath}
             style={{ width: '30px', height: '30px', borderRadius: '50%' }}
             onError={() => setErrorInProfileImage(true)}
           />
@@ -114,7 +115,7 @@ export function Header({ navigationIsMinimized, toggleNavigationIsMinimized }: I
             </Typography>
           )}
         </div>
-        {profileMenuIsOpen && <AccountMenu userPrivileges={userData?.privileges} />}
+        {profileMenuIsOpen && <AccountMenu />}
       </div>
     </div>
   );

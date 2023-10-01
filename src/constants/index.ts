@@ -9,3 +9,4 @@ export * from './mainCategoriesForMediaOutlets';
 export * from './magazinePositions';
 export * from './seasonOptions';
 export * from './speakerOpportunities';
+export * from './roles';

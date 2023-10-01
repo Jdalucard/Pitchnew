@@ -1,8 +1,8 @@
 import React from 'react';
 import HighchartsReact from 'highcharts-react-official';
-import styles from './Chart.module.css';
 import { LoadingDisplay } from '../..';
 import { loadingDisplayTypes } from '../../../types';
+import styles from './Chart.module.css';
 
 interface ChartProps {
   ready: boolean;
@@ -13,7 +13,7 @@ interface ChartProps {
 export const Chart: React.FC<ChartProps> = ({ options, highcharts, ready }) => (
   <>
     {ready ? (
-      <HighchartsReact highcharts={highcharts} constructorType={'chart'} options={options} />
+      <HighchartsReact highcharts={highcharts} constructorType="chart" options={options} />
     ) : (
       <div className={styles.loadingChart}>
         <LoadingDisplay type={loadingDisplayTypes.entireComponent} />

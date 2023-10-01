@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { IUserSubscription, subscriptionStoreKey } from '.';
+import { subscriptionStoreKey } from '.';
 import { errorAlert, errorSideAlert, successAlert } from '../alerts';
 import { Token } from '@stripe/stripe-js';
+import { IUserSubscription } from '../../types';
 
 interface IPaySubscription {
   token: Token;
@@ -217,6 +218,10 @@ export const getStripeSubscriptionPlansData = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       const response = await axios.get(`${subscriptionPath}/getStripePlansdata`);
+
+      if (response.status === 200) {
+        return response.data.data;
+      }
 
       return response.data;
     } catch (error) {
