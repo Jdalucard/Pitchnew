@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { adminStoreKey } from '.';
 import { errorAlert, successAlert } from '../alerts';
-import { IUserData } from '../../types';
+import { ICreatingUser } from '../../types';
 
 interface IGetAllUsersProps {
   page: number;
@@ -59,7 +59,7 @@ export const countUsers = createAsyncThunk(
 
 export const createUser = createAsyncThunk(
   `${adminStoreKey}/createUser`,
-  async (userData: IUserData, thunkApi) => {
+  async (userData: ICreatingUser, thunkApi) => {
     try {
       const response = await axios.post(`${adminPath}/`, userData);
 

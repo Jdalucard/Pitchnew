@@ -14,13 +14,7 @@ import {
 import { userSelectors } from '../../redux/user';
 import { sendEmail } from '../../redux/email';
 import { warningAlert, openConfirmation } from '../../redux/alerts';
-import {
-  Typography,
-  Tabs,
-  Tab,
-  Button,
-  IconButton,
-} from '@mui/material';
+import { Typography, Tabs, Tab, Button, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';
@@ -263,7 +257,7 @@ export function Templates() {
         </Tabs>
         <CustomTabPanel value={activeTab} index={0}>
           <Typography variant="body1" color="text.secondary" fontWeight="bold">
-            <DefaultTemplates/>
+            <DefaultTemplates />
           </Typography>
         </CustomTabPanel>
         <CustomTabPanel value={activeTab} index={1}>

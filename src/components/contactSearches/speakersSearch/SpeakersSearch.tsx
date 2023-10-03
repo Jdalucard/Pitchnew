@@ -120,7 +120,7 @@ export function SpeakersSearch() {
   );
 
   const getSpeakers = useCallback(
-    async (offset: number, isResettingValue: boolean, filters?: IFilterExpertSearchsOptions) => {
+    async (_offset: number, isResettingValue: boolean, filters?: IFilterExpertSearchsOptions) => {
       setIsLoadingResults(true);
 
       const speakerParameters = {

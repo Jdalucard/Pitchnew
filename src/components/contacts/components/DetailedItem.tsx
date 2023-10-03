@@ -156,17 +156,18 @@ export function DetailedItem({ info, userContactLists, handleCloseDetails }: IPr
   };
 
   const findEmail = (item: IContactListItemDetail) => {
-    const itemSelector = `user${formatToTitleCase(item.baseInfo.category)}Id`;
+    console.log(item);
+    // const itemSelector = `user${formatToTitleCase(item.baseInfo.category)}Id`;
 
-    const newSequence = {
-      itemSelector: info.details?.id ?? '',
-      listId: item.baseInfo.listId,
-      listItemId: item.baseInfo.id,
-    };
+    // const newSequence = {
+    //   itemSelector: info.details?.id ?? '',
+    //   listId: item.baseInfo.listId,
+    //   listItemId: item.baseInfo.id,
+    // };
   };
 
   const openEmail = (item: IContactListItemDetail) => {
-    console.log('repitch!');
+    console.log(item);
   };
 
   const handlePitch = (item: IContactListItemDetail) => {

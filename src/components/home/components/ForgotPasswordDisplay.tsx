@@ -3,6 +3,8 @@ import { Button, TextField, Typography } from '@mui/material';
 import { useAppDispatch } from '../../../redux/hooks';
 import { closeLoadingModal, openLoadingModal } from '../../../redux/alerts';
 import { processResetPassword } from '../../../redux/authentication';
+import { LoadingDisplay } from '../../../common';
+import { loadingDisplayTypes } from '../../../types';
 import styles from './styles/ForgotPasswordDisplay.module.css';
 
 interface IProps {

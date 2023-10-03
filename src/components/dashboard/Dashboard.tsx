@@ -1,5 +1,5 @@
-import { useEffect, useCallback } from 'react';
-import { setSelectedDate, setCategoryName } from '../../redux/dashboard/dashboard.slice';
+import { useEffect } from 'react';
+import { setSelectedDate } from '../../redux/dashboard/dashboard.slice';
 import { Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { subscriptionSelectors } from '../../redux/subscription';
