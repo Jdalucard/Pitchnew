@@ -25,6 +25,7 @@ import {
   deleteUser,
   getAllUsers,
   getPrivilegeList,
+  getSignInToken,
   removePrivilege,
   resetPassword,
   toggleStatus,
@@ -37,10 +38,12 @@ import {
   subscriptionSelectors,
 } from '../../../../redux/subscription';
 import Switch from '@mui/material/Switch';
-import { openConfirmation, openDeleteConfirmation } from '../../../../redux/alerts';
+import { closeLoadingModal, openConfirmation, openDeleteConfirmation, openLoadingModal } from '../../../../redux/alerts';
 import { getAllTemplates, templateSelectors } from '../../../../redux/template';
 import Pagination from '@mui/material/Pagination';
-import { current } from '@reduxjs/toolkit';
+import { setAdminJWT } from '../../../../redux/cookies';
+import { useNavigate } from 'react-router-dom';
+import { getUserData } from '../../../../redux/user';
 
 interface IPlan {
   planName: string;
@@ -49,7 +52,9 @@ interface IPlan {
 }
 
 export const UsersSuperAdmin = () => {
+
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const usersData = useAppSelector(adminSelectors.users);
   const privilegeList = useAppSelector(adminSelectors.userPrivileges);
@@ -106,8 +111,6 @@ export const UsersSuperAdmin = () => {
   }, [templates]);
 
   useEffect(() => {
-    //to delete
-    console.log('currentUser ', currentUser);
 
     //to update the list of privileges to remove
     if (currentUser) {
@@ -450,10 +453,19 @@ export const UsersSuperAdmin = () => {
       ).unwrap();
 
       if (confirm) {
-        const result = await dispatch(deleteUser(currentUser._id));
 
-        if (result && result.meta.requestStatus === 'fulfilled') {
-          dispatch(getAllUsers({ page: page - 1 }));
+        dispatch(openLoadingModal('Authenticating'));
+
+        const token = await dispatch(getSignInToken(currentUser._id)).unwrap();
+
+        //to delete
+        console.log('handleSignInAsUser token ', token);
+
+        if (token) {
+            dispatch(setAdminJWT(token));
+            dispatch(closeLoadingModal());
+            await dispatch(getUserData());
+            window.location.reload();
         }
       }
     }

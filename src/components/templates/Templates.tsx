@@ -15,14 +15,10 @@ import { userSelectors } from '../../redux/user';
 import { sendEmail } from '../../redux/email';
 import { warningAlert, openConfirmation } from '../../redux/alerts';
 import {
-  Box,
-  Card,
-  CardContent,
   Typography,
   Tabs,
   Tab,
   Button,
-  Fab,
   IconButton,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -36,6 +32,7 @@ import { ITemplate, IAddEmailTemplate, IEditEmailTemplate, ISendEmail } from '..
 import { convertToMarkdown } from '../../utils';
 import 'react-quill/dist/quill.snow.css'; // Importa los estilos CSS de react-quill
 import styles from './Templates.module.css';
+import { DefaultTemplates } from './DefaultTemplates';
 
 export function Templates() {
   const dispatch = useAppDispatch();
@@ -266,7 +263,7 @@ export function Templates() {
         </Tabs>
         <CustomTabPanel value={activeTab} index={0}>
           <Typography variant="body1" color="text.secondary" fontWeight="bold">
-            Work in progress
+            <DefaultTemplates/>
           </Typography>
         </CustomTabPanel>
         <CustomTabPanel value={activeTab} index={1}>
