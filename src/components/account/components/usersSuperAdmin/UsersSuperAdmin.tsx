@@ -29,7 +29,7 @@ import {
   resetPassword,
   toggleStatus,
 } from '../../../../redux/admin';
-import { ISubscriptionPlan, ITemplate, IUserData } from '../../../../types';
+import { ICreatingUser, ISubscriptionPlan, ITemplate, IUserData } from '../../../../types';
 import {
   addSubscriptionPlanToStripe,
   addUserSubscriptionPlan,
@@ -40,12 +40,11 @@ import Switch from '@mui/material/Switch';
 import { openConfirmation, openDeleteConfirmation } from '../../../../redux/alerts';
 import { getAllTemplates, templateSelectors } from '../../../../redux/template';
 import Pagination from '@mui/material/Pagination';
-import { current } from '@reduxjs/toolkit';
 
 interface IPlan {
-  planName: string;
-  planPrice: number;
-  planCredits: number;
+  planName?: string;
+  planPrice?: number;
+  planCredits?: number;
 }
 
 export const UsersSuperAdmin = () => {
@@ -60,7 +59,7 @@ export const UsersSuperAdmin = () => {
 
   const [searchValue, setSearchValue] = useState('');
   const [currentUser, setCurrentUser] = useState<IUserData | null>(null);
-  const [newUser, setNewUser] = useState<IUserData | null>(null);
+  const [newUser, setNewUser] = useState<ICreatingUser | null>(null);
   const [newPlan, setNewPlan] = useState<IPlan | null>({
     planName: '',
     planPrice: 0,
@@ -163,7 +162,7 @@ export const UsersSuperAdmin = () => {
     if (templates) setTemplateSelected(templates[0]);
   };
 
-  const handleOnChangePage = (event: ChangeEvent<unknown>, value: number) => {
+  const handleOnChangePage = (_e: ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
@@ -242,24 +241,30 @@ export const UsersSuperAdmin = () => {
     event.preventDefault();
 
     if (event.target.name == 'email') {
-      setNewUser({
-        ...newUser,
-        email: event.target.value,
-        ['signupEmail']: event.target.value,
+      setNewUser((prev) => {
+        return {
+          ...(prev ?? undefined),
+          email: event.target.value,
+          signupEmail: event.target.value,
+        };
       });
     } else {
-      setNewUser({
-        ...newUser,
-        [event.target.name]: event.target.value,
+      setNewUser((prev) => {
+        return {
+          ...(prev ?? undefined),
+          [event.target.name]: event.target.value,
+        };
       });
     }
   };
 
   const handleOnChangeNewPlan = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setNewPlan({
-      ...newPlan,
-      [event.target.name]: event.target.value,
+    setNewPlan((prev) => {
+      return {
+        ...(prev ?? undefined),
+        [event.target.name]: event.target.value,
+      };
     });
   };
 
@@ -372,10 +377,10 @@ export const UsersSuperAdmin = () => {
         interval_count: interval_counts,
         currency: 'usd',
         amount: price,
-        'product[name]': newPlan?.planName,
-        nickname: newPlan?.planName,
+        'product[name]': newPlan?.planName ?? '',
+        nickname: newPlan?.planName ?? '',
         'metadata[app_credits]': credit,
-        'metadata[app_name]': newPlan?.planName,
+        'metadata[app_name]': newPlan?.planName ?? '',
       };
 
       dispatch(addSubscriptionPlanToStripe(requestBody));

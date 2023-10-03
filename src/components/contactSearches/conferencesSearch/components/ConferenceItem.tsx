@@ -1,12 +1,9 @@
 import { Checkbox, Typography } from '@mui/material';
 import podcastDefaultImage from '../../../../assets/images/podcast-default-image.png';
-import numeral from 'numeral';
-import LinkIcon from '@mui/icons-material/Link';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import defautlContactImage from '../../../../assets/logos/pitchdb-logo-short.png';
 import styles from '../../ContactSearches.module.css';
-import { formatDate, formatExternalLinkCorrently } from '../../../../utils';
+import { formatDate } from '../../../../utils';
 import { IConferenceResult } from '../ConferencesSearch';
 
 interface IProps {

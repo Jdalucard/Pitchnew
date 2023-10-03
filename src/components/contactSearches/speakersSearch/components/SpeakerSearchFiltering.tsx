@@ -129,7 +129,6 @@ export function SpeakerSearchFiltering({ handleProcessFiltering }: IProps) {
                   {!!genresList?.length && (
                     <MultiSelectInput
                       inputLabel="Genres"
-                      inputWidth="29rem"
                       options={genresList}
                       selectedOptions={filterOptions.genres}
                       handleChange={handleGenresChange}
@@ -137,7 +136,6 @@ export function SpeakerSearchFiltering({ handleProcessFiltering }: IProps) {
                   )}
                   <MultiSelectInput
                     inputLabel="Opportunities"
-                    inputWidth="29rem"
                     options={speakerOpportunities}
                     selectedOptions={filterOptions.opportunities}
                     handleChange={handleOpportunitiesChange}

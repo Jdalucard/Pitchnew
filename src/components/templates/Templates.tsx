@@ -14,17 +14,7 @@ import {
 import { userSelectors } from '../../redux/user';
 import { sendEmail } from '../../redux/email';
 import { warningAlert, openConfirmation } from '../../redux/alerts';
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Tabs,
-  Tab,
-  Button,
-  Fab,
-  IconButton,
-} from '@mui/material';
+import { Typography, Tabs, Tab, Button, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from '@mui/icons-material/Edit';

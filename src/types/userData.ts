@@ -31,3 +31,9 @@ export interface IUserData {
     submissionId: string | null;
   } | null;
 }
+
+export interface ICreatingUser {
+  name?: string;
+  email?: string;
+  signupEmail?: string;
+}

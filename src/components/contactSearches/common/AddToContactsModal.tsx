@@ -57,7 +57,6 @@ export function AddToContactsModal({
               options={convertContactListsToSelectOptions(contactLists)}
               selectedOptions={selectedLists}
               handleChange={(options) => setSelectedLists(options)}
-              inputWidth="20rem"
             />
             <Button
               variant="contained"

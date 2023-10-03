@@ -5,7 +5,7 @@ import { Button, Typography } from '@mui/material';
 import SecurityIcon from '@mui/icons-material/Security';
 import { IBundle, ISubscription } from '.';
 import { formatToTitleCase } from '../../../utils';
-import { IUserSubscription } from '../../../redux/subscription';
+import { IUserSubscription } from '../../../types';
 import styles from '../BuyCredits.module.css';
 
 interface IProps {
