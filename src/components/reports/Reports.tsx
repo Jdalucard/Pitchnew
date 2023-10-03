@@ -7,7 +7,7 @@ import { reportsSelectors } from '../../redux/reports';
 import { userSelectors } from '../../redux/user';
 import styles from './Reports.module.css';
 
-export const Reports = () => {
+export function Reports() {
   const dispatch = useAppDispatch();
 
   const userData = useAppSelector(userSelectors.userData);
@@ -40,4 +40,4 @@ export const Reports = () => {
       </div>
     </div>
   );
-};
+}

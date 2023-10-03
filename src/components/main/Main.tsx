@@ -13,8 +13,8 @@ import Contacts from '../contacts';
 import Reports from '../reports';
 import Dashboard from '../dashboard';
 import ContactSearches from '../contactSearches';
-import styles from './Main.module.css';
 import Account from '../account';
+import styles from './Main.module.css';
 
 export function Main() {
   const userIsLoading = useAppSelector(userSelectors.isLoading);
