@@ -9,7 +9,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import styles from '../../Account.module.css';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -25,6 +24,7 @@ import {
   deleteUser,
   getAllUsers,
   getPrivilegeList,
+  getSignInToken,
   removePrivilege,
   resetPassword,
   toggleStatus,
@@ -37,9 +37,17 @@ import {
   subscriptionSelectors,
 } from '../../../../redux/subscription';
 import Switch from '@mui/material/Switch';
-import { openConfirmation, openDeleteConfirmation } from '../../../../redux/alerts';
+import {
+  closeLoadingModal,
+  openConfirmation,
+  openDeleteConfirmation,
+  openLoadingModal,
+} from '../../../../redux/alerts';
 import { getAllTemplates, templateSelectors } from '../../../../redux/template';
 import Pagination from '@mui/material/Pagination';
+import { setAdminJWT } from '../../../../redux/cookies';
+import { getUserData } from '../../../../redux/user';
+import styles from '../../Account.module.css';
 
 interface IPlan {
   planName?: string;
@@ -105,9 +113,6 @@ export const UsersSuperAdmin = () => {
   }, [templates]);
 
   useEffect(() => {
-    //to delete
-    console.log('currentUser ', currentUser);
-
     //to update the list of privileges to remove
     if (currentUser) {
       setCurrentPrivilegeListToRemove(currentUser?.privileges);
@@ -455,10 +460,18 @@ export const UsersSuperAdmin = () => {
       ).unwrap();
 
       if (confirm) {
-        const result = await dispatch(deleteUser(currentUser._id));
+        dispatch(openLoadingModal('Authenticating'));
 
-        if (result && result.meta.requestStatus === 'fulfilled') {
-          dispatch(getAllUsers({ page: page - 1 }));
+        const token = await dispatch(getSignInToken(currentUser._id)).unwrap();
+
+        //to delete
+        console.log('handleSignInAsUser token ', token);
+
+        if (token) {
+          dispatch(setAdminJWT(token));
+          dispatch(closeLoadingModal());
+          await dispatch(getUserData());
+          window.location.reload();
         }
       }
     }

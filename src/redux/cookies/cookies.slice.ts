@@ -46,7 +46,20 @@ export const cookiesSlice = createSlice({
 
       cookies.remove(action.payload, setSettings);
     },
+    setAdminJWT: (_, action: PayloadAction<string>) => {
+
+      const cookies = new Cookies();
+    
+      cookies.set("admin-token", cookies.get("jwt"));
+      const today = new Date();
+      const expireDate = new Date();
+      expireDate.setDate(today.getDate() + 5);
+      setSettings.expires = expireDate;
+      cookies.set('jwt', action.payload, setSettings);
+      cookies.remove("currentPage");
+
+    }
   },
 });
 
-export const { setUserJWT, setCookies, removeCookies } = cookiesSlice.actions;
+export const { setUserJWT, setCookies, removeCookies, setAdminJWT } = cookiesSlice.actions;
