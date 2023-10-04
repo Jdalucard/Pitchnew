@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Typography, FormControlLabel, Checkbox, FormGroup, TextField } from '@mui/material';
-import { Genre, IProfileData } from '../../../../../types';
-import { MultiSelector } from '.';
+import { Genre, IProfileData, ISelectInputOption } from '../../../../../types';
 import styles from '../../../Account.module.css';
+import { MultiSelectInput } from '../../../../../common';
+import { useAppSelector } from '../../../../../redux/hooks';
+import { searchParametersSelectors } from '../../../../../redux/searchParameters';
 
 interface IProps {
   data: IProfileData | null;
@@ -10,9 +12,52 @@ interface IProps {
 }
 
 export const SpeakingTopics: React.FC<IProps> = ({ data, handleSetProfileData }) => {
+  
+  const genres = useAppSelector(searchParametersSelectors.genres);
+  
+  const userGenres = data?.searchGenres?.map((genre) => genre._id) || [];
+  
+  const [selectedGenre, setSelectedGenre] = useState<ISelectInputOption[]>([]);
+
+  const convertGenresToSelectOptions = (genres: Genre[]) => {
+    const options: ISelectInputOption[] = [];
+
+    genres.map((genre) => {
+      if(genre.label && genre.value)
+        options.push({
+          _id: genre._id,
+          label: genre.label,
+          value: genre.value,
+        });
+    });
+
+    return options;
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    const selectedGenres: ISelectInputOption[] = [];
+    if (genres?.length && userGenres) {
+      genres.map((genre) => {
+        userGenres.map((selectedId) => {
+          if (genre._id === selectedId) {
+            const selected = {
+              _id: genre._id,
+              parentId: genre?.parentId,
+              label: genre.label || '',
+              value: genre.value || ''
+            }
+            selectedGenres.push(selected);
+          }
+        });
+      });
+    }
+
+    setSelectedGenre(selectedGenres)
+
   }, []);
+  
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -63,7 +108,12 @@ export const SpeakingTopics: React.FC<IProps> = ({ data, handleSetProfileData })
         </div>
       </div>
       <div className={styles.speakingTopicsFieldsWrapper}>
-        <MultiSelector handleSetProfileData={handleSetProfileData} />
+        <MultiSelectInput
+          inputLabel="Categories"
+          options={convertGenresToSelectOptions(genres ?? [])}
+          selectedOptions={selectedGenre}
+          handleChange={(options) => setSelectedGenre(options)}
+        />
         <TextField
           multiline
           rows={4}
