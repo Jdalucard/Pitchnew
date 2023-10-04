@@ -127,13 +127,30 @@ export function Profile() {
           value={value}
           onChange={handleChange}
           centered
-          className={styles.tabMenuWrapper}
+          className={styles.tabMenuProfileAndConfiguration}
           variant="fullWidth"
         >
-          <Tab icon={<AddPhotoAlternateOutlinedIcon />} label="Profile image" />
-          <Tab icon={<AccountCircleOutlinedIcon />} label="Contact info" />
-          <Tab icon={<LayersOutlinedIcon />} label="Speaking topics" />
-          <Tab icon={<ClassOutlinedIcon />} label="Past appearances" />
+          <Tab
+            className={styles.tabMenuWrapperIcons}
+            icon={<AddPhotoAlternateOutlinedIcon />}
+            label="Profile image"
+          />
+          <Tab
+            className={styles.tabMenuWrapperIcons}
+            icon={<AccountCircleOutlinedIcon />}
+            label="Contact info"
+          />
+          <Tab
+            className={styles.tabMenuWrapperIcons}
+            icon={<LayersOutlinedIcon />}
+            label="Speaking topics"
+          />
+
+          <Tab
+            className={styles.tabMenuWrapperIcons}
+            icon={<ClassOutlinedIcon />}
+            label="Previous occasions"
+          />
         </Tabs>
         <TabPanel value={value} index={0}>
           <UploadImage userId={profileData?.userId || ''} />

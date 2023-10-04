@@ -41,13 +41,25 @@ export function Configuration() {
           value={value}
           onChange={handleChange}
           centered
-          className={styles.tabMenuWrapper}
+          className={styles.tabMenuProfileAndConfiguration}
           variant="fullWidth"
         >
-          <Tab icon={<LockIcon />} label="Password & Sign In" />
-          <Tab icon={<Email />} label="Email" />
-          <Tab icon={<CalendarMonth />} label="Sending Calendar" />
-          <Tab icon={<CreateIcon />} label="Email Signature" />
+          <Tab
+            className={styles.tabMenuWrapperIcons}
+            icon={<LockIcon />}
+            label="Password & Sign In"
+          />
+          <Tab className={styles.tabMenuWrapperIcons} icon={<Email />} label="Email" />
+          <Tab
+            className={styles.tabMenuWrapperIcons}
+            icon={<CalendarMonth />}
+            label="Sending Calendar"
+          />
+          <Tab
+            className={styles.tabMenuWrapperIcons}
+            icon={<CreateIcon />}
+            label="Email Signature"
+          />
         </Tabs>
         <TabPanel value={value} index={0}>
           <PasswordTab

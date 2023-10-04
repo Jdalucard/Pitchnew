@@ -20,8 +20,8 @@
 
 .customTabPanel {
   display: flex;
-  align-items: center;
   flex-direction: column;
+
   padding: 1rem;
   background-color: #ffffff;
   border-radius: 4px;
@@ -37,16 +37,18 @@
   justify-content: space-between;
   background-color: rgba(88, 86, 214, 0.1);
   padding: 1rem;
-  width: 90%;
+
 
   @media only screen and (max-width: 600px) {
     flex-direction: column-reverse;
   }
 }
 
+
 .buttonsWrapper {
   display: flex;
   flex-direction: column;
+  
 
   @media only screen and (max-width: 600px) {
     flex-direction: row;

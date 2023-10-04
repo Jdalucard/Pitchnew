@@ -69,6 +69,11 @@ export const buildAppTheme = () => ({
     caption: {
       fontSize: '0.82rem',
     },
+    subtitle1: {
+      '@media (max-width: 600px)': {
+        margin: 'auto',
+      },
+    },
   },
 
   MailOutlineIcon: {
@@ -82,6 +87,72 @@ export const buildAppTheme = () => ({
       fontSize: '1.375rem',
     },
   },
+
+  AccountCircleOutlinedIcon: {
+    '@media (max-width: 768px)': {
+      fontSize: '1.375rem',
+    },
+  },
+
+  SettingsIcon: {
+    '@media (max-width: 768px)': {
+      fontSize: '1.375rem',
+    },
+  },
+  /*  account  icons */
+  GroupsIcon: {
+    '@media (max-width: 600px)': {
+      fontSize: '1rem',
+    },
+  },
+
+  ManageAccountsIcon: {
+    '@media (max-width: 600px)': {
+      fontSize: '1rem',
+    },
+  },
+
+  AddPhotoAlternateOutlinedIcon: {
+    '@media (max-width: 600px)': {
+      fontSize: '0.5rem',
+    },
+  },
+
+  LayersOutlinedIcon: {
+    '@media (max-width: 600px)': {
+      fontSize: '1rem',
+    },
+  },
+
+  ClassOutlinedIcon: {
+    '@media (max-width: 600px)': {
+      fontSize: '1rem',
+    },
+  },
+  LockIcon: {
+    '@media (max-width: 600px)': {
+      fontSize: '1rem',
+    },
+  },
+
+  Email: {
+    '@media (max-width: 600px)': {
+      fontSize: '1rem',
+    },
+  },
+
+  CalendarMonth: {
+    '@media (max-width: 600px)': {
+      fontSize: '1rem',
+    },
+  },
+
+  CreateIcon: {
+    '@media (max-width: 600px)': {
+      fontSize: '1rem',
+    },
+  },
+
   // Here we can override MUI styles in their components
   components: {
     MuiListItem: {

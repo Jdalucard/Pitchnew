@@ -72,10 +72,7 @@ export const Teams = () => {
         ) : (
           <>
             <Typography variant="body1"> Invite new members to your team </Typography>
-            <div
-              className={`${styles.horizontalWrapper}`}
-              style={{ margin: '0rem 2rem 2rem 0rem' }}
-            >
+            <div className={`${styles.horizontalWrapper}`}>
               <TextField
                 label="Email Invitation"
                 type="email"
