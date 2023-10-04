@@ -75,7 +75,7 @@ export const getEmailSignature = createAsyncThunk(
 //not used yet
 export const getEmailReport = createAsyncThunk(
   `${emailStoreKey}/getEmailReport`,
-  async (id: string, thunkApi) => {
+  async (_id: string, thunkApi) => {
     try {
       const requestPath = `${templatePath}/email-validity`;
       const response = await axios.get(requestPath);

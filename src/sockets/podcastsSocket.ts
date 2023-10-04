@@ -1,11 +1,10 @@
-import io, { Socket } from 'socket.io-client';
-import { DefaultEventsMap } from '@socket.io/component-emitter';
+import io from 'socket.io-client';
 import Cookies from 'universal-cookie';
 
 const PODCASTS_SOCKET_ENDPOINT = '/so-podcasts';
 const SOCKETIO_DEFAULT_URL = '/socket.io';
 
-let activeSocket: Socket<DefaultEventsMap, DefaultEventsMap>;
+let activeSocket: any;
 
 export const podcastsSocket = {
   events: {
