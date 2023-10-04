@@ -269,7 +269,7 @@ export function Templates() {
               onClick={() => {
                 handleOpenEditor(crud.ADD.toString());
               }}
-              sx={{ mb: '1rem' }}
+              sx={{ mb: '1rem', mx: 'auto', width: ' 40%' }}
             >
               Add template
             </Button>

@@ -20,7 +20,7 @@ export function Account() {
 
   return (
     <div className={styles.container}>
-      <div className={`${styles.sidebar} ${styles.accountNavigation}`}>
+      <div className={`${styles.sidebar} `}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -30,23 +30,15 @@ export function Account() {
           indicatorColor="primary"
         >
           <Tab
-            icon={<AccountCircleOutlinedIcon fontSize="small" />}
+            icon={<AccountCircleOutlinedIcon />}
             label="Profile"
             className={styles.tabItemWrapper}
           />
-          <Tab
-            icon={<SettingsIcon fontSize="small" />}
-            label="Configuration"
-            className={styles.tabItemWrapper}
-          />
-          <Tab
-            icon={<GroupsIcon fontSize="small" />}
-            label="Teams"
-            className={styles.tabItemWrapper}
-          />
+          <Tab icon={<SettingsIcon />} label="Configuration" className={styles.tabItemWrapper} />
+          <Tab icon={<GroupsIcon />} label="Teams" className={styles.tabItemWrapper} />
           {userData && userData.privileges.some((privilege) => privilege === 'superAdmin') && (
             <Tab
-              icon={<ManageAccountsIcon fontSize="small" />}
+              icon={<ManageAccountsIcon />}
               label="Super Admin - Users"
               className={styles.tabItemWrapper}
             />

@@ -93,47 +93,53 @@ export const SendingCalendarTab: React.FC<ISendingCalendarProps> = ({ userId }) 
   };
 
   return (
-    <div className={`${styles.content}`}>
-      <div className={`${styles.contentWrapper}`}>
-        <Typography variant="h3">Send on these days</Typography>
-        <FormGroup row>
-          {weekDaysCheckboxes.map((day) => (
-            <FormControlLabel
-              key={day.key}
-              control={
-                <Checkbox
-                  checked={selectedDays[day.name as keyof ICheckboxesDays]}
-                  onChange={handleChangeCheckBox}
-                  name={day.name}
-                  color="primary"
-                />
-              }
-              label={day.label}
-            />
-          ))}
-        </FormGroup>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={['TimePicker']}>
-            <TimePicker
-              label="Start Time of Day"
-              value={startTime}
-              onChange={handleStartTimeChange}
-            />
-            <Typography variant="body1">to</Typography>
-            <TimePicker label="End Time of Day" value={endTime} onChange={handleEndTimeChange} />
-          </DemoContainer>
-        </LocalizationProvider>
-        <Select value={timeZone} onChange={handleTimeZoneChange} sx={{ width: '50vh' }}>
-          {timeZoneoptions.map((timeZone) => (
-            <MenuItem key={timeZone.key} value={timeZone.label}>
-              {timeZone.label}
-            </MenuItem>
-          ))}
-        </Select>
-        <Button onClick={handleSubmit} variant="contained" sx={{ width: '20vh' }}>
-          Save
-        </Button>
-      </div>
+    <div className={`${styles.contentWrapper}`}>
+      <Typography variant="h3">Send on these days</Typography>
+      <FormGroup className={styles.FormGroup}>
+        {weekDaysCheckboxes.map((day) => (
+          <FormControlLabel
+            className={styles.FormControlLabel}
+            key={day.key}
+            control={
+              <Checkbox
+                checked={selectedDays[day.name as keyof ICheckboxesDays]}
+                onChange={handleChangeCheckBox}
+                name={day.name}
+                color="primary"
+              />
+            }
+            label={day.label}
+          />
+        ))}
+      </FormGroup>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={['TimePicker']} sx={{ mx: 'auto' }}>
+          <TimePicker
+            className={styles.timePicker}
+            label="Start Time of Day"
+            value={startTime}
+            onChange={handleStartTimeChange}
+          />
+          <Typography variant="body1">to</Typography>
+          <TimePicker
+            className={styles.timePicker}
+            label="End Time of Day"
+            value={endTime}
+            onChange={handleEndTimeChange}
+          />
+        </DemoContainer>
+      </LocalizationProvider>
+
+      <Select className={styles.multiSelect} value={timeZone} onChange={handleTimeZoneChange}>
+        {timeZoneoptions.map((timeZone) => (
+          <MenuItem className={styles.menuItem} key={timeZone.key} value={timeZone.label}>
+            {timeZone.label}
+          </MenuItem>
+        ))}
+      </Select>
+      <Button className={styles.buttonSave} onClick={handleSubmit} variant="contained">
+        Save
+      </Button>
     </div>
   );
 };

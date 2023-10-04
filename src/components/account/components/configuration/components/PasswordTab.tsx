@@ -210,8 +210,7 @@ export const PasswordTab: React.FC<IPasswordProps> = ({ currentMethod, isSignIn 
 
       <div className={styles.socialButtonsWrapper}>
         <Typography variant="subtitle1" fontWeight="fontWeightBold">
-          {' '}
-          Current sign-in method:{' '}
+          Current sign-in method:
         </Typography>
         <Typography variant="subtitle1"> {currentMethod}</Typography>
 
